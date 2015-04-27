@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50530
 File Encoding         : 65001
 
-Date: 2015-04-27 11:45:37
+Date: 2015-04-27 14:09:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -62,7 +62,7 @@ CREATE TABLE `manager` (
   `salt` varchar(255) DEFAULT NULL,
   `firstName` varchar(255) DEFAULT NULL,
   `lastName` varchar(255) DEFAULT NULL,
-  `mobilePhone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `type` int(255) DEFAULT NULL,
   `createBy` int(11) DEFAULT NULL,
   `createDate` datetime DEFAULT NULL,
