@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Manager;
@@ -32,6 +33,7 @@ public class ManagerController extends MyController {
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		response.setContentType("text/html;charset=utf-8");
+		
 		model=new ModelMap();
 		String account=getString(request, "account");
 		String password=getString(request, "password");
@@ -195,9 +197,12 @@ public class ManagerController extends MyController {
 		return model;
 	}
 	
-	@RequestMapping("/admin/login")
+	
+	@RequestMapping(value = "/admin/login", method = RequestMethod.POST)
+	//@RequestMapping("/admin/login")
 	@ResponseBody
 	protected Object login(HttpServletRequest request,HttpServletResponse response,HttpSession session){
+		
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String account=getString(request, "account");
