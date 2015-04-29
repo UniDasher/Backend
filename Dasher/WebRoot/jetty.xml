@@ -56,11 +56,11 @@
 		<Arg>
 			<Ref id="contexts" />
 		</Arg>
-		<Arg>E:/UniDasher/Backend/Dasher/WebRoot</Arg>
+		<Arg>D:/MyEclipse8/Dasher/WebRoot</Arg>
 		<Arg>/</Arg>
 		<Set name="virtualHosts">
 			<Array type="java.lang.String">
-				<Item>192.168.1.3</Item>
+				<Item>localhost</Item>
 			</Array>
 		</Set>
 	</New>

@@ -3,6 +3,7 @@ package com.dasher.service.impl;
 import com.dasher.mapper.UserMapper;
 import com.dasher.model.User;
 import com.dasher.service.UserService;
+import com.dasher.util.MyMD5Util;
 
 public class UserServiceImpl implements UserService {
 
@@ -21,6 +22,82 @@ public class UserServiceImpl implements UserService {
 		return userMapper.addUser(u)>0? true:false;
 	}
 
+	public boolean delete(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.delete(u)>0? true:false;
+	}
+
+	public User getByUId(String uid) {
+		// TODO Auto-generated method stub
+		return userMapper.getByUId(uid);
+	}
+
+	public boolean update(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.update(u)>0? true:false;
+	}
+
+	public User getUserByAccount(String account) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByAccount(account);
+	}
+
+	public int userLoin(String account, String pwd) {
+		// TODO Auto-generated method stub
+		int flag=-1;
+		User u=userMapper.getUserByAccount(account);
+		if(u==null)
+		   flag=1;
+		else
+		{
+			try {
+				if(!MyMD5Util.validPassword(pwd, u.getPassword()))
+					flag=2;
+				else
+					flag=0;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return flag;
+	}
+
+	
+	public boolean updatePwd(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.updatePwd(u)>0? true:false;
+	}
+
+	public int getPwd(String uid, String pwd) {
+		// TODO Auto-generated method stub
+		int flag=-1;
+		User u=userMapper.getByUId(uid);
+		if(u!=null)
+		{
+			try {
+				if(!MyMD5Util.validPassword(pwd,u.getPassword()))
+					flag=2;
+				else
+					flag=0;
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else
+			flag=1;
+		
+		return flag;
+	}
+
+	public boolean userApply(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.userApply(u)>0? true:false;
+	}
+
+	
 	
 
 }
