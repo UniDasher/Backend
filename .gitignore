@@ -1,1 +1,5 @@
 Dasher/.mymetadata
+Dasher/.settings/*
+Dasher/logs/*
+Dasher/WebRoot/WEB-INF/classes/**
+Dasher/.mymetadata
