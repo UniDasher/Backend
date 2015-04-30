@@ -2,6 +2,8 @@ package com.dasher.controller;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +42,6 @@ public class ManagerController extends MyController {
 		String lastName=getString(request, "lastName");
 		String email=getString(request, "email");
 		int type=getInt(request, "type");
-		
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
 		String salt="";
@@ -48,7 +49,6 @@ public class ManagerController extends MyController {
 		{
 			salt=salt+str[i];
 		}
-		
 		if(account=="")
 		{
 			resultDesc=ShowMsg.userNull;
@@ -74,48 +74,53 @@ public class ManagerController extends MyController {
 			resultDesc=ShowMsg.EmailNull;
 			resultCode=2;
 		}
-		
 		else
 		{
-			Manager man=managerService.getByAccount(account);
-			if(man==null)
+			Pattern pattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+			Matcher matcher = pattern.matcher(email);
+			if(matcher.matches())
 			{
-				Manager m=new Manager();
-				m.setAccount(account);
-				try {
-					m.setPassword(MyMD5Util.getEncryptedPwd(password));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				m.setSalt(salt);
-				m.setFirstName(firstName);
-				m.setLastName(lastName);
-				m.setEmail(email);
-				m.setType(type);
-				m.setCreateDate(DateUtil.getCurrentDateStr());
-				result=managerService.add(m);
-				if(result==true)
+				Manager man=managerService.getByAccount(account);
+				if(man==null)
 				{
-					resultCode=0;
-					resultDesc=ShowMsg.addSuc;
+					Manager m=new Manager();
+					m.setAccount(account);
+					try {
+						m.setPassword(MyMD5Util.getEncryptedPwd(password));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					m.setSalt(salt);
+					m.setFirstName(firstName);
+					m.setLastName(lastName);
+					m.setEmail(email);
+					m.setType(type);
+					m.setCreateDate(DateUtil.getCurrentDateStr());
+					result=managerService.add(m);
+					if(result==true)
+					{
+						resultCode=0;
+						resultDesc=ShowMsg.addSuc;
+					}
+					else
+					{
+						resultCode=1;
+						resultDesc=ShowMsg.addFail;
+					}
 				}
 				else
 				{
 					resultCode=1;
-					resultDesc=ShowMsg.addFail;
+					resultDesc=ShowMsg.addRepeat;
 				}
-
 			}
 			else
 			{
-				resultCode=1;
-				resultDesc=ShowMsg.addRepeat;
+				resultCode=2;
+				resultDesc=ShowMsg.emailErr;
 			}
 		}
-		
-		
-		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -127,26 +132,35 @@ public class ManagerController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String myid=getString(request, "id");
-		if(!myid.equals("")&&myid.matches("^[0-9]*$"))
+        String admin=(String)session.getAttribute("AdminId");
+		if(admin==""||admin==null)
 		{
-			int id=Integer.parseInt(myid);
-			Manager m=managerService.getById(id);
-			if(m!=null)
-			{
-				resultCode=0;
-				model.put("Manager", m);
-				resultDesc=ShowMsg.findSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.findFail;
-			}
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
 		}
 		else
 		{
-			resultCode=2;
-			resultDesc=ShowMsg.ParFail;
+			if(!myid.equals("")&&myid.matches("^[0-9]*$"))
+			{
+				int id=Integer.parseInt(myid);
+				Manager m=managerService.getById(id);
+				if(m!=null)
+				{
+					resultCode=0;
+					model.put("Manager", m);
+					resultDesc=ShowMsg.findSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.findFail;
+				}
+			}
+			else
+			{
+				resultCode=2;
+				resultDesc=ShowMsg.ParFail;
+			}
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -163,37 +177,68 @@ public class ManagerController extends MyController {
 		String lastName=getString(request, "lastName");
 		String email=getString(request, "email");
 		int type=getInt(request, "type");
-		
-		if(!myid.equals("")&&myid.matches("^[0-9]*$"))
+		String admin=(String)session.getAttribute("AdminId");
+		if(admin==""||admin==null)
 		{
-			int id=Integer.parseInt(myid);
-			Manager m=new Manager();
-			m.setId(id);
-			m.setFirstName(firstName);
-			m.setLastName(lastName);
-			m.setEmail(email);
-			m.setType(type);
-			m.setUpdateBy(id);
-			m.setUpdateDate(DateUtil.getCurrentDateStr());
-			result=managerService.update(m);
-			if(result==true)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.updateSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.updateFail;
-			}
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
 		}
 		else
 		{
-			resultCode=2;
-			resultDesc=ShowMsg.ParFail;
+			if(myid.equals("")||!myid.matches("^[0-9]*$"))
+			{
+				resultCode=2;
+				resultDesc=ShowMsg.ParFail;
+			}
+			else if(firstName=="")
+			{
+				resultDesc=ShowMsg.FirstNameNull;
+				resultCode=2;
+			}
+			else if(lastName=="")
+			{
+				resultDesc=ShowMsg.LastNameNull;
+				resultCode=2;
+			}
+			else if(email=="")
+			{
+				resultDesc=ShowMsg.EmailNull;
+				resultCode=2;
+			}
+			else
+			{
+				Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+				Matcher matcher=pattern.matcher(email);
+				if(matcher.matches())
+				{
+					int id=Integer.parseInt(myid);
+					Manager m=new Manager();
+					m.setId(id);
+					m.setFirstName(firstName);
+					m.setLastName(lastName);
+					m.setEmail(email);
+					m.setType(type);
+					m.setUpdateBy(id);
+					m.setUpdateDate(DateUtil.getCurrentDateStr());
+					result=managerService.update(m);
+					if(result==true)
+					{
+						resultCode=0;
+						resultDesc=ShowMsg.updateSuc;
+					}
+					else
+					{
+						resultCode=1;
+						resultDesc=ShowMsg.updateFail;
+					}
+				}
+				else
+				{
+					resultCode=2;
+					resultDesc=ShowMsg.emailErr;
+				}
+			}
 		}
-		
-	
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -205,32 +250,39 @@ public class ManagerController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String myid=getString(request, "id");
-		if(!myid.equals("")&&myid.matches("^[0-9]*$"))
+        String admin=(String)session.getAttribute("AdminId");
+		if(admin==""||admin==null)
 		{
-			int id=Integer.parseInt(myid);
-			Manager m=new Manager();
-			m.setId(id);
-			m.setUpdateBy(id);
-			m.setUpdateDate(DateUtil.getCurrentDateStr());
-			result=managerService.delete(m);
-			if(result==true)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.delSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.delFail;
-			}
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
 		}
 		else
 		{
-			resultCode=2;
-			resultDesc=ShowMsg.ParFail;
+			if(!myid.equals("")&&myid.matches("^[0-9]*$"))
+			{
+				int id=Integer.parseInt(myid);
+				Manager m=new Manager();
+				m.setId(id);
+				m.setUpdateBy(id);
+				m.setUpdateDate(DateUtil.getCurrentDateStr());
+				result=managerService.delete(m);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.delSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.delFail;
+				}
+			}
+			else
+			{
+				resultCode=2;
+				resultDesc=ShowMsg.ParFail;
+			}
 		}
-		
-	
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -241,19 +293,27 @@ public class ManagerController extends MyController {
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		List<Manager> list=managerService.list();
-		if(list.size()>0)
+        String admin=(String)session.getAttribute("AdminId");
+		if(admin==""||admin==null)
 		{
-			resultCode=0;
-			model.put("list", list);
-			resultDesc=ShowMsg.findSuc;
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
 		}
 		else
 		{
-			resultCode=1;
-			resultDesc=ShowMsg.findFail;
+			List<Manager> list=managerService.list();
+			if(list.size()>0)
+			{
+				resultCode=0;
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
 		}
-		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -292,8 +352,7 @@ public class ManagerController extends MyController {
 				model.put("firstName", m.getFirstName());
 				model.put("lastName", m.getLastName());
 				model.put("type", m.getType());
-				session.setAttribute("account", account);
-				session.setAttribute("password", password);
+				session.setAttribute("AdminId", account);
 			}
 			else
 			{
@@ -306,23 +365,10 @@ public class ManagerController extends MyController {
 			resultDesc=ShowMsg.pwdLength;
 			resultCode=2;
 		}
-		
-		
-			
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
 	
-	@RequestMapping("/getSess")
-	@ResponseBody
-	protected Object getSess(HttpServletRequest request,HttpServletResponse response,HttpSession session){
-		response.setContentType("text/html;charset=utf-8");
-		String account=(String)session.getAttribute("account");
-		String password=(String)session.getAttribute("password");
-		model.put("account", account);
-		model.put("password", password);
-		return model;
-	}
 	
 }

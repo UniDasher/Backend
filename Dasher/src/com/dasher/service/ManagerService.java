@@ -11,6 +11,7 @@ public interface ManagerService {
 	public Manager getById(int id);
 	public boolean update(Manager m);
 	public boolean delete(Manager m);
+	public List<Manager> listAll();
 	public List<Manager> list();
 	public int managerLoin(String account,String pwd);
 }

@@ -13,5 +13,6 @@ public interface ManagerMapper {
 	public int update(Manager m);
 	public int delete(Manager m);
 	public List<Manager> list();
+	public List<Manager> listAll();
 	
 }
