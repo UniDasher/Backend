@@ -3,3 +3,9 @@ Dasher/.settings/*
 Dasher/logs/*
 Dasher/WebRoot/WEB-INF/classes/**
 Dasher/.mymetadata
+Dasher/WebRoot/jetty.xml
+Dasher/logs/dasher.log
+Dasher/WebRoot/jetty.xml
+Dasher/logs/dasher.log
+Dasher/WebRoot/jetty.xml
+Dasher/logs/dasher.log
