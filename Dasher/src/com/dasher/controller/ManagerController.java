@@ -15,7 +15,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.model.Login;
 import com.dasher.model.Manager;
+import com.dasher.service.LoginService;
 import com.dasher.service.ManagerService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.MyMD5Util;
@@ -26,21 +28,25 @@ public class ManagerController extends MyController {
 
 	@Autowired
 	private ManagerService managerService;
+	@Autowired
+	private LoginService loginService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
 	private ModelMap model;
-	
+
 	@RequestMapping("/admin/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
+		String authCode=getString(request, "authCode");
 		String account=getString(request, "account");
 		String password=getString(request, "password");
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
 		String email=getString(request, "email");
+		String myloginId=loginService.getByAuthCode(authCode);
 		int type=getInt(request, "type");
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
@@ -49,7 +55,17 @@ public class ManagerController extends MyController {
 		{
 			salt=salt+str[i];
 		}
-		if(account=="")
+		if(authCode==""||authCode==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+		}
+		else if(myloginId==""||myloginId==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+		}
+		else if(account=="")
 		{
 			resultDesc=ShowMsg.userNull;
 			resultCode=2;
@@ -74,6 +90,7 @@ public class ManagerController extends MyController {
 			resultDesc=ShowMsg.EmailNull;
 			resultCode=2;
 		}
+
 		else
 		{
 			Pattern pattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
@@ -96,6 +113,7 @@ public class ManagerController extends MyController {
 					m.setLastName(lastName);
 					m.setEmail(email);
 					m.setType(type);
+					m.setCreateBy(Integer.parseInt(myloginId));
 					m.setCreateDate(DateUtil.getCurrentDateStr());
 					result=managerService.add(m);
 					if(result==true)
@@ -125,15 +143,24 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+
 	@RequestMapping("/admin/get")
 	@ResponseBody
 	protected Object get(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
+		String authCode=getString(request, "authCode");
 		String myid=getString(request, "id");
-        String admin=(String)session.getAttribute("AdminId");
-		if(admin==""||admin==null)
+		Login l=new Login();
+		l.setLoginId(myid);
+		l.setAuthCode(authCode);
+		String myloginId=loginService.getByAuthCode(authCode);
+		if(authCode==""||authCode==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+		}
+		else if(myloginId==""||myloginId==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -149,6 +176,18 @@ public class ManagerController extends MyController {
 					resultCode=0;
 					model.put("Manager", m);
 					resultDesc=ShowMsg.findSuc;
+
+					UUID uuid=UUID.randomUUID();
+					String str[]=uuid.toString().split("-");
+					String myauthCode="";
+					for(int i=0;i<str.length;i++)
+					{
+						myauthCode=myauthCode+str[i];
+					}
+					Login myLogin=new Login();
+					myLogin.setAuthCode(myauthCode);
+					myLogin.setLoginId(myid);
+
 				}
 				else
 				{
@@ -166,19 +205,25 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+
 	@RequestMapping("/admin/update")
 	@ResponseBody
 	protected Object update(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
+		String authCode=getString(request, "authCode");
 		String myid=getString(request, "id");
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
 		String email=getString(request, "email");
 		int type=getInt(request, "type");
-		String admin=(String)session.getAttribute("AdminId");
-		if(admin==""||admin==null)
+		String myloginId=loginService.getByAuthCode(authCode);
+		if(authCode==""||authCode==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+		}
+		else if(myloginId==""||myloginId==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -243,15 +288,21 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+
 	@RequestMapping("/admin/delete")
 	@ResponseBody
 	protected Object delete(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
+		String authCode=getString(request, "authCode");
 		String myid=getString(request, "id");
-        String admin=(String)session.getAttribute("AdminId");
-		if(admin==""||admin==null)
+		String myloginId=loginService.getByAuthCode(authCode);
+		if(authCode==""||authCode==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+		}
+		else if(myloginId==""||myloginId==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -287,14 +338,20 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+
 	@RequestMapping("/admin/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session){
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-        String admin=(String)session.getAttribute("AdminId");
-		if(admin==""||admin==null)
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if(authCode==""||authCode==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+		}
+		else if(myloginId==""||myloginId==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -318,7 +375,7 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+
 	@RequestMapping("/admin/login")
 	@ResponseBody
 	protected Object login(HttpServletRequest request,HttpServletResponse response,HttpSession session){
@@ -352,7 +409,10 @@ public class ManagerController extends MyController {
 				model.put("firstName", m.getFirstName());
 				model.put("lastName", m.getLastName());
 				model.put("type", m.getType());
-				session.setAttribute("AdminId", account);
+				Login l=loginService.NewAuthCode(m.getId()+"");
+				loginService.handleLogin(l);
+				model.put("authCode", l.getAuthCode());
+
 			}
 			else
 			{
@@ -369,6 +429,6 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
-	
+
+
 }

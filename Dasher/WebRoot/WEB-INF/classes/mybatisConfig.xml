@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
-
     <typeAliases>
   		<typeAlias type="com.dasher.model.User" alias="User" />
   		<typeAlias type="com.dasher.model.UserAddress" alias="UserAddress" />
   		<typeAlias type="com.dasher.model.UserSettle" alias="UserSettle" />
   		<typeAlias type="com.dasher.model.Complain" alias="Complain" />
   		<typeAlias type="com.dasher.model.ComplainDeal" alias="ComplainDeal" />
+  		<typeAlias type="com.dasher.model.Login" alias="Login" />
   	    <typeAlias type="com.dasher.model.Manager" alias="Manager" />
   	    <typeAlias type="com.dasher.model.Market" alias="Market" />
   	    <typeAlias type="com.dasher.model.MarketCommodity" alias="MarketCommodity" />
@@ -28,6 +28,7 @@
 	    <mapper resource="com/dasher/mapper/UserSettleMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ComplainMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ComplainDealMapper.xml" />
+	    <mapper resource="com/dasher/mapper/LoginMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ManagerMapper.xml" />
 	    <mapper resource="com/dasher/mapper/MarketMapper.xml" />
 	    <mapper resource="com/dasher/mapper/MarketCommodityMapper.xml" />
