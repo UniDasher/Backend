@@ -1,6 +1,8 @@
 package com.dasher.util;
 
 public class ShowMsg {
+	
+	public static final String checkLogin="You are not logged in, please login first.";  //您尚未登录，请先登录。
 	public static final String addSuc="Information added successfully";  //添加成功
 	public static final String addFail="Information added unsuccessfully"; //添加失败
 	public static final String addRepeat="User name already exists. Please enter again";//用户名已存在
