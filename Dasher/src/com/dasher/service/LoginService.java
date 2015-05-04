@@ -9,6 +9,6 @@ public interface LoginService {
 	public Login getByLogId(String loginId);
 	public void handleLogin(Login l);
 	public String getByAuthCode(String authCode);
-	public Login NewAuthCode(String id);
+	public String NewAuthCode(String id);
 	public Login userNewAuthCode(String id);
 }

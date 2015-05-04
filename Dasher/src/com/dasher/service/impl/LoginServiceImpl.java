@@ -53,7 +53,7 @@ public class LoginServiceImpl implements LoginService {
 		return loginMapper.getByAuthCode(authCode);
 	}
 
-	public Login NewAuthCode(String id){
+	public String NewAuthCode(String id){
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
 		String authCode="";
@@ -66,7 +66,18 @@ public class LoginServiceImpl implements LoginService {
 		l.setAuthCode(authCode);
 		l.setType(0);
 		l.setLoginTime(DateUtil.getCurrentDateStr());
-		return l;
+		Login login=loginMapper.getByLogId(l.getLoginId());
+		
+		if(login==null)
+		{
+			loginMapper.add(l);
+		}
+		else
+		{
+			loginMapper.update(l);
+		}
+		
+		return authCode;
 	}
 
 	public Login userNewAuthCode(String id) {
@@ -83,6 +94,16 @@ public class LoginServiceImpl implements LoginService {
 		l.setAuthCode(authCode);
 		l.setType(1);
 		l.setLoginTime(DateUtil.getCurrentDateStr());
+		Login login=loginMapper.getByLogId(l.getLoginId());
+		
+		if(login==null)
+		{
+			loginMapper.add(l);
+		}
+		else
+		{
+			loginMapper.update(l);
+		}
 		return l;
 	}
 }

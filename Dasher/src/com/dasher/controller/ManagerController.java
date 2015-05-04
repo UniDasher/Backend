@@ -41,12 +41,22 @@ public class ManagerController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", loginService.NewAuthCode(myloginId));
+
 		String account=getString(request, "account");
 		String password=getString(request, "password");
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
 		String email=getString(request, "email");
-		String myloginId=loginService.getByAuthCode(authCode);
 		int type=getInt(request, "type");
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
@@ -55,17 +65,8 @@ public class ManagerController extends MyController {
 		{
 			salt=salt+str[i];
 		}
-		if(authCode==""||authCode==null)
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else if(myloginId==""||myloginId==null)
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else if(account=="")
+
+		if(account=="")
 		{
 			resultDesc=ShowMsg.userNull;
 			resultCode=2;
@@ -120,6 +121,7 @@ public class ManagerController extends MyController {
 					{
 						resultCode=0;
 						resultDesc=ShowMsg.addSuc;
+						
 					}
 					else
 					{
@@ -150,57 +152,55 @@ public class ManagerController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", loginService.NewAuthCode(myloginId));
 		String myid=getString(request, "id");
 		Login l=new Login();
 		l.setLoginId(myid);
 		l.setAuthCode(authCode);
-		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
+
+		if(!myid.equals("")&&myid.matches("^[0-9]*$"))
 		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else if(myloginId==""||myloginId==null)
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else
-		{
-			if(!myid.equals("")&&myid.matches("^[0-9]*$"))
+			int id=Integer.parseInt(myid);
+			Manager m=managerService.getById(id);
+			if(m!=null)
 			{
-				int id=Integer.parseInt(myid);
-				Manager m=managerService.getById(id);
-				if(m!=null)
-				{
-					resultCode=0;
-					model.put("Manager", m);
-					resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+				model.put("Manager", m);
+				resultDesc=ShowMsg.findSuc;
 
-					UUID uuid=UUID.randomUUID();
-					String str[]=uuid.toString().split("-");
-					String myauthCode="";
-					for(int i=0;i<str.length;i++)
-					{
-						myauthCode=myauthCode+str[i];
-					}
-					Login myLogin=new Login();
-					myLogin.setAuthCode(myauthCode);
-					myLogin.setLoginId(myid);
-
-				}
-				else
+				UUID uuid=UUID.randomUUID();
+				String str[]=uuid.toString().split("-");
+				String myauthCode="";
+				for(int i=0;i<str.length;i++)
 				{
-					resultCode=1;
-					resultDesc=ShowMsg.findFail;
+					myauthCode=myauthCode+str[i];
 				}
+				Login myLogin=new Login();
+				myLogin.setAuthCode(myauthCode);
+				myLogin.setLoginId(myid);
+
 			}
 			else
 			{
-				resultCode=2;
-				resultDesc=ShowMsg.ParFail;
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
 			}
 		}
+		else
+		{
+			resultCode=2;
+			resultDesc=ShowMsg.ParFail;
+		}
+
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -211,76 +211,74 @@ public class ManagerController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", loginService.NewAuthCode(myloginId));
+
 		String myid=getString(request, "id");
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
 		String email=getString(request, "email");
 		int type=getInt(request, "type");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
+
+		if(myid.equals("")||!myid.matches("^[0-9]*$"))
 		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
+			resultCode=2;
+			resultDesc=ShowMsg.ParFail;
 		}
-		else if(myloginId==""||myloginId==null)
+		else if(firstName=="")
 		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
+			resultDesc=ShowMsg.FirstNameNull;
+			resultCode=2;
+		}
+		else if(lastName=="")
+		{
+			resultDesc=ShowMsg.LastNameNull;
+			resultCode=2;
+		}
+		else if(email=="")
+		{
+			resultDesc=ShowMsg.EmailNull;
+			resultCode=2;
 		}
 		else
 		{
-			if(myid.equals("")||!myid.matches("^[0-9]*$"))
+			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+			Matcher matcher=pattern.matcher(email);
+			if(matcher.matches())
 			{
-				resultCode=2;
-				resultDesc=ShowMsg.ParFail;
-			}
-			else if(firstName=="")
-			{
-				resultDesc=ShowMsg.FirstNameNull;
-				resultCode=2;
-			}
-			else if(lastName=="")
-			{
-				resultDesc=ShowMsg.LastNameNull;
-				resultCode=2;
-			}
-			else if(email=="")
-			{
-				resultDesc=ShowMsg.EmailNull;
-				resultCode=2;
-			}
-			else
-			{
-				Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
-				Matcher matcher=pattern.matcher(email);
-				if(matcher.matches())
+				int id=Integer.parseInt(myid);
+				Manager m=new Manager();
+				m.setId(id);
+				m.setFirstName(firstName);
+				m.setLastName(lastName);
+				m.setEmail(email);
+				m.setType(type);
+				m.setUpdateBy(Integer.parseInt(myloginId));
+				m.setUpdateDate(DateUtil.getCurrentDateStr());
+				result=managerService.update(m);
+				if(result==true)
 				{
-					int id=Integer.parseInt(myid);
-					Manager m=new Manager();
-					m.setId(id);
-					m.setFirstName(firstName);
-					m.setLastName(lastName);
-					m.setEmail(email);
-					m.setType(type);
-					m.setUpdateBy(id);
-					m.setUpdateDate(DateUtil.getCurrentDateStr());
-					result=managerService.update(m);
-					if(result==true)
-					{
-						resultCode=0;
-						resultDesc=ShowMsg.updateSuc;
-					}
-					else
-					{
-						resultCode=1;
-						resultDesc=ShowMsg.updateFail;
-					}
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
 				}
 				else
 				{
-					resultCode=2;
-					resultDesc=ShowMsg.emailErr;
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
 				}
+			}
+			else
+			{
+				resultCode=2;
+				resultDesc=ShowMsg.emailErr;
 			}
 		}
 		model.put("resultCode", resultCode);	
@@ -293,44 +291,43 @@ public class ManagerController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
-		String myid=getString(request, "id");
 		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
 		}
-		else if(myloginId==""||myloginId==null)
+		model.put("authCode", loginService.NewAuthCode(myloginId));
+
+
+		String myid=getString(request, "id");
+
+		if(!myid.equals("")&&myid.matches("^[0-9]*$"))
 		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else
-		{
-			if(!myid.equals("")&&myid.matches("^[0-9]*$"))
+			int id=Integer.parseInt(myid);
+			Manager m=new Manager();
+			m.setId(id);
+			m.setUpdateBy(Integer.parseInt(myloginId));
+			m.setUpdateDate(DateUtil.getCurrentDateStr());
+			result=managerService.delete(m);
+			if(result==true)
 			{
-				int id=Integer.parseInt(myid);
-				Manager m=new Manager();
-				m.setId(id);
-				m.setUpdateBy(id);
-				m.setUpdateDate(DateUtil.getCurrentDateStr());
-				result=managerService.delete(m);
-				if(result==true)
-				{
-					resultCode=0;
-					resultDesc=ShowMsg.delSuc;
-				}
-				else
-				{
-					resultCode=1;
-					resultDesc=ShowMsg.delFail;
-				}
+				resultCode=0;
+				resultDesc=ShowMsg.delSuc;
 			}
 			else
 			{
-				resultCode=2;
-				resultDesc=ShowMsg.ParFail;
+				resultCode=1;
+				resultDesc=ShowMsg.delFail;
 			}
+		}
+		else
+		{
+			resultCode=2;
+			resultDesc=ShowMsg.ParFail;
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -343,30 +340,27 @@ public class ManagerController extends MyController {
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
 		}
-		else if(myloginId==""||myloginId==null)
+		model.put("authCode", loginService.NewAuthCode(myloginId));
+
+		List<Manager> list=managerService.list();
+		if(list.size()>0)
 		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
+			resultCode=0;
+			model.put("list", list);
+			resultDesc=ShowMsg.findSuc;
 		}
 		else
 		{
-			List<Manager> list=managerService.list();
-			if(list.size()>0)
-			{
-				resultCode=0;
-				model.put("list", list);
-				resultDesc=ShowMsg.findSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.findFail;
-			}
+			resultCode=1;
+			resultDesc=ShowMsg.findFail;
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -406,9 +400,8 @@ public class ManagerController extends MyController {
 				model.put("firstName", m.getFirstName());
 				model.put("lastName", m.getLastName());
 				model.put("type", m.getType());
-				Login l=loginService.NewAuthCode(m.getId()+"");
-				loginService.handleLogin(l);
-				model.put("authCode", l.getAuthCode());
+
+				model.put("authCode", loginService.NewAuthCode(m.getId()+""));
 
 			}
 			else
