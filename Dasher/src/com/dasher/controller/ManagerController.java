@@ -105,7 +105,7 @@ public class ManagerController extends MyController {
 					try {
 						m.setPassword(MyMD5Util.getEncryptedPwd(password));
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
+						// TODO Auto-g8enerated catch block
 						e.printStackTrace();
 					}
 					m.setSalt(salt);
@@ -205,7 +205,6 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
 	@RequestMapping("/admin/update")
 	@ResponseBody
 	protected Object update(HttpServletRequest request,HttpServletResponse response,HttpSession session){
@@ -288,7 +287,6 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
 	@RequestMapping("/admin/delete")
 	@ResponseBody
 	protected Object delete(HttpServletRequest request,HttpServletResponse response,HttpSession session){
@@ -338,7 +336,6 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
 	@RequestMapping("/admin/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session){

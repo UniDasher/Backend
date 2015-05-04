@@ -15,7 +15,6 @@
 	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd   
 	http://www.springframework.org/schema/aop 
     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
-    
     <!--启动注解配置bean -->
     <context:annotation-config></context:annotation-config>
     <!--AOP开发（基于注解方式进行AOP开发） -->

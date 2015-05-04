@@ -44,12 +44,10 @@
    </update>
    
    <select id="list" resultType="Manager">
-     select id,account,name,mobilePhone,taken,type from manager where status>0
+     select id,account,firstName,lastName,email,type from manager where status>0
    </select>
    
    <select id="listAll" resultType="Manager">
      select * from manager where status>0
    </select>
-   
-  
 </mapper>

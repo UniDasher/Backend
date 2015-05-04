@@ -10,7 +10,7 @@ import com.dasher.util.DateUtil;
 public class LoginServiceImpl implements LoginService {
 
 	private LoginMapper loginMapper;
-	
+
 	public LoginMapper getLoginMapper() {
 		return loginMapper;
 	}
@@ -23,8 +23,6 @@ public class LoginServiceImpl implements LoginService {
 		// TODO Auto-generated method stub
 		return loginMapper.add(l)>0? true:false;
 	}
-
-	
 
 	public boolean update(Login l) {
 		// TODO Auto-generated method stub
@@ -49,12 +47,12 @@ public class LoginServiceImpl implements LoginService {
 		return loginMapper.getByLogId(loginId);
 	}
 
-	
+
 	public String getByAuthCode(String authCode) {
 		// TODO Auto-generated method stub
 		return loginMapper.getByAuthCode(authCode);
 	}
-	
+
 	public Login NewAuthCode(String id){
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
@@ -87,6 +85,4 @@ public class LoginServiceImpl implements LoginService {
 		l.setLoginTime(DateUtil.getCurrentDateStr());
 		return l;
 	}
-
-	
 }

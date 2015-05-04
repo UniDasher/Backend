@@ -7,7 +7,6 @@
 	xmlns:aop="http://www.springframework.org/schema/aop" 
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
-	
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/context 
@@ -16,7 +15,6 @@
 	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd   
 	http://www.springframework.org/schema/aop 
     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
-    
     <!-- 引用bean的配置文件 -->
     <import resource="classpath:beanContext.xml"/>
 
@@ -65,7 +63,6 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
 	
 	<!-- 以下用于将对象转换为 JSON  -->
 	<bean id="stringConverter"

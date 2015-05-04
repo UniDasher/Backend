@@ -11,4 +11,5 @@ public interface UserMapper {
 	public int delete(User u);
 	public int updatePwd(User u);
 	public int userApply(User u);
+	
 }

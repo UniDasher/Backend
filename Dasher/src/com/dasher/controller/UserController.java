@@ -456,7 +456,6 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
 	@RequestMapping("/user/apply")
 	@ResponseBody
 	protected Object apply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -514,6 +513,4 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
-
 }

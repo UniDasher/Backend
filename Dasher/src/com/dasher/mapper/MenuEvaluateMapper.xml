@@ -6,6 +6,4 @@
      <result property="id" column="id"/>
     
    </resultMap>
-   
-  
 </mapper>
