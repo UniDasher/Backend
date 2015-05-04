@@ -7,6 +7,7 @@
 	xmlns:aop="http://www.springframework.org/schema/aop" 
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/context 
@@ -72,12 +73,6 @@
 		class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.dasher.mapper.ComplainDealMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean>
-	<bean id="loginMapper"
-		class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface"
-			value="com.dasher.mapper.LoginMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	<bean id="managerMapper"
@@ -152,13 +147,13 @@
 			value="com.dasher.mapper.ShopDishTypeMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	
 	<bean id="shopTypeMapper"
 		class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.dasher.mapper.ShopTypeMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	
 	<!-- service config -->
 	<bean id="userService"
 		class="com.dasher.service.impl.UserServiceImpl">
@@ -167,10 +162,6 @@
 	<bean id="managerService"
 		class="com.dasher.service.impl.ManagerServiceImpl">
 		<property name="managerMapper" ref="managerMapper"></property>
-	</bean>
-	<bean id="loginService"
-		class="com.dasher.service.impl.LoginServiceImpl">
-		<property name="loginMapper" ref="loginMapper"></property>
 	</bean>
 	
 </beans>

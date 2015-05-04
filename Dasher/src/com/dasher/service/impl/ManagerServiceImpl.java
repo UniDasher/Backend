@@ -1,13 +1,10 @@
 package com.dasher.service.impl;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.dasher.mapper.ManagerMapper;
-import com.dasher.model.Login;
 import com.dasher.model.Manager;
 import com.dasher.service.ManagerService;
-import com.dasher.util.DateUtil;
 import com.dasher.util.MyMD5Util;
 
 public class ManagerServiceImpl implements ManagerService {
@@ -78,7 +75,5 @@ public class ManagerServiceImpl implements ManagerService {
 		// TODO Auto-generated method stub
 		return managerMapper.listAll();
 	}
-	
-	
 
 }

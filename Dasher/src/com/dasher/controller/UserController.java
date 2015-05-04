@@ -16,10 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.dasher.model.Login;
 import com.dasher.model.User;
-import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
@@ -31,8 +28,6 @@ public class UserController extends MyController {
 
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private LoginService loginService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -209,9 +204,7 @@ public class UserController extends MyController {
 				resultCode=0;
 				User us=userService.getUserByAccount(account);
 				model.put("uid", us.getUid());
-				Login l=loginService.userNewAuthCode(us.getUid()+"");
-				loginService.handleLogin(l);
-				model.put("authCode", l.getAuthCode());
+				session.setAttribute("AdminId", account);
 			}
 			else
 			{
@@ -235,15 +228,9 @@ public class UserController extends MyController {
 	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
 		String uid=getString(request, "uid");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else if(myloginId==""||myloginId==null)
+		String UserLogin=(String)session.getAttribute("AdminId");
+		if(UserLogin==""||UserLogin==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -281,7 +268,6 @@ public class UserController extends MyController {
 	protected Object update(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
 		String uid=getString(request, "uid");
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
@@ -291,13 +277,8 @@ public class UserController extends MyController {
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else if(myloginId==""||myloginId==null)
+		String UserLogin=(String)session.getAttribute("AdminId");
+		if(UserLogin==""||UserLogin==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -393,17 +374,11 @@ public class UserController extends MyController {
 	protected Object pwdupdate(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
 		String uid=getString(request, "uid");
 		String oldPassword=getString(request, "oldPassword");
 		String newPassword=getString(request, "newPassword");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else if(myloginId==""||myloginId==null)
+		String UserLogin=(String)session.getAttribute("AdminId");
+		if(UserLogin==""||UserLogin==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -462,16 +437,10 @@ public class UserController extends MyController {
 	protected Object apply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
 		String uid=getString(request, "uid");
 		String myStatus=getString(request, "status");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if(authCode==""||authCode==null)
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-		}
-		else if(myloginId==""||myloginId==null)
+		String UserLogin=(String)session.getAttribute("AdminId");
+		if(UserLogin==""||UserLogin==null)
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
