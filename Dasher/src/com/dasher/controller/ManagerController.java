@@ -42,7 +42,7 @@ public class ManagerController extends MyController {
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -50,7 +50,7 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.NewAuthCode(myloginId));
+		model.put("authCode", loginService.handleLogin(myloginId));
 
 		String account=getString(request, "account");
 		String password=getString(request, "password");
@@ -153,7 +153,7 @@ public class ManagerController extends MyController {
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -161,7 +161,7 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.NewAuthCode(myloginId));
+		model.put("authCode", loginService.handleLogin(myloginId));
 		String myid=getString(request, "id");
 		Login l=new Login();
 		l.setLoginId(myid);
@@ -212,7 +212,7 @@ public class ManagerController extends MyController {
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -220,7 +220,7 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.NewAuthCode(myloginId));
+		model.put("authCode", loginService.handleLogin(myloginId));
 
 		String myid=getString(request, "id");
 		String firstName=getString(request, "firstName");
@@ -292,7 +292,7 @@ public class ManagerController extends MyController {
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -300,7 +300,7 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.NewAuthCode(myloginId));
+		model.put("authCode", loginService.handleLogin(myloginId));
 
 
 		String myid=getString(request, "id");
@@ -340,7 +340,7 @@ public class ManagerController extends MyController {
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null)
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
 			resultCode=3;
@@ -348,7 +348,7 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.NewAuthCode(myloginId));
+		model.put("authCode", loginService.handleLogin(myloginId));
 
 		List<Manager> list=managerService.list();
 		if(list.size()>0)
@@ -401,7 +401,7 @@ public class ManagerController extends MyController {
 				model.put("lastName", m.getLastName());
 				model.put("type", m.getType());
 
-				model.put("authCode", loginService.NewAuthCode(m.getId()+""));
+				model.put("authCode", loginService.handleLogin(m.getId()+""));
 
 			}
 			else

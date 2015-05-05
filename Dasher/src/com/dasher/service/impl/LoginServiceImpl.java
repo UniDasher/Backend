@@ -29,18 +29,6 @@ public class LoginServiceImpl implements LoginService {
 		return loginMapper.update(l)>0? true:false;
 	}
 
-	public void handleLogin(Login l) {
-		// TODO Auto-generated method stub
-		Login login=loginMapper.getByLogId(l.getLoginId());
-		if(login==null)
-		{
-			loginMapper.add(l);
-		}
-		else
-		{
-			loginMapper.update(l);
-		}
-	}
 
 	public Login getByLogId(String loginId) {
 		// TODO Auto-generated method stub
@@ -53,7 +41,7 @@ public class LoginServiceImpl implements LoginService {
 		return loginMapper.getByAuthCode(authCode);
 	}
 
-	public String NewAuthCode(String id){
+	public String handleLogin(String id){
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
 		String authCode="";
@@ -80,7 +68,7 @@ public class LoginServiceImpl implements LoginService {
 		return authCode;
 	}
 
-	public Login userNewAuthCode(String id) {
+	public String userHandleLogin(String id) {
 		// TODO Auto-generated method stub
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
@@ -104,6 +92,6 @@ public class LoginServiceImpl implements LoginService {
 		{
 			loginMapper.update(l);
 		}
-		return l;
+		return authCode;
 	}
 }

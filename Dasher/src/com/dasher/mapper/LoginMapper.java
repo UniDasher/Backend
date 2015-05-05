@@ -1,6 +1,5 @@
 package com.dasher.mapper;
 
-import com.dasher.model.Complain;
 import com.dasher.model.Login;
 
 public interface LoginMapper {

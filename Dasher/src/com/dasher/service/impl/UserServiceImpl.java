@@ -1,5 +1,7 @@
 package com.dasher.service.impl;
 
+import java.util.List;
+
 import com.dasher.mapper.UserMapper;
 import com.dasher.model.User;
 import com.dasher.service.UserService;
@@ -96,6 +98,27 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userMapper.userApply(u)>0? true:false;
 	}
+
+	public List<User> getUserByStatus(int status) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByStatus(status);
+	}
+	public List<User> searchUser(int type, String searchStr, int startRow,
+			int pageSize) {
+		// TODO Auto-generated method stub
+		return userMapper.searchUser(type, searchStr, startRow, pageSize);
+	}
+	public List<User> getUserByPage(int type, int startRow, int pageSize) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByPage(type, startRow, pageSize);
+	}
+
+	public int getUserByStatus2(int status) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByStatus2(status);
+	}
+
+	
 
 	
 	

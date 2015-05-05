@@ -25,8 +25,8 @@
    </resultMap>
    
    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="User">
-     insert into user_info(uid,firstName,lastName,account,password,salt,equmentNumber,mobilePhone,logo,email,address,longitude,latitude,createDate)
-     values(#{uid},#{firstName},#{lastName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate})
+     insert into user_info(uid,firstName,lastName,account,password,salt,equmentNumber,mobilePhone,logo,email,address,longitude,latitude,createDate,status)
+     values(#{uid},#{firstName},#{lastName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate},1)
    </insert>
    
    <select id="getByUId" parameterType="String" resultType="User">
@@ -43,7 +43,6 @@
      where uid=#{uid}
    </update>
    
-   
    <update id="updatePwd" parameterType="User">
      update user_info 
      set password=#{password}
@@ -55,4 +54,32 @@
      set status=#{status}
      where uid=#{uid}
    </update>
+     
+   <select id="getUserByPage" resultType="User">
+     select uid,account,firstName,lastName,logo,balance,mobilePhone,email,address,longitude,latitude,goodEvaluate,badEvaluate,status from user_info where status=#{0} limit #{1},#{2}
+   </select>
+  
+   <select id="getUserByStatus" resultType="User">
+     select uid,account,firstName,lastName,logo,balance,mobilePhone,email,address,longitude,latitude,goodEvaluate,badEvaluate,status from user_info where status=#{status}
+   </select>
+   
+   <select id="getUserByStatus2" resultType="Integer">
+     select count(*) from user_info where status=#{status}
+   </select>
+   
+   <select id="searchUser" resultType="User">
+     select uid,account,firstName,lastName,logo,balance,mobilePhone,email,address,longitude,latitude,goodEvaluate,badEvaluate,status from user_info
+     <where>
+	     <if test="type==1">
+	     	 status=2 or status=3
+	     </if>
+	     <if test="searchStr!='' and searchStr!=null">
+	     	 and firstName like '%${searchStr}%' or lastName like '%${searchStr}%'
+	     </if>
+	     
+     </where>
+     limit #{2},#{3}
+   </select>
+  
+   
 </mapper>
