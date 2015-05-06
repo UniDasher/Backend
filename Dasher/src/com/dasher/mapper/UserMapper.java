@@ -16,6 +16,6 @@ public interface UserMapper {
 	public List<User> getUserByStatus(int status);
 	public List<User> getUserByPage(int type,int startRow,int pageSize);
 	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
-	public int getUserByStatus2(int status);
+	public int getUserByStatus2(int type,String searchStr);
 	
 }

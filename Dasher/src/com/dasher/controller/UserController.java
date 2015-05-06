@@ -447,7 +447,7 @@ public class UserController extends MyController {
 		return model;
 	}
 	
-	@RequestMapping("/user/apply")
+	@RequestMapping("/user/status")
 	@ResponseBody
 	protected Object apply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
@@ -507,34 +507,34 @@ public class UserController extends MyController {
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-//		String authCode=getString(request, "authCode");
-//		String myloginId=loginService.getByAuthCode(authCode);
-//		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-//		{
-//			resultDesc=ShowMsg.NoLogin;
-//			resultCode=3;
-//			model.put("resultCode", resultCode);	
-//			model.put("resultDesc", resultDesc);	
-//			return model;
-//		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", loginService.userHandleLogin(myloginId));
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		String mytype=getString(request, "type");
 		String searchStr=getString(request, "searchStr");
-//		if(mycurPage.equals("")||mypageSize.equals("")||mytype.equals(""))
-//		{
-//			resultDesc=ShowMsg.ParFail;
-//			resultCode=2;
-//		}
-//		else
-//		{
-//			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$")&&mytype.matches("^[0-9]*$"))
-//			{
+		if(mycurPage.equals("")||mypageSize.equals("")||mytype.equals(""))
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$")&&mytype.matches("^[0-9]*$"))
+			{
 				int curPage=Integer.parseInt(mycurPage);
 				int pageSize=Integer.parseInt(mypageSize);
 				int type=Integer.parseInt(mytype);
-				int count=userService.getUserByStatus2(type);
+				int count=userService.getUserByStatus2(type,searchStr);
 				if(count>0)
 				{
 					model.put("count", count);
@@ -550,13 +550,13 @@ public class UserController extends MyController {
 					resultCode=1;
 				}
 				
-//			}
-//			else
-//			{
-//				resultDesc=ShowMsg.inputErr;
-//				resultCode=2;
-//			}
-//		}
+			}
+			else
+			{
+				resultDesc=ShowMsg.inputErr;
+				resultCode=2;
+			}
+		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;

@@ -113,9 +113,9 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUserByPage(type, startRow, pageSize);
 	}
 
-	public int getUserByStatus2(int status) {
+	public int getUserByStatus2(int type,String searchStr) {
 		// TODO Auto-generated method stub
-		return userMapper.getUserByStatus2(status);
+		return userMapper.getUserByStatus2(type,searchStr);
 	}
 
 	

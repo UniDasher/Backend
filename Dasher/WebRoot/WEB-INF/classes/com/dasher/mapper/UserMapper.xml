@@ -64,20 +64,26 @@
    </select>
    
    <select id="getUserByStatus2" resultType="Integer">
-     select count(*) from user_info where status=#{status}
+     select count(*) from user_info
+     where 1=1 
+     <if test="#{type==1}">
+     	and (status=2 or status=3)
+     </if>
+     <if test="#{searchStr!=''}">
+	    and (firstName like CONCAT(CONCAT('%', #{1}),'%') or lastName like CONCAT(CONCAT('%', #{1}),'%')) 
+	 </if>
+	 
    </select>
    
    <select id="searchUser" resultType="User">
      select uid,account,firstName,lastName,logo,balance,mobilePhone,email,address,longitude,latitude,goodEvaluate,badEvaluate,status from user_info
-     <where>
-	     <if test="type==1">
-	     	 status=2 or status=3
-	     </if>
-	     <if test="searchStr!='' and searchStr!=null">
-	     	 and firstName like '%${searchStr}%' or lastName like '%${searchStr}%'
-	     </if>
-	     
-     </where>
+     where 1=1 
+     <if test="#{type==1}">
+     	and (status=2 or status=3)
+     </if>
+     <if test="#{searchStr!=''}">
+	    and (firstName like CONCAT(CONCAT('%', #{1}),'%') or lastName like CONCAT(CONCAT('%', #{1}),'%')) 
+	 </if>
      limit #{2},#{3}
    </select>
   
