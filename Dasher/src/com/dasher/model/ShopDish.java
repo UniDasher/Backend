@@ -12,13 +12,21 @@ public class ShopDish implements Serializable {
 	private int typeId;
 	private int chilies;
 	private String description;
+	private int createBy;
+	private String createDate;
+	private int updateBy;
+	private String updateDate;
+	private int status;
 	
 	public ShopDish() {
 		
 	}
+	
+	
 
 	public ShopDish(int id, String sid, String did, String name, float price,
-			int typeId, int chilies, String description) {
+			int typeId, int chilies, String description, int createBy,
+			String createDate, int updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.sid = sid;
@@ -28,6 +36,18 @@ public class ShopDish implements Serializable {
 		this.typeId = typeId;
 		this.chilies = chilies;
 		this.description = description;
+		this.createBy = createBy;
+		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
+		this.status = status;
+	}
+
+	public int getCreateBy() {
+		return createBy;
+	}
+	public void setCreateBy(int createBy) {
+		this.createBy = createBy;
 	}
 
 	public int getId() {
@@ -92,6 +112,38 @@ public class ShopDish implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public int getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(int updateBy) {
+		this.updateBy = updateBy;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	
 	

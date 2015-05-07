@@ -17,6 +17,10 @@ public class Shop implements Serializable {
 	private String latitude;
 	private int goodEvaluate;
 	private int badEvaluate;
+	private int createBy;
+	private String createDate;
+	private int updateBy;
+	private String updateDate;
 	private int status;
 	
 	
@@ -27,7 +31,8 @@ public class Shop implements Serializable {
 	public Shop(int id, String sid, String name, String typeTab,
 			String address, String subscribe, String email, String phone,
 			String logo, String longitude, String latitude, int goodEvaluate,
-			int badEvaluate, int status) {
+			int badEvaluate, int createBy, String createDate, int updateBy,
+			String updateDate, int status) {
 		super();
 		this.id = id;
 		this.sid = sid;
@@ -42,8 +47,14 @@ public class Shop implements Serializable {
 		this.latitude = latitude;
 		this.goodEvaluate = goodEvaluate;
 		this.badEvaluate = badEvaluate;
+		this.createBy = createBy;
+		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
 		this.status = status;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -147,6 +158,38 @@ public class Shop implements Serializable {
 
 	public void setBadEvaluate(int badEvaluate) {
 		this.badEvaluate = badEvaluate;
+	}
+
+	public int getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(int createBy) {
+		this.createBy = createBy;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public int getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(int updateBy) {
+		this.updateBy = updateBy;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public int getStatus() {

@@ -159,6 +159,34 @@
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	<!-- service config -->
+	<bean id="userSettleService"
+		class="com.dasher.service.impl.UserSettleServiceImpl">
+		<property name="userSettleMapper" ref="userSettleMapper"></property>
+	</bean>
+	<bean id="userAddressService"
+		class="com.dasher.service.impl.UserAddressServiceImpl">
+		<property name="userAddressMapper" ref="userAddressMapper"></property>
+	</bean>
+	<bean id="menuService"
+		class="com.dasher.service.impl.MenuServiceImpl">
+		<property name="menuMapper" ref="menuMapper"></property>
+	</bean>
+	<bean id="menuEvaluateService"
+		class="com.dasher.service.impl.MenuEvaluateServiceImpl">
+		<property name="menuEvaluateMapper" ref="menuEvaluateMapper"></property>
+	</bean>
+	<bean id="menuDishService"
+		class="com.dasher.service.impl.MenuDishServiceImpl">
+		<property name="menuDishMapper" ref="menuDishMapper"></property>
+	</bean>
+	<bean id="complainDealService"
+		class="com.dasher.service.impl.ComplainDealServiceImpl">
+		<property name="complainDealMapper" ref="complainDealMapper"></property>
+	</bean>
+	<bean id="complainService"
+		class="com.dasher.service.impl.ComplainServiceImpl">
+		<property name="complainMapper" ref="complainMapper"></property>
+	</bean>
 	<bean id="userService"
 		class="com.dasher.service.impl.UserServiceImpl">
 		<property name="userMapper" ref="userMapper"></property>
@@ -171,5 +199,40 @@
 		class="com.dasher.service.impl.LoginServiceImpl">
 		<property name="loginMapper" ref="loginMapper"></property>
 	</bean>
-	
+	<bean id="serverSettleService"
+		class="com.dasher.service.impl.ServerSettleServiceImpl">
+		<property name="serverSettleMapper" ref="serverSettleMapper"></property>
+	</bean>
+	<bean id="shopService"
+		class="com.dasher.service.impl.ShopServiceImpl">
+		<property name="shopMapper" ref="shopMapper"></property>
+	</bean>
+	<bean id="shopDishService"
+		class="com.dasher.service.impl.ShopDishServiceImpl">
+		<property name="shopDishMapper" ref="shopDishMapper"></property>
+	</bean>
+	<bean id="shopDishTypeService"
+		class="com.dasher.service.impl.ShopDishTypeServiceImpl">
+		<property name="shopDishTypeMapper" ref="shopDishTypeMapper"></property>
+	</bean>
+	<bean id="shopTypeService"
+		class="com.dasher.service.impl.ShopTypeServiceImpl">
+		<property name="shopTypeMapper" ref="shopTypeMapper"></property>
+	</bean>
+	<bean id="marketService"
+		class="com.dasher.service.impl.MarketServiceImpl">
+		<property name="marketMapper" ref="marketMapper"></property>
+	</bean>
+	<bean id="marketCommodityService"
+		class="com.dasher.service.impl.MarketCommodityServiceImpl">
+		<property name="marketCommodityMapper" ref="marketCommodityMapper"></property>
+	</bean>
+	<bean id="marketMenuRecordService"
+		class="com.dasher.service.impl.MarketMenuRecordServiceImpl">
+		<property name="marketMenuRecordMapper" ref="marketMenuRecordMapper"></property>
+	</bean>
+	<bean id="marketMenuService"
+		class="com.dasher.service.impl.MarketMenuServiceImpl">
+		<property name="marketMenuMapper" ref="marketMenuMapper"></property>
+	</bean>
 </beans>

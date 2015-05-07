@@ -6,6 +6,7 @@ public class ShowMsg {
 	public static final String addSuc="Information added successfully";  //添加成功
 	public static final String addFail="Information added unsuccessfully"; //添加失败
 	public static final String addRepeat="User name already exists. Please enter again";//用户名已存在
+	public static final String ShopaddRepeat="Business name already exists. Please enter again";//商家名称已存在
 	public static final String loginSuc="Login successful";  //登录成功
 	public static final String loginFail="Login failed";  //登录失败
 	public static final String userNameNull="User name does not exist";//用户名不存在
@@ -30,4 +31,9 @@ public class ShowMsg {
 	public static final String NoLogin = "The user is not login, please login again";//用户没有登录
 	public static final String mobilePhoneErr="Mobile phone number format is not correct, please enter again";//手机号码格式不正确
 	public static final String inputErr="You input format is not correct";//你输入的格式不正确
+	public static final String LogoNull = "The store logo is empty";//店铺logo为空
+	public static final String shopNull="Businessman named empty";//商家名为空
+	public static final String typeTabNull="Business type is empty tags";//商家类型标签为空
+	public static final String NoPermiss = "You do not have permission to do this";//您没有权限进行此操作
+
 }

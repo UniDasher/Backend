@@ -4,7 +4,13 @@
 <mapper namespace="com.dasher.mapper.ShopDishTypeMapper">
    <resultMap type="ShopDishType" id="shopDishTypeMap">
      <result property="id" column="id"/>
-    
+     <result property="name" column="name"/>
+     <result property="sortNum" column="sortNum"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="status" column="status"/>
    </resultMap>
    
   
