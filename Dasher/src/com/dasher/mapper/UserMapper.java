@@ -2,6 +2,8 @@ package com.dasher.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.dasher.model.User;
 
 public interface UserMapper {
@@ -13,9 +15,7 @@ public interface UserMapper {
 	public int delete(User u);
 	public int updatePwd(User u);
 	public int userApply(User u);
-	public List<User> getUserByStatus(int status);
-	public List<User> getUserByPage(int type,int startRow,int pageSize);
-	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
-	public int getUserByStatus2(int type,String searchStr);
+	public List<User> searchUser(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public int getUserByStatus2(@Param(value="type") int type,@Param(value="searchStr") String searchStr);
 	
 }

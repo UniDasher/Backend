@@ -50,17 +50,17 @@
    
    <select id="getListByLati" resultType="Shop">
      select * from shop_info
-     where longitude>#{0} and latitude>#{1}
-     limit #{2},#{3}
+     where longitude>#{longitude} and latitude>#{latitude}
+     limit #{startRow},#{pageSize}
    </select>
    
    <select id="list" resultType="Shop">
      select * from shop_info
      where 1=1
-     <if test="#{searchStr!=''}">
-       and name like CONCAT(CONCAT('%',#{0}),'%')
+     <if test="searchStr!=''">
+       and name like CONCAT(CONCAT('%',#{searchStr}),'%')
      </if>
-     limit #{1},#{2}
+     limit #{startRow},#{pageSize}
    </select>
   
 </mapper>

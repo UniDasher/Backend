@@ -32,8 +32,7 @@ import com.dasher.util.ShowMsg;
 
 @Controller
 public class ShopController extends MyController {
-
-	@Autowired
+    @Autowired
 	private ShopService shopService;
 	@Autowired
 	private LoginService loginService;
@@ -41,7 +40,7 @@ public class ShopController extends MyController {
 	private int resultCode;
 	private String resultDesc;
 	private ModelMap model;
-
+	
 	@RequestMapping("/shop/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -76,7 +75,6 @@ public class ShopController extends MyController {
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
-
 		if(name=="")
 		{
 			resultDesc=ShowMsg.shopNull;
@@ -128,7 +126,7 @@ public class ShopController extends MyController {
 				Shop shop=shopService.getByName(name);
 				if(shop==null)
 				{
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss");
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 					Date date=new Date();
 					String strs[]=sdf.format(date).split("-");
 					String sid="";
@@ -168,16 +166,10 @@ public class ShopController extends MyController {
 					resultCode=1;
 					resultDesc=ShowMsg.ShopaddRepeat;
 				}
-
-
 			}
-
-
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
-
 		return model;
 	}	
 
@@ -302,14 +294,11 @@ public class ShopController extends MyController {
 					resultCode=1;
 					resultDesc=ShowMsg.ShopaddRepeat;
 				}
-
 			}
 
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
-
 		return model;
 	}	
 
@@ -356,7 +345,6 @@ public class ShopController extends MyController {
 
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
-
 		return model;
 	}	
 
@@ -392,15 +380,13 @@ public class ShopController extends MyController {
 			}
 			else
 			{
-				model.put("shop", s);
+				model.put("data", s);
 				resultCode=1;
 				resultDesc=ShowMsg.findSuc;
 			}
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
-
 		return model;
 	}
 
@@ -427,13 +413,12 @@ public class ShopController extends MyController {
 				int pageSize=Integer.parseInt(mypageSize);
 				int startRow=(curPage-1)*pageSize;
 				List<Shop> shopList=shopService.getListByLati(Integer.parseInt(longitude), Integer.parseInt(latitude), startRow, pageSize);
-				model.put("shopList", shopList);
+				model.put("list", shopList);
 			}
 		}
 
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
-
 		return model;
 	}	
 
@@ -454,7 +439,7 @@ public class ShopController extends MyController {
 			if(shopList.size()>0)
 			{
 				model.put("count", shopList.size());
-				model.put("shopList", shopList);
+				model.put("list", shopList);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
@@ -467,7 +452,6 @@ public class ShopController extends MyController {
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
-
 		return model;
 	}	
 

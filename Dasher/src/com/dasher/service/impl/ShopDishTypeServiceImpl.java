@@ -1,5 +1,9 @@
 package com.dasher.service.impl;
 
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.dasher.mapper.ShopDishTypeMapper;
 import com.dasher.model.ShopDishType;
 import com.dasher.service.ShopDishTypeService;
@@ -21,6 +25,47 @@ public class ShopDishTypeServiceImpl implements ShopDishTypeService {
 	public boolean add(ShopDishType sdt) {
 		// TODO Auto-generated method stub
 		return shopDishTypeMapper.add(sdt)>0? true:false;
+	}
+
+
+	public boolean delete(ShopDishType sdt) {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.delete(sdt)>0? true:false;
+	}
+
+
+	public ShopDishType getById(int id) {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.getById(id);
+	}
+
+
+	public boolean update(ShopDishType sdt) {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.update(sdt)>0? true:false;
+	}
+
+
+	public ShopDishType getByName(String name) {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.getByName(name);
+	}
+
+
+	public List<ShopDishType> list() {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.list();
+	}
+
+
+	public String getMax() {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.getMax();
+	}
+
+	public boolean updateSortNum(ShopDishType sdt) {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.updateSortNum(sdt)>0? true:false;
 	}
 
 }

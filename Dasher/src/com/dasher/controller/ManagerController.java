@@ -4,17 +4,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.dasher.model.Login;
 import com.dasher.model.Manager;
 import com.dasher.service.LoginService;
@@ -91,7 +88,6 @@ public class ManagerController extends MyController {
 			resultDesc=ShowMsg.EmailNull;
 			resultCode=2;
 		}
-
 		else
 		{
 			Pattern pattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
@@ -174,7 +170,7 @@ public class ManagerController extends MyController {
 			if(m!=null)
 			{
 				resultCode=0;
-				model.put("Manager", m);
+				model.put("data", m);
 				resultDesc=ShowMsg.findSuc;
 
 				UUID uuid=UUID.randomUUID();
@@ -187,7 +183,6 @@ public class ManagerController extends MyController {
 				Login myLogin=new Login();
 				myLogin.setAuthCode(myauthCode);
 				myLogin.setLoginId(myid);
-
 			}
 			else
 			{
@@ -301,10 +296,7 @@ public class ManagerController extends MyController {
 			return model;
 		}
 		model.put("authCode", loginService.handleLogin(myloginId));
-
-
 		String myid=getString(request, "id");
-
 		if(!myid.equals("")&&myid.matches("^[0-9]*$"))
 		{
 			int id=Integer.parseInt(myid);
@@ -400,9 +392,7 @@ public class ManagerController extends MyController {
 				model.put("firstName", m.getFirstName());
 				model.put("lastName", m.getLastName());
 				model.put("type", m.getType());
-
 				model.put("authCode", loginService.handleLogin(m.getId()+""));
-
 			}
 			else
 			{

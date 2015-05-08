@@ -5,11 +5,6 @@ import javax.servlet.ServletContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-/*
- *   @copyright (c) Qeeka 2005 
- * @author YinChunhui    Mar 25, 2012 
- */
-
 public class MyApplicationContext {
 
 	public ApplicationContext context = null;

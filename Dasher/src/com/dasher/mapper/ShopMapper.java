@@ -2,6 +2,8 @@ package com.dasher.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.dasher.model.Shop;
 
 public interface ShopMapper {
@@ -11,6 +13,6 @@ public interface ShopMapper {
 	public Shop getByName(String name);
 	public int update(Shop s);
 	public int delete(Shop s);
-	public List<Shop> getListByLati(int longitude,int latitude,int startRow,int pageSize);
-	public List<Shop> list(String searchStr, int startRow,int pageSize);
+	public List<Shop> getListByLati(@Param(value="longitude")int longitude,@Param(value="latitude") int latitude,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public List<Shop> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 }

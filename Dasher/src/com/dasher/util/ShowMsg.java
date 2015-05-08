@@ -35,5 +35,8 @@ public class ShowMsg {
 	public static final String shopNull="Businessman named empty";//商家名为空
 	public static final String typeTabNull="Business type is empty tags";//商家类型标签为空
 	public static final String NoPermiss = "You do not have permission to do this";//您没有权限进行此操作
-
+	public static final String DishTypeNull="Category name is empty, please enter again";//分类名称为空，请重新输入
+	public static final String sortNumErr = "The sortNum of the format is not correct"; //sortNum的格式不正确
+	public static final String ShopDishTypeaddRepeat = "Category name already exists. Please enter again";//分类名称已存在,请重新输入
+	public static final String sortNumNull="sortNum is null";//sortNum为空
 }

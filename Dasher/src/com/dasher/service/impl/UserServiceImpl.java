@@ -99,20 +99,12 @@ public class UserServiceImpl implements UserService {
 		return userMapper.userApply(u)>0? true:false;
 	}
 
-	public List<User> getUserByStatus(int status) {
-		// TODO Auto-generated method stub
-		return userMapper.getUserByStatus(status);
-	}
 	public List<User> searchUser(int type, String searchStr, int startRow,
 			int pageSize) {
 		// TODO Auto-generated method stub
 		return userMapper.searchUser(type, searchStr, startRow, pageSize);
 	}
-	public List<User> getUserByPage(int type, int startRow, int pageSize) {
-		// TODO Auto-generated method stub
-		return userMapper.getUserByPage(type, startRow, pageSize);
-	}
-
+	
 	public int getUserByStatus2(int type,String searchStr) {
 		// TODO Auto-generated method stub
 		return userMapper.getUserByStatus2(type,searchStr);

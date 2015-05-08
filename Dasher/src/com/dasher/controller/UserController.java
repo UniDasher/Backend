@@ -112,7 +112,7 @@ public class UserController extends MyController {
 			}
 			else
 			{
-				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss");
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 				Date date=new Date();
 				String strs[]=sdf.format(date).split("-");
 				String uid="";
@@ -258,7 +258,7 @@ public class UserController extends MyController {
 			{
 				resultCode=0;
 				resultDesc=ShowMsg.findSuc;
-				model.put("user", u);
+				model.put("data", u);
 			}
 			else
 			{
@@ -540,7 +540,7 @@ public class UserController extends MyController {
 					model.put("count", count);
 					int startRow=(curPage-1)*pageSize;
 					List<User> userList=userService.searchUser(type, searchStr, startRow, pageSize);
-					model.put("userList", userList);
+					model.put("list", userList);
 					resultCode=0;
 					resultDesc=ShowMsg.findSuc;
 				}
@@ -549,7 +549,6 @@ public class UserController extends MyController {
 					resultDesc=ShowMsg.findFail;
 					resultCode=1;
 				}
-				
 			}
 			else
 			{
@@ -561,6 +560,5 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
 	
 }

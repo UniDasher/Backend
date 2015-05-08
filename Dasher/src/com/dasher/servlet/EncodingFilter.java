@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 public class EncodingFilter implements Filter {
+	
 	protected String encoding = null;  
     protected FilterConfig filterConfig = null;  
     protected boolean ignore = true;  

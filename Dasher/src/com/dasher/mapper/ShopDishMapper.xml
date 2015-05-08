@@ -17,6 +17,5 @@
      <result property="updateDate" column="updateDate"/>
      <result property="status" column="status"/>
    </resultMap>
-   
   
 </mapper>
