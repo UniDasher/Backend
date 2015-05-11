@@ -1,4 +1,8 @@
 package com.dasher.service.impl;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.dasher.mapper.ShopDishMapper;
 import com.dasher.model.ShopDish;
 import com.dasher.service.ShopDishService;
@@ -28,6 +32,16 @@ public class ShopDishServiceImpl implements ShopDishService {
 	public boolean update(ShopDish sd) {
 		// TODO Auto-generated method stub
 		return shopDishMapper.update(sd)>0? true:false;
+	}
+
+	public ShopDish getByDid(String did) {
+		// TODO Auto-generated method stub
+		return shopDishMapper.getByDid(did);
+	}
+
+	public List<ShopDish> list(String sid,String typeId,String searchStr, int startRow, int pageSize) {
+		// TODO Auto-generated method stub
+		return shopDishMapper.list(sid, typeId, searchStr, startRow, pageSize);
 	}
 
 }

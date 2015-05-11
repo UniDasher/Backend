@@ -47,8 +47,8 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.handleLogin(myloginId));
-
+//		model.put("authCode", loginService.handleLogin(myloginId));
+		model.put("authCode", authCode);
 		String account=getString(request, "account");
 		String password=getString(request, "password");
 		String firstName=getString(request, "firstName");
@@ -157,7 +157,8 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.handleLogin(myloginId));
+//		model.put("authCode", loginService.handleLogin(myloginId));
+		model.put("authCode", authCode);
 		String myid=getString(request, "id");
 		Login l=new Login();
 		l.setLoginId(myid);
@@ -215,8 +216,8 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.handleLogin(myloginId));
-
+//		model.put("authCode", loginService.handleLogin(myloginId));
+		model.put("authCode", authCode);
 		String myid=getString(request, "id");
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
@@ -295,7 +296,8 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.handleLogin(myloginId));
+//		model.put("authCode", loginService.handleLogin(myloginId));
+		model.put("authCode", authCode);
 		String myid=getString(request, "id");
 		if(!myid.equals("")&&myid.matches("^[0-9]*$"))
 		{
@@ -340,8 +342,8 @@ public class ManagerController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.handleLogin(myloginId));
-
+//		model.put("authCode", loginService.handleLogin(myloginId));
+		model.put("authCode", authCode);
 		List<Manager> list=managerService.list();
 		if(list.size()>0)
 		{

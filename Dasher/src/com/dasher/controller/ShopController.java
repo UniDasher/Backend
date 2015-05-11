@@ -65,7 +65,8 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String name=getString(request, "name");
 		String typeTab=getString(request, "typeTab");
 		String subscribe=getString(request, "subscribe");
@@ -197,7 +198,8 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String sid=getString(request, "sid");
 		String name=getString(request, "name");
 		String typeTab=getString(request, "typeTab");
@@ -317,7 +319,8 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String sid=getString(request, "sid");
 		if(sid=="")
 		{
@@ -363,7 +366,8 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String sid=getString(request, "sid");
 		if(sid=="")
 		{

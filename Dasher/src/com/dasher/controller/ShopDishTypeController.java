@@ -56,7 +56,8 @@ public class ShopDishTypeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String name=getString(request, "name");
 		if(name=="")
 		{
@@ -126,7 +127,8 @@ public class ShopDishTypeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String myid=getString(request, "id");
 		String name=getString(request, "name");
 		if(myid=="")
@@ -203,7 +205,8 @@ public class ShopDishTypeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String myid=getString(request, "id");
 		if(myid=="")
 		{
@@ -265,7 +268,8 @@ public class ShopDishTypeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		List<ShopDishType> list=shopDishTypeService.list();
 		if(list.size()>0)
 		{
@@ -311,7 +315,8 @@ public class ShopDishTypeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String id_1=getString(request, "id_1");
 		String sortNum_1=getString(request, "sortNum_1");
 		String id_2=getString(request, "id_2");
@@ -354,5 +359,51 @@ public class ShopDishTypeController extends MyController {
 
 		return model;
 	}	
+	
+	@RequestMapping("/dish/type/listBySid")
+	@ResponseBody
+	protected Object typelistBySid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String sid=getString(request, "sid");
+		List<ShopDishType> list=shopDishTypeService.listBySid(sid);
+		if(list.size()>0)
+		{
+			model.put("list", list);
+			resultCode=1;
+			resultDesc=ShowMsg.findSuc;
+		}
+		else
+		{
+			resultCode=0;
+			resultDesc=ShowMsg.findFail;
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+
+		return model;
+	}	
+
 
 }

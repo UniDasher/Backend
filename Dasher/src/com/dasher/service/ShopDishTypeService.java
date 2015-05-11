@@ -14,4 +14,5 @@ public interface ShopDishTypeService {
 	public List<ShopDishType> list();
 	public String getMax();
 	public boolean updateSortNum(ShopDishType sdt);
+	public List<ShopDishType> listBySid(String sid);
 }

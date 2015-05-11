@@ -24,4 +24,16 @@ public class UserAddressServiceImpl implements UserAddressService {
 		return userAddressMapper.add(ua)>0? true:false;
 	}
 
+
+	public boolean delete(UserAddress ua) {
+		// TODO Auto-generated method stub
+		return userAddressMapper.delete(ua)>0? true:false;
+	}
+
+
+	public boolean update(UserAddress ua) {
+		// TODO Auto-generated method stub
+		return userAddressMapper.update(ua)>0? true:false;
+	}
+
 }

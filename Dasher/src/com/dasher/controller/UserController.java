@@ -244,7 +244,8 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String uid=getString(request, "uid");
 		if(uid=="")
 		{
@@ -286,7 +287,8 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String uid=getString(request, "uid");
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
@@ -396,7 +398,8 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String uid=getString(request, "uid");
 		String oldPassword=getString(request, "oldPassword");
 		String newPassword=getString(request, "newPassword");
@@ -462,7 +465,8 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String uid=getString(request, "uid");
 		String myStatus=getString(request, "status");
 
@@ -517,7 +521,8 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		String mytype=getString(request, "type");

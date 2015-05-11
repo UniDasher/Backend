@@ -68,4 +68,10 @@ public class ShopDishTypeServiceImpl implements ShopDishTypeService {
 		return shopDishTypeMapper.updateSortNum(sdt)>0? true:false;
 	}
 
+
+	public List<ShopDishType> listBySid(String sid) {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.listBySid(sid);
+	}
+
 }

@@ -2,6 +2,8 @@ package com.dasher.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.dasher.model.ShopDishType;
 
 public interface ShopDishTypeMapper {
@@ -14,5 +16,6 @@ public interface ShopDishTypeMapper {
 	public List<ShopDishType> list();
 	public String getMax();
 	public int updateSortNum(ShopDishType sdt);
+	public List<ShopDishType> listBySid(@Param(value="sid") String sid);
 	
 }

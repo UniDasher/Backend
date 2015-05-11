@@ -18,4 +18,39 @@
      <result property="status" column="status"/>
    </resultMap>
   
+   <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="ShopDish">
+     insert into shop_dish(sid,did,name,price,typeId,chilies,description,createBy,createDate,status)
+     values(#{sid},#{did},#{name},#{price},#{typeId},#{chilies},#{description},#{createBy},#{createDate},1)
+   </insert>
+   
+   <update id="update" parameterType="ShopDish">
+     update shop_dish 
+     set name=#{name},price=#{price},typeId=#{typeId},chilies=#{chilies},description=#{description},updateBy=#{updateBy},updateDate=#{updateDate}
+     where did=#{did}
+   </update>
+   
+   <update id="delete" parameterType="ShopDish">
+     update shop_dish 
+     set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
+     where did=#{did}
+   </update>
+   
+   <select id="getByDid" parameterType="String" resultType="ShopDish">
+     select * from shop_dish where did=#{did} and status>0
+   </select>
+   
+   <select id="list" resultType="ShopDish">
+     select * from shop_dish 
+     where 1=1 and status>0
+     <if test="searchStr!=''">
+       and name like CONCAT(CONCAT('%',#{searchStr}),'%')
+     </if>
+     <if test="sid!=''">
+       and sid=#{sid}
+     </if>
+     <if test="typeId!=''">
+       and typeId=#{typeId}
+     </if>
+     limit #{startRow},#{pageSize}
+   </select>
 </mapper>
