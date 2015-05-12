@@ -21,7 +21,10 @@ public class Menu implements Serializable {
 	private String address;
 	private String longitude;
 	private String latitude;
+	private String createBy;
 	private String createDate;
+	private String updateBy;
+	private String updateDate;
 	private String startDate;
 	private String endDate;
 	private int status;
@@ -30,11 +33,13 @@ public class Menu implements Serializable {
 
 	}
 
+	
 	public Menu(int id, String mid, String sid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
 			float serviceMoney, float tipMoney, int menuCount, int payType,
 			String mealStartDate, String mealEndDate, String address,
-			String longitude, String latitude, String createDate,
+			String longitude, String latitude, String createBy,
+			String createDate, String updateBy, String updateDate,
 			String startDate, String endDate, int status) {
 		super();
 		this.id = id;
@@ -54,11 +59,15 @@ public class Menu implements Serializable {
 		this.address = address;
 		this.longitude = longitude;
 		this.latitude = latitude;
+		this.createBy = createBy;
 		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.status = status;
 	}
+
 
 	public int getId() {
 		return id;
@@ -226,6 +235,36 @@ public class Menu implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
+
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 	
 	

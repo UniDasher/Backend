@@ -4,7 +4,29 @@
 <mapper namespace="com.dasher.mapper.MenuMapper">
    <resultMap type="Menu" id="menuMap">
      <result property="id" column="id"/>
-    
+     <result property="mid" column="mid"/>
+     <result property="sid" column="sid"/>
+     <result property="uid" column="uid"/>
+     <result property="wid" column="wid"/>
+     <result property="dishsMoney" column="dishsMoney"/>
+     <result property="carriageMoney" column="carriageMoney"/>
+     <result property="taxesMoney" column="taxesMoney"/>
+     <result property="serviceMoney" column="serviceMoney"/>
+     <result property="tipMoney" column="tipMoney"/>
+     <result property="menuCount" column="menuCount"/>
+     <result property="payType" column="payType"/>
+     <result property="mealStartDate" column="mealStartDate"/>
+     <result property="mealEndDate" column="mealEndDate"/>
+     <result property="address" column="address"/>
+     <result property="longitude" column="longitude"/>
+     <result property="latitude" column="latitude"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="startDate" column="startDate"/>
+     <result property="endDate" column="endDate"/>
+     <result property="status" column="status"/>
    </resultMap>
    
   
