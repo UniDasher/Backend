@@ -21,4 +21,9 @@ public class MenuServiceImpl implements MenuService {
 		return menuMapper.add(m)>0? true:false;
 	}
 
+	public boolean receive(Menu m) {
+		// TODO Auto-generated method stub
+		return menuMapper.receive(m)>0? true:false;
+	}
+
 }

@@ -86,4 +86,7 @@ public class ShowMsg {
 	public static final String chiliesNull="菜品味道为空";//Dishes taste is empty
 	public static final String typeErr = "菜品类型格式不正确！"; //The typeId of the format is not correct
 	public static final String priceErr="菜品价格格式不正确！";//The price of the format is not correct
+	public static final String imageUploadFail="图片上传失败！";//Image upload failure
+	public static final String imageUploadSuc="图片上传成功！";//Photos uploaded successfully
+
 }

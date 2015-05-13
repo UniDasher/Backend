@@ -29,5 +29,8 @@
      <result property="status" column="status"/>
    </resultMap>
    
+   <insert id="add" parameterType="Menu" keyProperty="id" useGeneratedKeys="true">
+   
+   </insert>
   
 </mapper>

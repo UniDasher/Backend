@@ -274,12 +274,12 @@ public class ShopDishTypeController extends MyController {
 		if(list.size()>0)
 		{
 			model.put("list", list);
-			resultCode=1;
+			resultCode=0;
 			resultDesc=ShowMsg.findSuc;
 		}
 		else
 		{
-			resultCode=0;
+			resultCode=1;
 			resultDesc=ShowMsg.findFail;
 		}
 		
@@ -391,12 +391,12 @@ public class ShopDishTypeController extends MyController {
 		if(list.size()>0)
 		{
 			model.put("list", list);
-			resultCode=1;
+			resultCode=0;
 			resultDesc=ShowMsg.findSuc;
 		}
 		else
 		{
-			resultCode=0;
+			resultCode=1;
 			resultDesc=ShowMsg.findFail;
 		}
 		model.put("resultCode", resultCode);	

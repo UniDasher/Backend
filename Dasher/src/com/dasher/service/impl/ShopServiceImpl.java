@@ -54,4 +54,9 @@ public class ShopServiceImpl implements ShopService {
 		return shopMapper.list(searchStr, startRow, pageSize);
 	}
 
+	public boolean updateLogo(Shop s) {
+		// TODO Auto-generated method stub
+		return shopMapper.updateLogo(s)>0? true:false;
+	}
+
 }

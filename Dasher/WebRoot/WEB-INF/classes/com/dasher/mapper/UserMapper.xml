@@ -39,7 +39,7 @@
    
    <update id="update" parameterType="User">
      update user_info 
-     set firstName=#{firstName},lastName=#{lastName},mobilePhone=#{mobilePhone},logo=#{logo},email=#{email},address=#{address},longitude=#{longitude},latitude=#{latitude}
+     set firstName=#{firstName},lastName=#{lastName},mobilePhone=#{mobilePhone},email=#{email},address=#{address},longitude=#{longitude},latitude=#{latitude}
      where uid=#{uid}
    </update>
    
@@ -79,5 +79,9 @@
      limit #{startRow},#{pageSize}
    </select>
   
-   
+   <update id="updateLogo" parameterType="User">
+     update user_info 
+     set logo=#{logo}
+     where uid=#{uid}
+   </update>
 </mapper>

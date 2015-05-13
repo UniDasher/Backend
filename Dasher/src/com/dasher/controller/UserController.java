@@ -18,9 +18,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.model.Login;
+import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
+import com.dasher.util.DateUtil;
+import com.dasher.util.FileUploadUtil;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
 
@@ -293,7 +297,6 @@ public class UserController extends MyController {
 		String firstName=getString(request, "firstName");
 		String lastName=getString(request, "lastName");
 		String mobilePhone=getString(request, "mobilePhone");
-		String logo=getString(request, "logo");
 		String email=getString(request, "email");
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
@@ -358,7 +361,6 @@ public class UserController extends MyController {
 				u.setFirstName(firstName);
 				u.setLastName(lastName);
 				u.setMobilePhone(mobilePhone);
-				u.setLogo(logo);
 				u.setEmail(email);
 				u.setAddress(address);
 				u.setLongitude(longitude);
@@ -566,4 +568,59 @@ public class UserController extends MyController {
 		return model;
 	}
 	
+	@RequestMapping("/user/upload")
+	@ResponseBody
+	protected Object upload(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String uid=getString(request, "uid");
+		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/user/images");
+		if(uid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			if("false".equals(logo))
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.imageUploadFail;
+			}
+			else
+			{
+				User u=new User();
+				u.setUid(uid);
+				u.setLogo(logo);
+				result=userService.updateLogo(u);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
+				}
+				
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
 }

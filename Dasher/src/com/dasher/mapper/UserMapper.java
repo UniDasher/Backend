@@ -17,5 +17,5 @@ public interface UserMapper {
 	public int userApply(User u);
 	public List<User> searchUser(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public int getUserByStatus2(@Param(value="type") int type,@Param(value="searchStr") String searchStr);
-	
+	public int updateLogo(User u);
 }

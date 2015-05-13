@@ -38,7 +38,7 @@
    
    <update id="update" parameterType="Shop">
      update shop_info 
-     set name=#{name},typeTab=#{typeTab},address=#{address},subscribe=#{subscribe},email=#{email},phone=#{email},logo=#{email},longitude=#{longitude},latitude=#{latitude},updateBy=#{updateBy},updateDate=#{updateDate}
+     set name=#{name},typeTab=#{typeTab},address=#{address},subscribe=#{subscribe},email=#{email},phone=#{phone},longitude=#{longitude},latitude=#{latitude},updateBy=#{updateBy},updateDate=#{updateDate}
      where sid=#{sid} and status>0
    </update>
    
@@ -62,5 +62,11 @@
      </if>
      limit #{startRow},#{pageSize}
    </select>
+   
+   <update id="updateLogo" parameterType="Shop">
+     update shop_info 
+     set logo=#{logo},updateBy=#{updateBy},updateDate=#{updateDate}
+     where sid=#{sid}
+   </update>
   
 </mapper>

@@ -5,4 +5,6 @@ import com.dasher.model.Menu;
 public interface MenuMapper {
 
 	public int add(Menu m);
+	public int receive(Menu m);
+	
 }

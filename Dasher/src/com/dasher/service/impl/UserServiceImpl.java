@@ -110,6 +110,11 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUserByStatus2(type,searchStr);
 	}
 
+	public boolean updateLogo(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.updateLogo(u)>0? true:false;
+	}
+
 	
 
 	

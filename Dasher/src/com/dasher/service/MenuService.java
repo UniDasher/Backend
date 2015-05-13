@@ -5,4 +5,5 @@ import com.dasher.model.Menu;
 public interface MenuService {
 
 	public boolean add(Menu m);
+	public boolean receive(Menu m);
 }

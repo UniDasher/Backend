@@ -17,4 +17,5 @@ public interface UserService {
 	public boolean userApply(User u);
 	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
 	public int getUserByStatus2(int type,String searchStr);
+	public boolean updateLogo(User u);
 }

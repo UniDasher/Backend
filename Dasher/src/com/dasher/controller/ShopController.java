@@ -25,6 +25,7 @@ import com.dasher.service.LoginService;
 import com.dasher.service.ShopService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
+import com.dasher.util.FileUploadUtil;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
 
@@ -72,7 +73,6 @@ public class ShopController extends MyController {
 		String subscribe=getString(request, "subscribe");
 		String email=getString(request, "email");
 		String phone=getString(request, "phone");
-		String logo=getString(request, "logo");
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
@@ -96,11 +96,7 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.MobilePhoneNull;
 			resultCode=2;
 		}
-		else if(logo=="")
-		{
-			resultDesc=ShowMsg.LogoNull;
-			resultCode=2;
-		}
+		
 		else if(longitude==""||latitude=="")
 		{
 			resultDesc=ShowMsg.LonLatNull;
@@ -143,7 +139,7 @@ public class ShopController extends MyController {
 					s.setSubscribe(subscribe);
 					s.setEmail(email);
 					s.setPhone(phone);
-					s.setLogo(logo);
+					s.setLogo("/image/default.jpg");
 					s.setLongitude(longitude);
 					s.setLatitude(latitude);
 					s.setCreateBy(Integer.parseInt(myloginId));
@@ -206,7 +202,6 @@ public class ShopController extends MyController {
 		String subscribe=getString(request, "subscribe");
 		String email=getString(request, "email");
 		String phone=getString(request, "phone");
-		String logo=getString(request, "logo");
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
@@ -235,11 +230,6 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.MobilePhoneNull;
 			resultCode=2;
 		}
-		else if(logo=="")
-		{
-			resultDesc=ShowMsg.LogoNull;
-			resultCode=2;
-		}
 		else if(longitude==""||latitude=="")
 		{
 			resultDesc=ShowMsg.LonLatNull;
@@ -264,21 +254,21 @@ public class ShopController extends MyController {
 			else
 			{
 				Shop shop=shopService.getByName(name);
+				Shop sp=shopService.getBySid(sid);
+				Shop s=new Shop();
+				s.setSid(sid);
+				s.setName(name);
+				s.setTypeTab(typeTab);
+				s.setAddress(address);
+				s.setSubscribe(subscribe);
+				s.setEmail(email);
+				s.setPhone(phone);
+				s.setLongitude(longitude);
+				s.setLatitude(latitude);
+				s.setUpdateBy(Integer.parseInt(myloginId));
+				s.setUpdateDate(DateUtil.getCurrentDateStr());
 				if(shop==null)
 				{
-					Shop s=new Shop();
-					s.setSid(sid);
-					s.setName(name);
-					s.setTypeTab(typeTab);
-					s.setAddress(address);
-					s.setSubscribe(subscribe);
-					s.setEmail(email);
-					s.setPhone(phone);
-					s.setLogo(logo);
-					s.setLongitude(longitude);
-					s.setLatitude(latitude);
-					s.setUpdateBy(Integer.parseInt(myloginId));
-					s.setUpdateDate(DateUtil.getCurrentDateStr());
 					result=shopService.update(s);
 					if(result==true)
 					{
@@ -293,8 +283,26 @@ public class ShopController extends MyController {
 				}
 				else
 				{
-					resultCode=1;
-					resultDesc=ShowMsg.ShopaddRepeat;
+					if(sp.getName().equals(name))
+					{
+						result=shopService.update(s);
+						if(result==true)
+						{
+							resultCode=0;
+							resultDesc=ShowMsg.updateSuc;
+						}
+						else
+						{
+							resultCode=1;
+							resultDesc=ShowMsg.updateFail;
+						}
+					}
+					else
+					{
+						resultCode=1;
+						resultDesc=ShowMsg.ShopaddRepeat;
+					}
+					
 				}
 			}
 
@@ -379,13 +387,13 @@ public class ShopController extends MyController {
 			Shop s=shopService.getBySid(sid);
 			if(s==null)
 			{
-				resultCode=0;
+				resultCode=1;
 				resultDesc=ShowMsg.findFail;
 			}
 			else
 			{
 				model.put("data", s);
-				resultCode=1;
+				resultCode=0;
 				resultDesc=ShowMsg.findSuc;
 			}
 		}
@@ -453,6 +461,72 @@ public class ShopController extends MyController {
 				resultCode=1;
 			}
 			
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
+	@RequestMapping("/shop/upload")
+	@ResponseBody
+	protected Object upload(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String sid=getString(request, "sid");
+		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/images");
+		if(sid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			if("false".equals(logo))
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.imageUploadFail;
+			}
+			else
+			{
+				Shop s=new Shop();
+				s.setSid(sid);
+				s.setLogo(logo);
+				s.setUpdateBy(Integer.parseInt(myloginId));
+				s.setUpdateDate(DateUtil.getCurrentDateStr());
+				result=shopService.updateLogo(s);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
+				}
+				
+			}
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
