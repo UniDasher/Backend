@@ -447,10 +447,12 @@ public class ShopController extends MyController {
 			int curPage=Integer.parseInt(mycurPage);
 			int pageSize=Integer.parseInt(mypageSize);
 			int startRow=(curPage-1)*pageSize;
-			List<Shop> shopList=shopService.list(searchStr, startRow, pageSize);
-			if(shopList.size()>0)
+			int count=shopService.getShopCount(searchStr);
+			if(count>0)
 			{
-				model.put("count", shopList.size());
+
+				model.put("count", count);
+				List<Shop> shopList=shopService.list(searchStr, startRow, pageSize);
 				model.put("list", shopList);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;

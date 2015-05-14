@@ -360,7 +360,7 @@ public class ShopDishTypeController extends MyController {
 		return model;
 	}	
 	
-	@RequestMapping("/dish/type/listBySid")
+	@RequestMapping("/shop/type/list")
 	@ResponseBody
 	protected Object typelistBySid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");

@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,6 +24,7 @@ import com.dasher.service.LoginService;
 import com.dasher.service.ShopDishService;
 import com.dasher.service.ShopDishTypeService;
 import com.dasher.util.DateUtil;
+import com.dasher.util.FileUploadUtil;
 import com.dasher.util.ShowMsg;
 
 @Controller
@@ -107,15 +110,13 @@ public class ShopDishController extends MyController {
 		}
 		else
 		{
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
-			Date date=new Date();
-			String []strs=sdf.format(date).split("-");
+			UUID uuid=UUID.randomUUID();
+			String str[]=uuid.toString().split("-");
 			String did="";
-			for(int i=0;i<strs.length;i++)
+			for(int i=0;i<str.length;i++)
 			{
-				did=did+strs[i];
+				did=did+str[i];
 			}
-			
 			ShopDish sd=new ShopDish();
 			sd.setSid(sid);
 			sd.setDid(did);
@@ -368,10 +369,11 @@ public class ShopDishController extends MyController {
 			int curPage=Integer.parseInt(mycurPage);
 			int pageSize=Integer.parseInt(mypageSize);
 			int startRow=(curPage-1)*pageSize;
-			List<ShopDish> list=shopDishService.list(sid, typeId, searchStr, startRow, pageSize);
-			if(list.size()>0)
+			int count=shopDishService.getShopDishCount(sid, typeId, searchStr);
+			if(count>0)
 			{
-				model.put("count", list.size());
+				model.put("count", count);
+				List<ShopDish> list=shopDishService.list(sid, typeId, searchStr, startRow, pageSize);
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
@@ -388,5 +390,118 @@ public class ShopDishController extends MyController {
 		return model;
 	}	
 	
+	@RequestMapping("/dish/file")
+	@ResponseBody
+	protected Object uploadFile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		
+		String sid=getString(request, "sid");
+		String fileName=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/dish");
+		if("false".equals(fileName)){
+			resultCode=1;
+			resultDesc=ShowMsg.imageUploadFail;
+		}
+		else if(sid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			
+			List<ShopDish> list=null;
+			try 
+			{
+				if(fileName.toUpperCase().indexOf(".xls")>0)
+				{
+					list=FileUploadUtil.readXls(request, "/WEB-INF/upload/shop/dish/"+fileName);
+				}
+				else
+				{
+					list=FileUploadUtil.readXlsx(request, "/WEB-INF/upload/shop/dish/"+fileName);
+				}
+				
+				int count=shopDishService.getCountBySid(sid);
+				if(count>0)
+				{
+					ShopDish sd=new ShopDish();
+					sd.setSid(sid);
+					sd.setUpdateBy(Integer.parseInt(myloginId));
+					sd.setUpdateDate(DateUtil.getCurrentDateStr());
+					result=shopDishService.deleteList(sd);
+				}
+				
+				//餐品保存
+				for(ShopDish s:list)
+				{
+					String name=s.getName();
+					String price=s.getPrice()+"";
+					String typeId=s.getTypeId()+"";
+					String chilies=s.getChilies();
+					String description=s.getDescription();
+					UUID uuid=UUID.randomUUID();
+					String str[]=uuid.toString().split("-");
+					String did="";
+					for(int i=0;i<str.length;i++)
+					{
+						did=did+str[i];
+					}
+					ShopDish sd2=new ShopDish();
+					sd2.setSid(sid);
+					sd2.setDid(did);
+					sd2.setName(name);
+					sd2.setPrice(Float.parseFloat(price));
+					sd2.setTypeId(Integer.parseInt(typeId));
+					sd2.setChilies(chilies);
+					sd2.setDescription(description);
+					sd2.setCreateBy(Integer.parseInt(myloginId));
+					sd2.setCreateDate(DateUtil.getCurrentDateStr());
+					result=shopDishService.add(sd2);
+					
+				}
+				
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.addSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.addFail;
+				}	
+				
+				
+			} catch (InvalidFormatException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
+
 	
 }

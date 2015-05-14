@@ -44,4 +44,19 @@ public class ShopDishServiceImpl implements ShopDishService {
 		return shopDishMapper.list(sid, typeId, searchStr, startRow, pageSize);
 	}
 
+	public int getShopDishCount(String sid, String typeId, String searchStr) {
+		// TODO Auto-generated method stub
+		return shopDishMapper.getShopDishCount(sid, typeId, searchStr);
+	}
+
+	public boolean deleteList(ShopDish sd) {
+		// TODO Auto-generated method stub
+		return shopDishMapper.deleteList(sd)>0? true:false;
+	}
+
+	public int getCountBySid(String sid) {
+		// TODO Auto-generated method stub
+		return shopDishMapper.getCountBySid(sid);
+	}
+
 }

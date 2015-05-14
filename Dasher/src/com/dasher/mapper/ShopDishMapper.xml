@@ -39,6 +39,20 @@
      select * from shop_dish where did=#{did} and status>0
    </select>
    
+   <select id="getShopDishCount" resultType="Integer" >
+     select count(*) from shop_dish 
+     where 1=1 and status>0
+     <if test="searchStr!=''">
+       and name like CONCAT(CONCAT('%',#{searchStr}),'%')
+     </if>
+     <if test="sid!=''">
+       and sid=#{sid}
+     </if>
+     <if test="typeId!=''">
+       and typeId=#{typeId}
+     </if>
+   </select>
+   
    <select id="list" resultType="ShopDish">
      select * from shop_dish 
      where 1=1 and status>0
@@ -52,5 +66,17 @@
        and typeId=#{typeId}
      </if>
      limit #{startRow},#{pageSize}
+   </select>
+   
+   <update id="deleteList" parameterType="ShopDish">
+     update shop_dish 
+     set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
+     where sid=#{sid}
+   </update>
+   
+   <select id="getCountBySid" parameterType="String">
+     select count(*)
+     from shop_dish
+     where sid=#{sid} and status>0
    </select>
 </mapper>

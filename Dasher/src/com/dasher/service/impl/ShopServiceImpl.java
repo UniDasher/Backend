@@ -59,4 +59,9 @@ public class ShopServiceImpl implements ShopService {
 		return shopMapper.updateLogo(s)>0? true:false;
 	}
 
+	public int getShopCount(String searchStr) {
+		// TODO Auto-generated method stub
+		return shopMapper.getShopCount(searchStr);
+	}
+
 }

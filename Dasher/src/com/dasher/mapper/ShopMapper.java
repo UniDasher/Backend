@@ -15,5 +15,6 @@ public interface ShopMapper {
 	public int delete(Shop s);
 	public List<Shop> getListByLati(@Param(value="longitude")int longitude,@Param(value="latitude") int latitude,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<Shop> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public int getShopCount(@Param(value="searchStr") String searchStr);
 	public int updateLogo(Shop s);
 }
