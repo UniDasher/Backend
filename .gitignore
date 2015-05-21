@@ -10,3 +10,6 @@ Dasher/logs/dasher.log
 Dasher/WebRoot/jetty.xml
 Dasher/logs/dasher.log
 Dasher/.myeclipse/**
+Dasher/pom.xml
+Dasher/target/**
+Dasher/.classpath
