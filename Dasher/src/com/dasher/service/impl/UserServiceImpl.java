@@ -39,15 +39,15 @@ public class UserServiceImpl implements UserService {
 		return userMapper.update(u)>0? true:false;
 	}
 
-	public User getUserByAccount(String account) {
+	public User getUserByTel(String mobilePhone) {
 		// TODO Auto-generated method stub
-		return userMapper.getUserByAccount(account);
+		return userMapper.getUserByTel(mobilePhone);
 	}
 
-	public int userLoin(String account, String pwd) {
+	public int userLoin(String mobilePhone, String pwd) {
 		// TODO Auto-generated method stub
 		int flag=-1;
-		User u=userMapper.getUserByAccount(account);
+		User u=userMapper.getUserByTel(mobilePhone);
 		if(u==null)
 		   flag=1;
 		else

@@ -22,7 +22,7 @@ public class Shop implements Serializable {
 	private int updateBy;
 	private String updateDate;
 	private int status;
-	
+	private String serviceTimes;
 	
 	public Shop() {
 		
@@ -32,7 +32,7 @@ public class Shop implements Serializable {
 			String address, String subscribe, String email, String phone,
 			String logo, String longitude, String latitude, int goodEvaluate,
 			int badEvaluate, int createBy, String createDate, int updateBy,
-			String updateDate, int status) {
+			String updateDate, int status, String serviceTimes) {
 		super();
 		this.id = id;
 		this.sid = sid;
@@ -52,6 +52,7 @@ public class Shop implements Serializable {
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
 		this.status = status;
+		this.serviceTimes = serviceTimes;
 	}
 
 
@@ -198,6 +199,14 @@ public class Shop implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getServiceTimes() {
+		return serviceTimes;
+	}
+
+	public void setServiceTimes(String serviceTimes) {
+		this.serviceTimes = serviceTimes;
 	}
 	
 	

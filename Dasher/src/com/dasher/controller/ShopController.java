@@ -72,6 +72,8 @@ public class ShopController extends MyController {
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
+		String serviceTimes=getString(request, "serviceTimes");
+		
 		if(name=="")
 		{
 			resultDesc=ShowMsg.shopNull;
@@ -98,6 +100,7 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.LonLatNull;
 			resultCode=2;
 		}
+		
 		else
 		{
 			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
@@ -140,7 +143,7 @@ public class ShopController extends MyController {
 					s.setLatitude(latitude);
 					s.setCreateBy(Integer.parseInt(myloginId));
 					s.setCreateDate(DateUtil.getCurrentDateStr());
-
+                    s.setServiceTimes(serviceTimes);
 
 					result=shopService.add(s);
 					if(result==true)
@@ -201,6 +204,7 @@ public class ShopController extends MyController {
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
+		String serviceTimes=getString(request, "serviceTimes");
 		if(sid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -263,6 +267,7 @@ public class ShopController extends MyController {
 				s.setLatitude(latitude);
 				s.setUpdateBy(Integer.parseInt(myloginId));
 				s.setUpdateDate(DateUtil.getCurrentDateStr());
+				s.setServiceTimes(serviceTimes);
 				if(shop==null)
 				{
 					result=shopService.update(s);

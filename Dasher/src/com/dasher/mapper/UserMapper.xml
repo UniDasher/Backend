@@ -22,24 +22,26 @@
 	 <result property="badEvaluate" column="badEvaluate" />
 	 <result property="createDate" column="createDate" />
 	 <result property="status" column="status" />
+	 <result property="bankType" column="bankType" />
+	 <result property="bankAccount" column="bankAccount" />
    </resultMap>
    
    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="User">
-     insert into user_info(uid,firstName,lastName,account,password,salt,equmentNumber,mobilePhone,logo,email,address,longitude,latitude,createDate,status)
-     values(#{uid},#{firstName},#{lastName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate},1)
+     insert into user_info(uid,firstName,lastName,account,password,salt,equmentNumber,mobilePhone,logo,email,address,longitude,latitude,createDate,status,bankAccount,bankType)
+     values(#{uid},#{firstName},#{lastName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate},1,#{bankAccount},#{bankType})
    </insert>
    
    <select id="getByUId" parameterType="String" resultType="User">
      select * from user_info where uid=#{uid}
    </select>
    
-   <select id="getUserByAccount" parameterType="String" resultType="User">
-     select * from user_info where account=#{account}
+   <select id="getUserByTel" parameterType="String" resultType="User">
+     select * from user_info where mobilePhone=#{mobilePhone}
    </select>
    
    <update id="update" parameterType="User">
      update user_info 
-     set firstName=#{firstName},lastName=#{lastName},mobilePhone=#{mobilePhone},email=#{email},address=#{address},longitude=#{longitude},latitude=#{latitude}
+     set firstName=#{firstName},lastName=#{lastName},email=#{email},address=#{address},longitude=#{longitude},latitude=#{latitude},bankAccount=#{bankAccount},bankType=#{bankType}
      where uid=#{uid}
    </update>
    

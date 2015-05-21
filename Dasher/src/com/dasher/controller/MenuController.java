@@ -540,6 +540,38 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
+	@RequestMapping("/menu/user/list/status")
+	@ResponseBody
+	protected Object liststatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String uid=getString(request, "uid");
+		if(uid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
 
 
 }

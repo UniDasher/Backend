@@ -22,6 +22,8 @@ public class User implements Serializable {
 	private int goodEvaluate;
 	private int badEvaluate;
 	private String createDate;
+	private String bankAccount;
+	private String bankType;
 	private int status;
 	
 	public User()
@@ -33,7 +35,8 @@ public class User implements Serializable {
 			String account, String password, String salt, String equmentNumber,
 			String logo, float balance, String mobilePhone, String email,
 			String address, String longitude, String latitude,
-			int goodEvaluate, int badEvaluate, String createDate, int status) {
+			int goodEvaluate, int badEvaluate, String createDate,
+			String bankAccount, String bankType, int status) {
 		super();
 		this.id = id;
 		this.uid = uid;
@@ -53,8 +56,12 @@ public class User implements Serializable {
 		this.goodEvaluate = goodEvaluate;
 		this.badEvaluate = badEvaluate;
 		this.createDate = createDate;
+		this.bankAccount = bankAccount;
+		this.bankType = bankType;
 		this.status = status;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -198,6 +205,22 @@ public class User implements Serializable {
 
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+
+	public String getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(String bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public String getBankType() {
+		return bankType;
+	}
+
+	public void setBankType(String bankType) {
+		this.bankType = bankType;
 	}
 
 	public int getStatus() {

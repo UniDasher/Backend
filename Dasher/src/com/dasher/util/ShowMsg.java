@@ -46,17 +46,17 @@ public class ShowMsg {
 	public static final String checkLogin="您尚未登录，请先登录！";  //You are not logged in, please login first.
 	public static final String addSuc="添加成功！";  //Information added successfully
 	public static final String addFail="添加失败！"; //Information added unsuccessfully
-	public static final String addRepeat="用户名已存在！";//User name already exists. Please enter again
+	public static final String addRepeat="该手机号已被注册！";//User name already exists. Please enter again
 	public static final String ShopaddRepeat="商家名称已存在！";//Business name already exists. Please enter again
 	public static final String loginSuc="登录成功！";  //Login successful
 	public static final String loginFail="登录失败！";  //Login failed
-	public static final String userNameNull="用户名不存在！";//User name does not exist
+	public static final String userNameNull="账号不存在！";//User name does not exist
 	public static final String pwdErr="密码错误！";//Password Error
 	public static final String findSuc="查询成功！";//Information query is successful
 	public static final String findFail="查询失败！";//Information query is unsuccessful
 	public static final String updateSuc="修改成功！";//Information modify success
 	public static final String updateFail="修改失败！";//Information modify fail
-	public static final String userNull="用户名为空，请重新输入！";//User is null, please input again
+	public static final String userNull="登陆账号为空，请重新输入！";//User is null, please input again
 	public static final String pwdLength="密码不可为空且长度为6-30之间！";//Password cannot be empty and length is between 6 to 30
 	public static final String delSuc="删除成功！";//Information deleted successfully
 	public static final String delFail="删除失败！";//Information deleted unsuccessfully
@@ -115,5 +115,7 @@ public class ShowMsg {
 	public static final String evalFail="对不起，您的评价失败，请重试！";//Sorry, your evaluation of failure, please try again!
 	public static final String evalNull="评价分数为空！";
 	public static final String evalErr="评价分数类型错误";
+	public static final String bankAccountNull="银行卡账号为空";
+	public static final String bankTypeNull="银行卡类型为空";
 
 }
