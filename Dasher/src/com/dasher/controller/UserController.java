@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Login;
-import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
-import com.dasher.util.DateUtil;
 import com.dasher.util.FileUploadUtil;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
@@ -213,7 +211,7 @@ public class UserController extends MyController {
 				resultCode=0;
 				User us=userService.getUserByAccount(account);
 				model.put("uid", us.getUid());
-				model.put("authCode", loginService.handleLogin(us.getUid()+""));
+				model.put("authCode", loginService.userHandleLogin(us.getUid()+""));
 
 			}
 			else

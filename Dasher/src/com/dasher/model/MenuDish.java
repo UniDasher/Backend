@@ -10,13 +10,16 @@ public class MenuDish implements Serializable {
 	private String name;
 	private float price;
 	private int count;
+	private String createBy;
+	private String createDate;
 	
 	public MenuDish() {
 		
 	}
 
+	
 	public MenuDish(int id, String mid, String did, String name, float price,
-			int count) {
+			int count, String createBy, String createDate) {
 		super();
 		this.id = id;
 		this.mid = mid;
@@ -24,7 +27,10 @@ public class MenuDish implements Serializable {
 		this.name = name;
 		this.price = price;
 		this.count = count;
+		this.createBy = createBy;
+		this.createDate = createDate;
 	}
+
 
 	public int getId() {
 		return id;
@@ -72,6 +78,22 @@ public class MenuDish implements Serializable {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 	
 	

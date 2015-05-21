@@ -4,6 +4,71 @@
 <mapper namespace="com.dasher.mapper.MenuEvaluateMapper">
    <resultMap type="MenuEvaluate" id="menuEvaluateMap">
      <result property="id" column="id"/>
-    
+     <result property="sid" column="sid"/>
+     <result property="mid" column="mid"/>
+     <result property="uid" column="uid"/>
+     <result property="wid" column="wid"/>
+     <result property="evalShop" column="evalShop"/>
+     <result property="evalServer" column="evalServer"/>
+     <result property="evalContent" column="evalContent"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
    </resultMap>
+   
+   <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MenuEvaluate">
+     insert into menu_evaluate(sid,mid,uid,wid,evalShop,evalServer,evalContent,createBy,createDate)
+     values(#{sid},#{mid},#{uid},#{wid},#{evalShop},#{evalServer},#{evalContent},#{createBy},#{createDate})
+   </insert>
+   
+   <select id="getEvalByMid" parameterType="String" resultType="MenuEvaluate">
+     select me.* ,s.name as shopName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as waiterName
+	 from menu_evaluate me
+	 join shop_info s
+	 on me.sid=s.sid
+	 join user_info u
+	 on me.uid=u.uid
+	 join user_info u2
+     on me.wid=u2.uid
+	 where me.mid=#{mid}
+	 order by me.createDate desc
+   </select>
+   
+   <select id="ListWaiter" resultType="MenuEvaluate">
+     select me.* ,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as waiterName
+	 from menu_evaluate me
+	 join user_info u
+	 on me.uid=u.uid
+	 join user_info u2
+     on me.wid=u2.uid
+	 where me.wid=#{wid} 
+	 order by me.createDate desc
+	 limit #{startRow},#{pageSize}
+   </select>
+   
+   <select id="WaiterCount" resultType="Integer" parameterType="String">
+     select count(*)
+     from menu_evaluate
+     where wid=#{wid}
+   </select>
+   
+   <select id="ListShop" resultType="MenuEvaluate">
+     select me.* ,s.name as shopName,concat(u.firstName,u.lastName) as userName
+	 from menu_evaluate me
+	 join shop_info s
+	 on me.sid=s.sid
+	 join user_info u
+	 on me.uid=u.uid
+	 where me.sid=#{sid}
+	 order by me.createDate desc
+	 limit #{startRow},#{pageSize}
+   </select>
+   
+   <select id="ShopCount" resultType="Integer" parameterType="String">
+     select count(*)
+     from menu_evaluate
+     where sid=#{sid}
+   </select>
+   
 </mapper>

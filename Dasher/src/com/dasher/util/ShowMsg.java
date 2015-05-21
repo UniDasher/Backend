@@ -88,5 +88,32 @@ public class ShowMsg {
 	public static final String priceErr="菜品价格格式不正确！";//The price of the format is not correct
 	public static final String imageUploadFail="图片上传失败！";//Image upload failure
 	public static final String imageUploadSuc="图片上传成功！";//Photos uploaded successfully
+	public static final String dishsMoneyNull="订餐费为空";//Order meals is empty
+	public static final String carriageMoneyNull="运费为空";//The freight is empty
+	public static final String taxesMoneyNull="税费为空";//Taxation is empty
+	public static final String serviceMoneyNull="服务费为空";//The service fee is empty
+	public static final String tipMoneyNull="小费为空";//A tip is empty
+	public static final String menuCountNull="订单菜品数为空";//Order number is empty
+	public static final String menuCountErr="订单菜品数格式错误";//Order number format error
+	public static final String payTypeNull="支付方式为空";//Payment is empty
+	public static final String payTypeErr="支付方式格式错误";//Invalid format of payment
+	public static final String dishsMoneyErr="订餐费格式错误";//Invalid format of order meals
+	public static final String carriageMoneyErr="运费格式错误";//Invalid format of freight
+	public static final String taxesMoneyErr="税费格式错误";//Invalid format of taxes and fees
+	public static final String serviceMoneyErr="服务费格式错误";//服务费格式错误
+	public static final String tipMoneyErr="小费格式错误";//Invalid format of tip
+	public static final String menuSuc="您已订餐成功";//You have been order success
+	public static final String menuFail="对不起，您订餐失败，请重试！";//Sorry, your order failed, please try again!
+	public static final String NoPermiss2 = "您尚未通过送餐人的审核，没有权限进行订单的配送！";//You have not yet through the room of audit, that there was no authority to order delivery!
+	public static final String receiveSuc="接单成功，请及时完成订单的配送！";//Order is successful, please finish the order delivery!
+	public static final String receiveFail="接单失败，请重试！";//Single failure, please try again!
+	public static final String searchFail="无效的查询条件！";//Invalid query conditions
+	public static final String nameNull = "菜品名称为空";//Name is empty
+	public static final String menuDishSuc="新增订单成功";//New orders successful
+	public static final String menuDiahFail="对不起，您新增订单失败，请重试！";//Sorry, your new orders failed, please try again!
+	public static final String evalSuc="评价成功";//Evaluation of success
+	public static final String evalFail="对不起，您的评价失败，请重试！";//Sorry, your evaluation of failure, please try again!
+	public static final String evalNull="评价分数为空！";
+	public static final String evalErr="评价分数类型错误";
 
 }

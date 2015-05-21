@@ -27,12 +27,13 @@ public class Menu implements Serializable {
 	private String updateDate;
 	private String startDate;
 	private String endDate;
+	private String shopName;
+	private String userName;
 	private int status;
 	
 	public Menu() {
 
 	}
-
 	
 	public Menu(int id, String mid, String sid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
@@ -40,7 +41,8 @@ public class Menu implements Serializable {
 			String mealStartDate, String mealEndDate, String address,
 			String longitude, String latitude, String createBy,
 			String createDate, String updateBy, String updateDate,
-			String startDate, String endDate, int status) {
+			String startDate, String endDate, String shopName, String userName,
+			int status) {
 		super();
 		this.id = id;
 		this.mid = mid;
@@ -65,8 +67,12 @@ public class Menu implements Serializable {
 		this.updateDate = updateDate;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.shopName = shopName;
+		this.userName = userName;
 		this.status = status;
 	}
+
+
 
 
 	public int getId() {
@@ -107,6 +113,22 @@ public class Menu implements Serializable {
 
 	public void setWid(String wid) {
 		this.wid = wid;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public float getDishsMoney() {

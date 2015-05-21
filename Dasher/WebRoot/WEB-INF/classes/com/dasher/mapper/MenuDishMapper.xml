@@ -4,8 +4,22 @@
 <mapper namespace="com.dasher.mapper.MenuDishMapper">
    <resultMap type="MenuDish" id="menuDishMap">
      <result property="id" column="id"/>
-    
+     <result property="mid" column="mid"/>
+     <result property="did" column="did"/>
+     <result property="name" column="name"/>
+     <result property="price" column="price"/>
+     <result property="count" column="count"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
    </resultMap>
    
+   <insert id="add" parameterType="MenuDish" keyProperty="id" useGeneratedKeys="true">
+     insert into menu_dish(mid,did,name,price,count,createBy,createDate)
+     values(#{mid},#{did},#{name},#{price},#{count},#{createBy},#{createDate})
+   </insert>
+   
+   <select id="getListByMid" parameterType="String" resultType="MenuDish">
+     select * from menu_dish where mid=#{mid}
+   </select>
   
 </mapper>

@@ -1,8 +1,6 @@
 package com.dasher.service.impl;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.dasher.mapper.ShopDishMapper;
 import com.dasher.model.ShopDish;
 import com.dasher.service.ShopDishService;

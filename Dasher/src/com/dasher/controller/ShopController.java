@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,13 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Login;
 import com.dasher.model.Shop;
-import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.ShopService;
-import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.FileUploadUtil;
-import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
 
 
@@ -442,28 +438,37 @@ public class ShopController extends MyController {
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		String searchStr=getString(request, "searchStr");
-		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+		if(!mycurPage.equals("")&&!mypageSize.equals(""))
 		{
-			int curPage=Integer.parseInt(mycurPage);
-			int pageSize=Integer.parseInt(mypageSize);
-			int startRow=(curPage-1)*pageSize;
-			int count=shopService.getShopCount(searchStr);
-			if(count>0)
+			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 			{
+				int curPage=Integer.parseInt(mycurPage);
+				int pageSize=Integer.parseInt(mypageSize);
+				int startRow=(curPage-1)*pageSize;
+				int count=shopService.getShopCount(searchStr);
+				if(count>0)
+				{
 
-				model.put("count", count);
-				List<Shop> shopList=shopService.list(searchStr, startRow, pageSize);
-				model.put("list", shopList);
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
+					model.put("count", count);
+					List<Shop> shopList=shopService.list(searchStr, startRow, pageSize);
+					model.put("list", shopList);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
+				}
+				else
+				{
+					resultDesc=ShowMsg.findFail;
+					resultCode=1;
+				}
+				
 			}
-			else
-			{
-				resultDesc=ShowMsg.findFail;
-				resultCode=1;
-			}
-			
 		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;

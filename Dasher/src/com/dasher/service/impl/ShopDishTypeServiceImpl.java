@@ -2,8 +2,6 @@ package com.dasher.service.impl;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.dasher.mapper.ShopDishTypeMapper;
 import com.dasher.model.ShopDishType;
 import com.dasher.service.ShopDishTypeService;

@@ -1,5 +1,7 @@
 package com.dasher.service.impl;
 
+import java.util.List;
+
 import com.dasher.mapper.MenuMapper;
 import com.dasher.model.Menu;
 import com.dasher.service.MenuService;
@@ -24,6 +26,39 @@ public class MenuServiceImpl implements MenuService {
 	public boolean receive(Menu m) {
 		// TODO Auto-generated method stub
 		return menuMapper.receive(m)>0? true:false;
+	}
+
+	public boolean updateStatus(Menu m) {
+		// TODO Auto-generated method stub
+		return menuMapper.updateStatus(m)>0? true:false;
+	}
+
+	public List<Menu> list(String status, String sid, String searchStr,
+			String startDate, String endDate, int curPage, int countPage) {
+		// TODO Auto-generated method stub
+		return menuMapper.list(status, sid, searchStr, startDate, endDate, curPage, countPage);
+	}
+
+	public int getCount(String status, String sid, String searchStr,
+			String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return menuMapper.getCount(status, sid, searchStr, startDate, endDate);
+	}
+
+	public List<Menu> getListByUid(int type, String searchStr, int curPage,
+			int countPage) {
+		// TODO Auto-generated method stub
+		return menuMapper.getListByUid(type, searchStr, curPage, countPage);
+	}
+
+	public int getListByUidCount(int type, String searchStr) {
+		// TODO Auto-generated method stub
+		return menuMapper.getListByUidCount(type, searchStr);
+	}
+
+	public Menu getByMid(String mid) {
+		// TODO Auto-generated method stub
+		return menuMapper.getByMid(mid);
 	}
 
 }
