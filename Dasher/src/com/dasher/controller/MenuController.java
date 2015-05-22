@@ -358,8 +358,8 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
-	
+
+
 	@RequestMapping("/menu/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -377,18 +377,18 @@ public class MenuController extends MyController {
 		}
 		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-        String status=getString(request, "status");
-        String sid=getString(request, "sid");
-        String searchStr=getString(request, "searchStr");
-        String startDate=getString(request, "startDate");
-        String endDate=getString(request, "endDate");
-        String mycurPage=getString(request, "curPage");  
+		String status=getString(request, "status");
+		String sid=getString(request, "sid");
+		String searchStr=getString(request, "searchStr");
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
+		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		if(!mycurPage.equals("")&&!mypageSize.equals(""))
 		{
 			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 			{
-				
+
 				if(!status.equals("")&&!status.matches("^[0-9]*$"))
 				{
 					resultDesc=ShowMsg.statusErr;
@@ -427,14 +427,14 @@ public class MenuController extends MyController {
 			resultDesc=ShowMsg.searchFail;
 			resultCode=2;
 		}
-		
-		
+
+
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
 
-	
+
 	@RequestMapping("/menu/user/list")
 	@ResponseBody
 	protected Object userlist(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -452,15 +452,15 @@ public class MenuController extends MyController {
 		}
 		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-        String uid=getString(request, "uid");
-        String type=getString(request, "type");
-        String mycurPage=getString(request, "curPage");  
+		String uid=getString(request, "uid");
+		String type=getString(request, "type");
+		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		if(!mycurPage.equals("")&&!mypageSize.equals("")&&!type.equals(""))
 		{
 			if(mycurPage.matches("^[0-9]*$")&&type.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 			{
-				
+
 				int curPage=Integer.parseInt(mycurPage);
 				int pageSize=Integer.parseInt(mypageSize);
 				int startRow=(curPage-1)*pageSize;
@@ -491,8 +491,8 @@ public class MenuController extends MyController {
 			resultDesc=ShowMsg.searchFail;
 			resultCode=2;
 		}
-		
-		
+
+
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
@@ -513,7 +513,7 @@ public class MenuController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		String mid=getString(request, "mid");
 		if(mid=="")
@@ -540,7 +540,7 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+
 	@RequestMapping("/menu/user/list/status")
 	@ResponseBody
 	protected Object liststatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -556,17 +556,107 @@ public class MenuController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		String uid=getString(request, "uid");
-		if(uid=="")
+		String status=getString(request, "type");
+		String mycurPage=getString(request, "curPage");  
+		String mypageSize=getString(request, "countPage");//每页的数据数
+		if(!mycurPage.equals("")&&!mypageSize.equals(""))
+		{
+			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+			{
+
+				int curPage=Integer.parseInt(mycurPage);
+				int pageSize=Integer.parseInt(mypageSize);
+				int startRow=(curPage-1)*pageSize;
+				int count=menuService.CountByStatus(uid, status);
+				if(count>0)
+				{
+
+					model.put("count", count);
+					List<Menu> list=menuService.listByStatus( uid,status, startRow, pageSize);
+					model.put("list", list);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
+				}
+				else
+				{
+					resultDesc=ShowMsg.findFail;
+					resultCode=1;
+				}
+			}
+			else
+			{
+				resultDesc=ShowMsg.inputErr;
+				resultCode=2;
+			}
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	
+	
+	@RequestMapping("/menu/update/mealdate")
+	@ResponseBody
+	protected Object mealdate(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String mid=getString(request, "mid");
+		String mealStartDate=getString(request, "mealStartDate");
+		String mealEndDate=getString(request, "mealEndDate");
+		if(mid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
+		else if(mealStartDate=="")
+		{
+			resultDesc=ShowMsg.mealStartDateNull;
+			resultCode=2;
+		}
+		else if(mealEndDate=="")
+		{
+			resultDesc=ShowMsg.mealEndDateNull;
+			resultCode=2;
+		}
 		else
 		{
-			
+			Menu m=new Menu();
+			m.setMid(mid);
+			m.setMealStartDate(mealStartDate);
+			m.setMealEndDate(mealEndDate);
+			m.setUpdateBy(myloginId);
+			m.setUpdateDate(DateUtil.getCurrentDateStr());
+			result=menuService.updateMealDate(m);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	

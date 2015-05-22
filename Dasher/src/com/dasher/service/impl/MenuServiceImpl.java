@@ -61,4 +61,19 @@ public class MenuServiceImpl implements MenuService {
 		return menuMapper.getByMid(mid);
 	}
 
+	public int CountByStatus(String uid,String status) {
+		// TODO Auto-generated method stub
+		return menuMapper.CountByStatus(uid,status);
+	}
+
+	public List<Menu> listByStatus(String uid,String status, int curPage, int countPage) {
+		// TODO Auto-generated method stub
+		return menuMapper.listByStatus(uid,status, curPage, countPage);
+	}
+
+	public boolean updateMealDate(Menu m) {
+		// TODO Auto-generated method stub
+		return menuMapper.updateMealDate(m)>0? true:false;
+	}
+
 }

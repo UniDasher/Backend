@@ -16,4 +16,7 @@ public interface MenuMapper {
 	public int getListByUidCount(@Param(value="type") int type,@Param(value="searchStr") String searchStr);
     public List<Menu> getListByUid(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="curPage") int curPage,@Param(value="countPage") int countPage);
     public Menu getByMid(String mid);
+    public int CountByStatus(@Param(value="uid") String uid,@Param(value="status") String status);
+	public List<Menu> listByStatus(@Param(value="uid") String uid,@Param(value="status") String status,@Param(value="curPage") int curPage,@Param(value="countPage") int countPage);
+	public int updateMealDate(Menu m);
 }

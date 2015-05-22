@@ -52,24 +52,24 @@
 		select count(*) from menu where 1=1
 		<if test="status!=''">
 			and status=#{status}
-     </if>
+        </if>
 		<if test="sid!=''">
 			and sid=#{sid}
-     </if>
+        </if>
 		<if test="searchStr!=''">
 			and address like CONCAT(CONCAT('%',#{searchStr}),'%')
-     </if>
+        </if>
 		<if test="startDate!=''">
 			and startDate=#{startDate}
-     </if>
+        </if>
 		<if test="endDate!=''">
 			and endDate=#{endDate}
-     </if>
+        </if>
 	</select>
 
 	<select id="list" resultType="Menu">
 		<!--select * from menu where 1=1-->
-		select m.*,s.name as shopName,u.account as userName
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -81,16 +81,16 @@
         </if>
 		<if test="sid!=''">
 			and m.sid=#{sid}
-     </if>
+        </if>
 		<if test="searchStr!=''">
 			and m.address like CONCAT(CONCAT('%',#{searchStr}),'%')
-     </if>
+        </if>
 		<if test="startDate!=''">
 			and m.startDate=#{startDate}
-     </if>
+        </if>
 		<if test="endDate!=''">
 			and m.endDate=#{endDate}
-     </if>
+        </if>
 		limit #{curPage},#{countPage}
 	</select>
 
@@ -106,7 +106,7 @@
 
 	<select id="getListByUid" resultType="Menu">
 		<!--select * from menu where 1=1-->
-		select m.*,s.name as shopName,u.account as userName
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -118,13 +118,13 @@
         </if>
 		<if test="type==1 and searchStr!=''">
 			and m.wid=#{searchStr}
-     </if>
+        </if>
 		limit #{curPage},#{countPage}
 	</select>
 
 	<select id="getByMid" resultType="Menu" parameterType="String">
 		<!--select * from menu where mid=#{mid} and status>0-->
-		select m.*,s.name as shopName,u.account as userName
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -132,4 +132,34 @@
 		on m.uid=u.uid
 		where m.mid=#{mid} and m.status>0
 	</select>
+	
+	<select id="listByStatus" resultType="Menu">
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		from menu m
+		join shop_info s
+		on m.sid=s.sid
+		join user_info u
+		on m.uid=u.uid
+		where m.uid=#{uid}
+		<if test="status!=''">
+			and m.status=#{status}
+        </if>
+		limit #{curPage},#{countPage}
+	</select>
+	
+	<select id="CountByStatus" resultType="Integer">
+		select count(*)
+		from menu
+		where uid=#{uid}
+		<if test="status!=''">
+			and status=#{status}
+        </if>
+	</select>
+	
+	<update id="updateMealDate" parameterType="Menu">
+		update menu set
+		mealStartDate=#{mealStartDate},mealEndDate=#{mealEndDate},updateBy=#{updateBy},updateDate=#{updateDate}
+		where mid=#{mid} and status=1
+    </update>
+	
 </mapper>

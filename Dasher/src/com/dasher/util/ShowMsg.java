@@ -117,5 +117,7 @@ public class ShowMsg {
 	public static final String evalErr="评价分数类型错误";
 	public static final String bankAccountNull="银行卡账号为空";
 	public static final String bankTypeNull="银行卡类型为空";
+	public static final String mealStartDateNull="开始吃饭时间为空";
+	public static final String mealEndDateNull="吃饭结束时间为空";
 
 }
