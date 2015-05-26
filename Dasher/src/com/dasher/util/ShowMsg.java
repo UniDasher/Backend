@@ -119,5 +119,9 @@ public class ShowMsg {
 	public static final String bankTypeNull="银行卡类型为空";
 	public static final String mealStartDateNull="开始吃饭时间为空";
 	public static final String mealEndDateNull="吃饭结束时间为空";
+	public static final String marketNull="超市名称为空！";
+	public static final String marketaddRepeat="超市名称已存在！";
+	public static final String unitNull="商品单位为空";
+	public static final String typeNull="商品类型为空！";
 
 }

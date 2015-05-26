@@ -21,4 +21,9 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return marketMenuMapper.add(mm)>0? true:false;
 	}
 
+	public boolean receive(MarketMenu mm) {
+		// TODO Auto-generated method stub
+		return marketMenuMapper.receive(mm)>0? true:false;
+	}
+
 }

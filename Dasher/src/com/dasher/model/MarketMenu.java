@@ -19,10 +19,15 @@ public class MarketMenu implements Serializable {
 	private String address;
 	private String longitude;
 	private String latitude;
-	private String createDate;
+	private String image;
+	private String mealStartDate;
+	private String mealEndDate;
 	private String startDate;
 	private String endDate;
-	private String image;
+	private String createBy;
+	private String createDate;
+	private String updateBy;
+	private String updateDate;
 	private int status;
 	
 	public MarketMenu() {
@@ -32,9 +37,10 @@ public class MarketMenu implements Serializable {
 	public MarketMenu(int id, String mid, String smid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
 			float serviceMoney, float tipMoney, int menuCount, int payType,
-			String address, String longitude, String latitude,
-			String createDate, String startDate, String endDate, String image,
-			int status) {
+			String address, String longitude, String latitude, String image,
+			String mealStartDate, String mealEndDate, String startDate,
+			String endDate, String createBy, String createDate,
+			String updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.mid = mid;
@@ -51,12 +57,19 @@ public class MarketMenu implements Serializable {
 		this.address = address;
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.createDate = createDate;
+		this.image = image;
+		this.mealStartDate = mealStartDate;
+		this.mealEndDate = mealEndDate;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.image = image;
+		this.createBy = createBy;
+		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
 		this.status = status;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -216,6 +229,46 @@ public class MarketMenu implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getMealStartDate() {
+		return mealStartDate;
+	}
+
+	public void setMealStartDate(String mealStartDate) {
+		this.mealStartDate = mealStartDate;
+	}
+
+	public String getMealEndDate() {
+		return mealEndDate;
+	}
+
+	public void setMealEndDate(String mealEndDate) {
+		this.mealEndDate = mealEndDate;
+	}
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 	
 	

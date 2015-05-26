@@ -16,16 +16,22 @@ public class Market implements Serializable {
 	private String latitude;
 	private int goodEvaluate;
 	private int badEvaluate;
+	private String createBy;
+	private String createDate;
+	private String updateBy;
+	private String updateDate;
 	private int status;
 	
 	public Market() {
 		
 	}
 
+	
 	public Market(int id, String smid, String name, String address,
 			String subscribe, String email, String phone, String serviceTime,
 			String longitude, String latitude, int goodEvaluate,
-			int badEvaluate, int status) {
+			int badEvaluate, String createBy, String createDate,
+			String updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.smid = smid;
@@ -39,8 +45,13 @@ public class Market implements Serializable {
 		this.latitude = latitude;
 		this.goodEvaluate = goodEvaluate;
 		this.badEvaluate = badEvaluate;
+		this.createBy = createBy;
+		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
 		this.status = status;
 	}
+
 
 	public int getId() {
 		return id;
@@ -137,6 +148,47 @@ public class Market implements Serializable {
 	public void setBadEvaluate(int badEvaluate) {
 		this.badEvaluate = badEvaluate;
 	}
+
+	
+	public String getCreateBy() {
+		return createBy;
+	}
+
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
+
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
+
 
 	public int getStatus() {
 		return status;

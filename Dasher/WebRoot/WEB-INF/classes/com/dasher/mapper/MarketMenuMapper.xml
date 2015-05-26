@@ -4,7 +4,30 @@
 <mapper namespace="com.dasher.mapper.MarketMenuMapper">
    <resultMap type="MarketMenu" id="marketMenuMap">
      <result property="id" column="id"/>
-    
+     <result property="mid" column="mid"/>
+     <result property="smid" column="smid"/>
+     <result property="uid" column="uid"/>
+     <result property="wid" column="wid"/>
+     <result property="dishsMoney" column="dishsMoney"/>
+     <result property="carriageMoney" column="carriageMoney"/>
+     <result property="taxesMoney" column="taxesMoney"/>
+     <result property="serviceMoney" column="serviceMoney"/>
+     <result property="tipMoney" column="tipMoney"/>
+     <result property="menuCount" column="menuCount"/>
+     <result property="payType" column="payType"/>
+     <result property="address" column="address"/>
+     <result property="longitude" column="longitude"/>
+     <result property="latitude" column="latitude"/>
+     <result property="image" column="image"/>
+     <result property="mealStartDate" column="mealStartDate"/>
+     <result property="mealEndDate" column="mealEndDate"/>
+     <result property="startDate" column="startDate"/>
+     <result property="endDate" column="endDate"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="status" column="status"/>
    </resultMap>
    
   

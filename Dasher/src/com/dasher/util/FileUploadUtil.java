@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.dasher.model.MarketCommodity;
 import com.dasher.model.ShopDish;
 
 public class FileUploadUtil {
@@ -168,6 +169,68 @@ public class FileUploadUtil {
 			sd.setDescription(row.getCell(4).getStringCellValue());
 
 			list.add(sd);
+		}
+		return list;
+	}
+	
+	
+	//解析xls文件
+	public static List<MarketCommodity> readCommodityXls(HttpServletRequest request,String path) throws FileNotFoundException, IOException{
+
+		List<MarketCommodity> list=new ArrayList<MarketCommodity>();
+
+		String savePath = request.getSession().getServletContext().getRealPath(path);
+		File file = new File(savePath);
+		POIFSFileSystem poifsFileSystem = new POIFSFileSystem(new FileInputStream(file));
+		HSSFWorkbook hssfWorkbook =  new HSSFWorkbook(poifsFileSystem);
+		HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
+
+		int rowstart = hssfSheet.getFirstRowNum();
+		int rowEnd = hssfSheet.getLastRowNum();
+		for(int i=rowstart+1;i<=rowEnd;i++)
+		{
+			HSSFRow row = hssfSheet.getRow(i);
+			if(null == row) continue;
+			//int cellStart = row.getFirstCellNum();
+			//int cellEnd = row.getLastCellNum();
+
+
+			MarketCommodity mc=new MarketCommodity();
+			mc.setSmid(row.getCell(0).getStringCellValue());
+			mc.setName(row.getCell(1).getStringCellValue());
+			mc.setUnit(row.getCell(2).getStringCellValue());
+			mc.setType(row.getCell(3).getStringCellValue());
+			mc.setSubscribe(row.getCell(4).getStringCellValue());
+			list.add(mc);
+		}
+		return list;
+	}
+
+	//解析xlsx文件
+	public static List<MarketCommodity> readCommodityXlsx(HttpServletRequest request,String path) throws InvalidFormatException, IOException{
+
+		List<MarketCommodity> list=new ArrayList<MarketCommodity>();
+
+		String savePath = request.getSession().getServletContext().getRealPath(path);
+		File file = new File(savePath);
+
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file);
+		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
+
+		int rowstart = xssfSheet.getFirstRowNum();
+		int rowEnd = xssfSheet.getLastRowNum();
+		for(int i=rowstart+1;i<=rowEnd;i++)
+		{
+			XSSFRow row = xssfSheet.getRow(i);
+			if(null == row) continue;
+
+			MarketCommodity mc=new MarketCommodity();
+			mc.setSmid(row.getCell(0).getStringCellValue());
+			mc.setName(row.getCell(1).getStringCellValue());
+			mc.setUnit(row.getCell(2).getStringCellValue());
+			mc.setType(row.getCell(3).getStringCellValue());
+			mc.setSubscribe(row.getCell(4).getStringCellValue());
+			list.add(mc);
 		}
 		return list;
 	}

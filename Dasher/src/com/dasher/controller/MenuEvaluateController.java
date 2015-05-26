@@ -40,7 +40,6 @@ public class MenuEvaluateController extends MyController {
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -117,7 +116,6 @@ public class MenuEvaluateController extends MyController {
 	@ResponseBody
 	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
