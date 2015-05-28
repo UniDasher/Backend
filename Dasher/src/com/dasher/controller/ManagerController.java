@@ -78,11 +78,11 @@ public class ManagerController extends MyController {
 			resultDesc=ShowMsg.FirstNameNull;
 			resultCode=2;
 		}
-		else if(lastName=="")
-		{
-			resultDesc=ShowMsg.LastNameNull;
-			resultCode=2;
-		}
+//		else if(lastName=="")
+//		{
+//			resultDesc=ShowMsg.LastNameNull;
+//			resultCode=2;
+//		}
 		else if(email=="")
 		{
 			resultDesc=ShowMsg.EmailNull;
@@ -234,11 +234,11 @@ public class ManagerController extends MyController {
 			resultDesc=ShowMsg.FirstNameNull;
 			resultCode=2;
 		}
-		else if(lastName=="")
-		{
-			resultDesc=ShowMsg.LastNameNull;
-			resultCode=2;
-		}
+//		else if(lastName=="")
+//		{
+//			resultDesc=ShowMsg.LastNameNull;
+//			resultCode=2;
+//		}
 		else if(email=="")
 		{
 			resultDesc=ShowMsg.EmailNull;
