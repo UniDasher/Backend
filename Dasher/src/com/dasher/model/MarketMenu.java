@@ -6,7 +6,7 @@ public class MarketMenu implements Serializable {
 
 	private int id;
 	private String mid;
-	private String smid;
+	private String mcid;
 	private String uid;
 	private String wid;
 	private float dishsMoney;
@@ -19,7 +19,6 @@ public class MarketMenu implements Serializable {
 	private String address;
 	private String longitude;
 	private String latitude;
-	private String image;
 	private String mealStartDate;
 	private String mealEndDate;
 	private String startDate;
@@ -34,17 +33,17 @@ public class MarketMenu implements Serializable {
 
 	}
 
-	public MarketMenu(int id, String mid, String smid, String uid, String wid,
+	public MarketMenu(int id, String mid, String mcid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
 			float serviceMoney, float tipMoney, int menuCount, int payType,
-			String address, String longitude, String latitude, String image,
+			String address, String longitude, String latitude,
 			String mealStartDate, String mealEndDate, String startDate,
 			String endDate, String createBy, String createDate,
 			String updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.mid = mid;
-		this.smid = smid;
+		this.mcid = mcid;
 		this.uid = uid;
 		this.wid = wid;
 		this.dishsMoney = dishsMoney;
@@ -57,7 +56,6 @@ public class MarketMenu implements Serializable {
 		this.address = address;
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.image = image;
 		this.mealStartDate = mealStartDate;
 		this.mealEndDate = mealEndDate;
 		this.startDate = startDate;
@@ -87,12 +85,13 @@ public class MarketMenu implements Serializable {
 		this.mid = mid;
 	}
 
-	public String getSmid() {
-		return smid;
+	
+	public String getMcid() {
+		return mcid;
 	}
 
-	public void setSmid(String smid) {
-		this.smid = smid;
+	public void setMcid(String mcid) {
+		this.mcid = mcid;
 	}
 
 	public String getUid() {
@@ -213,14 +212,6 @@ public class MarketMenu implements Serializable {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public int getStatus() {

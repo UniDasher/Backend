@@ -6,6 +6,7 @@ public class ShopDishType implements Serializable {
 
 	private int id;
 	private String name;
+	private int type;
 	private int sortNum;
 	private int createBy;
 	private String createDate;
@@ -16,11 +17,14 @@ public class ShopDishType implements Serializable {
 	public ShopDishType() {
 		
 	}
-	public ShopDishType(int id, String name, int sortNum, int createBy,
-			String createDate, int updateBy, String updateDate, int status) {
+	
+	public ShopDishType(int id, String name, int type, int sortNum,
+			int createBy, String createDate, int updateBy, String updateDate,
+			int status) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.type = type;
 		this.sortNum = sortNum;
 		this.createBy = createBy;
 		this.createDate = createDate;
@@ -29,7 +33,6 @@ public class ShopDishType implements Serializable {
 		this.status = status;
 	}
 
-	
 	public int getCreateBy() {
 		return createBy;
 	}
@@ -74,6 +77,14 @@ public class ShopDishType implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public int getSortNum() {

@@ -7,8 +7,9 @@
      <result property="smid" column="smid"/>
      <result property="mcid" column="mcid"/>
      <result property="name" column="name"/>
+     <result property="price" column="price"/>
      <result property="unit" column="unit"/>
-     <result property="type" column="type"/>
+     <result property="typeId" column="typeId"/>
      <result property="subscribe" column="subscribe"/>
      <result property="createBy" column="createBy"/>
      <result property="createDate" column="createDate"/>
@@ -18,13 +19,13 @@
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MarketCommodity">
-     insert into market_commodity(smid,mcid,name,unit,type,subscribe,createBy,createDate,status)
-     values(#{smid},#{mcid},#{name},#{unit},#{type},#{subscribe},#{createBy},#{createDate},1)
+     insert into market_commodity(smid,mcid,name,price,unit,typeId,subscribe,createBy,createDate,status)
+     values(#{smid},#{mcid},#{name},#{price},#{unit},#{typeId},#{subscribe},#{createBy},#{createDate},1)
    </insert>
    
    <update id="update" parameterType="MarketCommodity">
      update market_commodity
-     set name=#{name},unit=#{unit},type=#{type},subscribe=#{subscribe},updateBy=#{updateBy},updateDate=#{updateDate}
+     set name=#{name},price=#{price},unit=#{unit},typeId=#{typeId},subscribe=#{subscribe},updateBy=#{updateBy},updateDate=#{updateDate}
      where mcid=#{mcid} 
    </update>
    

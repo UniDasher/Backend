@@ -50,9 +50,9 @@ public class ShopDishTypeServiceImpl implements ShopDishTypeService {
 	}
 
 
-	public List<ShopDishType> list() {
+	public List<ShopDishType> list(int type) {
 		// TODO Auto-generated method stub
-		return shopDishTypeMapper.list();
+		return shopDishTypeMapper.list(type);
 	}
 
 
@@ -70,6 +70,12 @@ public class ShopDishTypeServiceImpl implements ShopDishTypeService {
 	public List<ShopDishType> listBySid(String sid) {
 		// TODO Auto-generated method stub
 		return shopDishTypeMapper.listBySid(sid);
+	}
+
+
+	public List<ShopDishType> listBySmid(String smid) {
+		// TODO Auto-generated method stub
+		return shopDishTypeMapper.listBySmid(smid);
 	}
 
 }

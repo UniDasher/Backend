@@ -59,9 +59,20 @@ public class ShopDishTypeController extends MyController {
 //		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		String name=getString(request, "name");
+		String type=getString(request, "type");
 		if(name=="")
 		{
 			resultDesc=ShowMsg.DishTypeNull;
+			resultCode=2;
+		}
+		else if(type=="")
+		{
+			resultDesc=ShowMsg.typeNull;
+			resultCode=2;
+		}
+		else if(!type.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.typeErr;
 			resultCode=2;
 		}
 		else
@@ -76,6 +87,7 @@ public class ShopDishTypeController extends MyController {
 				}
 				ShopDishType sdt=new ShopDishType();
 				sdt.setName(name);
+				sdt.setType(Integer.parseInt(type));
 				sdt.setSortNum(Integer.parseInt(mysortNum.trim())+1);
 				sdt.setCreateBy(Integer.parseInt(myloginId));
 				sdt.setCreateDate(DateUtil.getCurrentDateStr());
@@ -270,18 +282,34 @@ public class ShopDishTypeController extends MyController {
 		}
 //		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-		List<ShopDishType> list=shopDishTypeService.list();
-		if(list.size()>0)
+		
+		String type=getString(request, "type");
+		if(type=="")
 		{
-			model.put("list", list);
-			resultCode=0;
-			resultDesc=ShowMsg.findSuc;
+			resultDesc=ShowMsg.typeNull;
+			resultCode=2;
+		}
+		else if(!type.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.typeErr;
+			resultCode=2;
 		}
 		else
 		{
-			resultCode=1;
-			resultDesc=ShowMsg.findFail;
+			List<ShopDishType> list=shopDishTypeService.list(Integer.parseInt(type));
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
 		}
+		
 		
 		
 		model.put("resultCode", resultCode);	
@@ -388,6 +416,52 @@ public class ShopDishTypeController extends MyController {
 		model.put("authCode", authCode);
 		String sid=getString(request, "sid");
 		List<ShopDishType> list=shopDishTypeService.listBySid(sid);
+		if(list.size()>0)
+		{
+			model.put("list", list);
+			resultCode=0;
+			resultDesc=ShowMsg.findSuc;
+		}
+		else
+		{
+			resultCode=1;
+			resultDesc=ShowMsg.findFail;
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+
+		return model;
+	}	
+
+	
+	@RequestMapping("/market/type/list")
+	@ResponseBody
+	protected Object typelistBySmid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String smid=getString(request, "smid");
+		List<ShopDishType> list=shopDishTypeService.listBySmid(smid);
 		if(list.size()>0)
 		{
 			model.put("list", list);

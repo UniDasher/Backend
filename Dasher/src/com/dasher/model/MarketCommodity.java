@@ -8,8 +8,9 @@ public class MarketCommodity implements Serializable {
 	private String smid;
 	private String mcid;
 	private String name;
+	private float price;
 	private String unit;
-	private String type;
+	private int typeId;
 	private String subscribe;
 	private String createBy;
 	private String createDate;
@@ -22,15 +23,17 @@ public class MarketCommodity implements Serializable {
 	}
 
 	public MarketCommodity(int id, String smid, String mcid, String name,
-			String unit, String type, String subscribe, String createBy,
-			String createDate, String updateBy, String updateDate, int status) {
+			float price, String unit, int typeId, String subscribe,
+			String createBy, String createDate, String updateBy,
+			String updateDate, int status) {
 		super();
 		this.id = id;
 		this.smid = smid;
 		this.mcid = mcid;
 		this.name = name;
+		this.price = price;
 		this.unit = unit;
-		this.type = type;
+		this.typeId = typeId;
 		this.subscribe = subscribe;
 		this.createBy = createBy;
 		this.createDate = createDate;
@@ -38,6 +41,8 @@ public class MarketCommodity implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -63,6 +68,14 @@ public class MarketCommodity implements Serializable {
 		this.name = name;
 	}
 
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
 	public String getUnit() {
 		return unit;
 	}
@@ -71,12 +84,12 @@ public class MarketCommodity implements Serializable {
 		this.unit = unit;
 	}
 
-	public String getType() {
-		return type;
+	public int getTypeId() {
+		return typeId;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
 	}
 
 	public String getSubscribe() {

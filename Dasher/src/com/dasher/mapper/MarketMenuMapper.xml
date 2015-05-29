@@ -5,7 +5,7 @@
    <resultMap type="MarketMenu" id="marketMenuMap">
      <result property="id" column="id"/>
      <result property="mid" column="mid"/>
-     <result property="smid" column="smid"/>
+     <result property="mcid" column="mcid"/>
      <result property="uid" column="uid"/>
      <result property="wid" column="wid"/>
      <result property="dishsMoney" column="dishsMoney"/>
@@ -18,7 +18,6 @@
      <result property="address" column="address"/>
      <result property="longitude" column="longitude"/>
      <result property="latitude" column="latitude"/>
-     <result property="image" column="image"/>
      <result property="mealStartDate" column="mealStartDate"/>
      <result property="mealEndDate" column="mealEndDate"/>
      <result property="startDate" column="startDate"/>
@@ -30,5 +29,15 @@
      <result property="status" column="status"/>
    </resultMap>
    
+   <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MarketMenu">
+     insert into market_menu(mid,mcid,uid,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,address,longitude,latitude,mealStartDate,mealEndDate,createBy,createDate,status)
+     values(#{mid},#{mcid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{address},#{longitude},#{latitude},#{mealStartDate},#{mealEndDate},#{createBy},#{createDate},1)
+   </insert>
+   
+   <update id="receive" parameterType="MarketMenu">
+     update market_menu 
+     set wid=#{wid},startDate=#{startDate},updateBy=#{updateBy},updateDate=#{updateDate},status=2
+     where mid=#{mid}
+   </update>
   
 </mapper>

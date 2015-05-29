@@ -199,8 +199,7 @@ public class FileUploadUtil {
 			mc.setSmid(row.getCell(0).getStringCellValue());
 			mc.setName(row.getCell(1).getStringCellValue());
 			mc.setUnit(row.getCell(2).getStringCellValue());
-			mc.setType(row.getCell(3).getStringCellValue());
-			mc.setSubscribe(row.getCell(4).getStringCellValue());
+			mc.setSubscribe(row.getCell(3).getStringCellValue());
 			list.add(mc);
 		}
 		return list;
@@ -228,8 +227,7 @@ public class FileUploadUtil {
 			mc.setSmid(row.getCell(0).getStringCellValue());
 			mc.setName(row.getCell(1).getStringCellValue());
 			mc.setUnit(row.getCell(2).getStringCellValue());
-			mc.setType(row.getCell(3).getStringCellValue());
-			mc.setSubscribe(row.getCell(4).getStringCellValue());
+			mc.setSubscribe(row.getCell(3).getStringCellValue());
 			list.add(mc);
 		}
 		return list;

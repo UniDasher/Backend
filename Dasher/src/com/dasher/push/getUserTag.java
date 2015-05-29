@@ -1,4 +1,4 @@
-package cpm.dasher.push;
+package com.dasher.push;
 
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.http.IGtPush;

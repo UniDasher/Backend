@@ -71,13 +71,14 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-
+		
 		String smid=getString(request, "smid");
 		String name=getString(request, "name");
+		String price=getString(request, "price");
 		String unit=getString(request, "unit");
-		String type=getString(request, "type");
+		String typeId=getString(request, "typeId");
 		String subscribe=getString(request, "subscribe");
 		if(smid=="")
 		{
@@ -89,20 +90,41 @@ public class MarketCommodityController extends MyController {
 			resultDesc=ShowMsg.marketNull;
 			resultCode=2;
 		}
+		else if(price=="")
+		{
+			resultDesc=ShowMsg.priceNull;
+			resultCode=2;
+		}
 		else if(unit=="")
 		{
 			resultDesc=ShowMsg.unitNull;
 			resultCode=2;
 		}
-		else if(type=="")
+		else if(typeId=="")
 		{
 			resultDesc=ShowMsg.typeNull;
 			resultCode=2;
 		}
+		else if(!typeId.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.typeErr;
+			resultCode=2;
+		}
 		else
 		{
-			
-			
+
+			//验证金额
+			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+			Matcher matcher=pattern.matcher(price);
+			if(matcher.matches()==false)
+			{
+				resultDesc=ShowMsg.dishsMoneyErr;
+				resultCode=2;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);
+				return model;
+			}
+
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 			Date date=new Date();
 			String strs[]=sdf.format(date).split("-");
@@ -111,29 +133,30 @@ public class MarketCommodityController extends MyController {
 			{
 				mcid=mcid+strs[i];
 			}
-			
+
 			MarketCommodity mc=new MarketCommodity();
 			mc.setSmid(smid);
 			mc.setMcid(mcid);
 			mc.setName(name);
+			mc.setPrice(Float.parseFloat(price));
 			mc.setUnit(unit);
-			mc.setType(type);
+			mc.setTypeId(Integer.parseInt(typeId));
 			mc.setSubscribe(subscribe);
 			mc.setCreateBy(myloginId);
 			mc.setCreateDate(DateUtil.getCurrentDateStr());
-			
+
 			result=marketCommodityService.add(mc);
-            if(result==true)
-		    {
+			if(result==true)
+			{
 				resultCode=0;
 				resultDesc=ShowMsg.addSuc;
-		    }
-		    else
-		    {
+			}
+			else
+			{
 				resultCode=1;
 				resultDesc=ShowMsg.addFail;
-		    }
-	
+			}
+
 
 		}
 
@@ -166,13 +189,14 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
 		String mcid=getString(request, "mcid");
 		String name=getString(request, "name");
+		String price=getString(request, "price");
 		String unit=getString(request, "unit");
-		String type=getString(request, "type");
+		String typeId=getString(request, "typeId");
 		String subscribe=getString(request, "subscribe");
 		if(mcid=="")
 		{
@@ -184,38 +208,60 @@ public class MarketCommodityController extends MyController {
 			resultDesc=ShowMsg.marketNull;
 			resultCode=2;
 		}
+		else if(price=="")
+		{
+			resultDesc=ShowMsg.priceNull;
+			resultCode=2;
+		}
 		else if(unit=="")
 		{
 			resultDesc=ShowMsg.unitNull;
 			resultCode=2;
 		}
-		else if(type=="")
+		else if(typeId=="")
 		{
 			resultDesc=ShowMsg.typeNull;
 			resultCode=2;
 		}
+		else if(!typeId.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.typeErr;
+			resultCode=2;
+		}
 		else
 		{
+			//验证金额
+			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+			Matcher matcher=pattern.matcher(price);
+			if(matcher.matches()==false)
+			{
+				resultDesc=ShowMsg.dishsMoneyErr;
+				resultCode=2;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);
+				return model;
+			}
 			MarketCommodity mc=new MarketCommodity();
 			mc.setMcid(mcid);
 			mc.setName(name);
+			mc.setPrice(Float.parseFloat(price));
 			mc.setUnit(unit);
-			mc.setType(type);
+			mc.setTypeId(Integer.parseInt(typeId));
 			mc.setSubscribe(subscribe);
 			mc.setUpdateBy(myloginId);
 			mc.setUpdateDate(DateUtil.getCurrentDateStr());
-			
+
 			result=marketCommodityService.update(mc);
-            if(result==true)
-		    {
+			if(result==true)
+			{
 				resultCode=0;
 				resultDesc=ShowMsg.updateSuc;
-		    }
-		    else
-		    {
+			}
+			else
+			{
 				resultCode=1;
 				resultDesc=ShowMsg.updateFail;
-		    }
+			}
 		}
 
 		model.put("resultCode", resultCode);	
@@ -247,7 +293,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
 		String mcid=getString(request, "mcid");
@@ -258,22 +304,22 @@ public class MarketCommodityController extends MyController {
 		}
 		else
 		{
-			
+
 			MarketCommodity mc=new MarketCommodity();
 			mc.setMcid(mcid);
 			mc.setUpdateBy(myloginId);
 			mc.setUpdateDate(DateUtil.getCurrentDateStr());
 			result=marketCommodityService.delete(mc);
-            if(result==true)
-		    {
+			if(result==true)
+			{
 				resultCode=0;
 				resultDesc=ShowMsg.delSuc;
-		    }
-		    else
-		    {
+			}
+			else
+			{
 				resultCode=1;
 				resultDesc=ShowMsg.delFail;
-		    }
+			}
 
 		}
 
@@ -298,7 +344,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
 		String mcid=getString(request, "mcid");
@@ -309,7 +355,7 @@ public class MarketCommodityController extends MyController {
 		}
 		else
 		{
-			
+
 			MarketCommodity mc=marketCommodityService.getByMcid(mcid);
 			if(mc==null)
 			{
@@ -329,7 +375,7 @@ public class MarketCommodityController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
+
 	@RequestMapping("/commodity/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -360,7 +406,7 @@ public class MarketCommodityController extends MyController {
 					resultDesc=ShowMsg.findFail;
 					resultCode=1;
 				}
-				
+
 			}
 		}
 		else
@@ -368,13 +414,13 @@ public class MarketCommodityController extends MyController {
 			resultDesc=ShowMsg.searchFail;
 			resultCode=2;
 		}
-		
+
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
 
-	
+
 	@RequestMapping("/commodity/file")
 	@ResponseBody
 	protected Object uploadFile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -400,7 +446,7 @@ public class MarketCommodityController extends MyController {
 		}
 //		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-		
+
 		String smid=getString(request, "smid");
 		String fileName=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/market/commodity");
 		if("false".equals(fileName)){
@@ -414,7 +460,7 @@ public class MarketCommodityController extends MyController {
 		}
 		else
 		{
-			
+
 			List<MarketCommodity> list=null;
 			try 
 			{
@@ -426,7 +472,7 @@ public class MarketCommodityController extends MyController {
 				{
 					list=FileUploadUtil.readCommodityXlsx(request, "/WEB-INF/upload/shop/dish/"+fileName);
 				}
-				
+
 				int count=marketCommodityService.getCountBySmid(smid);
 				if(count>0)
 				{
@@ -436,7 +482,7 @@ public class MarketCommodityController extends MyController {
 					mc.setUpdateDate(DateUtil.getCurrentDateStr());
 					result=marketCommodityService.deleteList(mc);
 				}
-				
+
 				for(MarketCommodity mc:list)
 				{
 					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
@@ -447,21 +493,20 @@ public class MarketCommodityController extends MyController {
 					{
 						mcid=mcid+strs[i];
 					}
-					
+
 					MarketCommodity mc2=new MarketCommodity();
 					mc2.setSmid(mc.getSmid());
 					mc2.setMcid(mcid);
 					mc2.setName(mc.getName());
 					mc2.setUnit(mc.getUnit());
-					mc2.setType(mc.getType());
 					mc2.setSubscribe(mc.getSubscribe());
 					mc2.setCreateBy(myloginId);
 					mc2.setCreateDate(DateUtil.getCurrentDateStr());
-					
+
 					result=marketCommodityService.add(mc2);
-					
+
 				}
-				
+
 				if(result==true)
 				{
 					resultCode=0;
@@ -472,12 +517,12 @@ public class MarketCommodityController extends MyController {
 					resultCode=1;
 					resultDesc=ShowMsg.addFail;
 				}	
-				
-				
+
+
 			} catch (InvalidFormatException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);

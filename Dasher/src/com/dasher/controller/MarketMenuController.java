@@ -61,17 +61,23 @@ public class MarketMenuController extends MyController {
 		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
-		String name=getString(request, "name");
+		String mcid=getString(request, "mcid");
+		String uid=getString(request, "uid");
+		String dishsMoney=getString(request, "dishsMoney");
+		String carriageMoney=getString(request, "carriageMoney");
+		String taxesMoney=getString(request, "taxesMoney");
+		String serviceMoney=getString(request, "serviceMoney");
+		String tipMoney=getString(request, "tipMoney");
+		String menuCount=getString(request, "menuCount");
+		String payType=getString(request, "payType");
 		String address=getString(request, "address");
-		String subscribe=getString(request, "subscribe");
-		String email=getString(request, "email");
-		String phone=getString(request, "phone");
-		String serviceTime=getString(request, "serviceTime");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
-		if(name=="")
+		String mealStartDate=getString(request, "mealStartDate");
+		String mealEndDate=getString(request, "mealEndDate");
+		if(mcid==""||uid=="")
 		{
-			resultDesc=ShowMsg.marketNull;
+			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
 		else if(address=="")
@@ -79,17 +85,36 @@ public class MarketMenuController extends MyController {
 			resultDesc=ShowMsg.AddressNull;
 			resultCode=2;
 		}
-		else if(email=="")
+		else if(dishsMoney=="")
 		{
-			resultDesc=ShowMsg.EmailNull;
+			resultDesc=ShowMsg.dishsMoneyNull;
 			resultCode=2;
 		}
-		else if(phone=="")
+		else if(menuCount=="")
 		{
-			resultDesc=ShowMsg.MobilePhoneNull;
+			resultDesc=ShowMsg.menuCountNull;
 			resultCode=2;
 		}
-		
+		else if(!menuCount.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.menuCountErr;
+			resultCode=2;
+		}
+		else if(payType=="")
+		{
+			resultDesc=ShowMsg.payTypeNull;
+			resultCode=2;
+		}
+		else if(!payType.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.payTypeErr;
+			resultCode=2;
+		}
+		else if(address=="")
+		{
+			resultDesc=ShowMsg.AddressNull;
+			resultCode=2;
+		}
 		else if(longitude==""||latitude=="")
 		{
 			resultDesc=ShowMsg.LonLatNull;
@@ -97,65 +122,25 @@ public class MarketMenuController extends MyController {
 		}
 		else
 		{
-			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
-			Matcher matcher=pattern.matcher(email);
-			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
-			Matcher matcher2=pattern2.matcher(phone);
-			if(matcher.matches()==false)
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.emailErr;
-			}
-			else if(matcher2.matches()==false)
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.mobilePhoneErr;
-			}
-			else
-			{
-//				Market market=marketService.getByMarketName(name);
-//				if(market==null)
-//				{
-//					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
-//					Date date=new Date();
-//					String strs[]=sdf.format(date).split("-");
-//					String smid="";
-//					for(int i=0;i<strs.length;i++)
-//					{
-//						smid=smid+strs[i];
-//					}
-//					
-//					Market m=new Market();
-//					m.setSmid(smid);
-//					m.setName(name);
-//					m.setAddress(address);
-//					m.setSubscribe(subscribe);
-//					m.setEmail(email);
-//					m.setPhone(phone);
-//					m.setServiceTime(serviceTime);
-//					m.setLatitude(latitude);
-//					m.setLongitude(longitude);
-//					m.setCreateBy(myloginId);
-//					m.setCreateDate(DateUtil.getCurrentDateStr());
-//					result=marketService.add(m);
-//		            if(result==true)
-//				    {
-//						resultCode=0;
-//						resultDesc=ShowMsg.addSuc;
-//				    }
-//				    else
-//				    {
-//						resultCode=1;
-//						resultDesc=ShowMsg.addFail;
-//				    }
-//				}
-//				else
-//				{
-//					resultCode=1;
-//					resultDesc=ShowMsg.marketaddRepeat;
-//				}
-				
-			}
+//			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+//			Matcher matcher=pattern.matcher(email);
+//			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+//			Matcher matcher2=pattern2.matcher(phone);
+//			if(matcher.matches()==false)
+//			{
+//				resultCode=2;
+//				resultDesc=ShowMsg.emailErr;
+//			}
+//			else if(matcher2.matches()==false)
+//			{
+//				resultCode=2;
+//				resultDesc=ShowMsg.mobilePhoneErr;
+//			}
+//			else
+//			{
+//
+//				
+//			}
 
 		}
 

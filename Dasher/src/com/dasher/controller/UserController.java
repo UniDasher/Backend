@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -44,33 +42,23 @@ public class UserController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
-	@RequestMapping("phone/user/add")
+	@RequestMapping("/user/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String password="";
-	    String mobilePhone="";
-	    String phoneCode="";
-	    String firstName="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			password = jsonObject.getString("password");
-			mobilePhone=jsonObject.getString("mobilePhone");
-			phoneCode=jsonObject.getString("phoneCode");
-			firstName=jsonObject.getString("firstName");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		
-		//参数判断
+		String account=getString(request, "account");
+		String password=getString(request, "password");
+		String firstName=getString(request, "firstName");
+		String lastName=getString(request, "lastName");
+		String equmentNumber=getString(request, "equmentNumber");
+		String mobilePhone=getString(request, "mobilePhone");
+		String email=getString(request, "email");
+		String address=getString(request, "address");
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
+		String bankAccount=getString(request, "bankAccount");
+		String bankType=getString(request, "bankType");
 		if(mobilePhone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -86,61 +74,96 @@ public class UserController extends MyController {
 			resultDesc=ShowMsg.FirstNameNull;
 			resultCode=2;
 		}
+		else if(lastName=="")
+		{
+			resultDesc=ShowMsg.LastNameNull;
+			resultCode=2;
+		}
+		else if(email=="")
+		{
+			resultDesc=ShowMsg.EmailNull;
+			resultCode=2;
+		}
+		else if(address=="")
+		{
+			resultDesc=ShowMsg.AddressNull;
+			resultCode=2;
+		}
+		else if(longitude==""||latitude=="")
+		{
+			resultDesc=ShowMsg.LonLatNull;
+			resultCode=2;
+		}
+		else if(bankAccount=="")
+		{
+			resultDesc=ShowMsg.bankAccountNull;
+			resultCode=2;
+		}
+		else if(bankType=="")
+		{
+			resultDesc=ShowMsg.bankTypeNull;
+			resultCode=2;
+		}
 		else
 		{
-			//手机格式验证
+
+			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+			Matcher matcher=pattern.matcher(email);
 			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
 			Matcher matcher2=pattern2.matcher(mobilePhone);
-			
-			if(matcher2.matches()==false)
+			if(matcher.matches()==false)
+			{
+				resultCode=2;
+				resultDesc=ShowMsg.emailErr;
+			}
+			else if(matcher2.matches()==false)
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;
 			}
 			else
 			{
-				//判断验证码是否正确
-				
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+				Date date=new Date();
+				String strs[]=sdf.format(date).split("-");
+				String uid="";
+				for(int i=0;i<strs.length;i++)
+				{
+					uid=uid+strs[i];
+				}
+				UUID uuid=UUID.randomUUID();
+				String str[]=uuid.toString().split("-");
+				String salt="";
+				for(int i=0;i<str.length;i++)
+				{
+					salt=salt+str[i];
+				}
+
+				User u=new User();
+				u.setUid(uid);
+				u.setAccount(account);
+				try {
+					u.setPassword(MyMD5Util.getEncryptedPwd(password));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				u.setSalt(salt);
+				u.setFirstName(firstName);
+				u.setLastName(lastName);
+				u.setEqumentNumber(equmentNumber);
+				u.setMobilePhone(mobilePhone);
+				u.setEmail(email);
+				u.setAddress(address);
+				u.setLongitude(longitude);
+				u.setLatitude(latitude);
+				u.setLogo("logo");
+				u.setCreateDate(DateUtil.getCurrentDateStr());
+				u.setBankAccount(bankAccount);
+				u.setBankType(bankType);
 				User user=userService.getUserByTel(mobilePhone);
 				if(user==null)
 				{
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
-					Date date=new Date();
-					String strs[]=sdf.format(date).split("-");
-					String uid="";
-					for(int i=0;i<strs.length;i++)
-					{
-						uid=uid+strs[i];
-					}
-					UUID uuid=UUID.randomUUID();
-					String str[]=uuid.toString().split("-");
-					String salt="";
-					for(int i=0;i<str.length;i++)
-					{
-						salt=salt+str[i];
-					}
-
-					User u=new User();
-					u.setUid(uid);
-					u.setAccount("");
-					try {
-						u.setPassword(MyMD5Util.getEncryptedPwd(password));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					u.setSalt(salt);
-					u.setFirstName(firstName);
-					u.setLastName("");
-					u.setEqumentNumber("");
-					u.setMobilePhone(mobilePhone);
-					u.setEmail("");
-					u.setAddress("");
-					u.setLongitude("");
-					u.setLatitude("");
-					u.setLogo("/WEB-INF/upload/user/images/default.png");
-					u.setCreateDate(DateUtil.getCurrentDateStr());
-					u.setBankAccount("");
-					u.setBankType("");
 					result=userService.addUser(u);
 					if(result==true)
 					{
@@ -161,6 +184,7 @@ public class UserController extends MyController {
 					resultDesc=ShowMsg.addRepeat;
 				}
 			}
+
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
@@ -168,29 +192,13 @@ public class UserController extends MyController {
 		return model;
 	}	
 
-	@RequestMapping("phone/user/login")
+	@RequestMapping("/user/login")
 	@ResponseBody
 	protected Object login(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String password="";
-	    String mobilePhone="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			password = jsonObject.getString("password");
-			mobilePhone=jsonObject.getString("mobilePhone");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		
+		String mobilePhone=getString(request, "mobilePhone");
+		String password=getString(request, "password");
 		if(mobilePhone=="")
 		{
 			resultDesc=ShowMsg.userNull;
@@ -234,29 +242,13 @@ public class UserController extends MyController {
 		return model;
 
 	}
-	
-	@RequestMapping("phone/user/info")
+
+	@RequestMapping("/user/info")
 	@ResponseBody
-	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -266,9 +258,9 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-		
-		
+		String uid=getString(request, "uid");
 		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -293,31 +285,13 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
-	@RequestMapping("phone/user/update/name")
+
+	@RequestMapping("/user/update")
 	@ResponseBody
-	protected Object updateName(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object update(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String firstName="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-			firstName=jsonObject.getString("firstName");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -327,269 +301,83 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-		
-		
+		String uid=getString(request, "uid");
+		String firstName=getString(request, "firstName");
+		String lastName=getString(request, "lastName");
+		String email=getString(request, "email");
+		String address=getString(request, "address");
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
+		String bankAccount=getString(request, "bankAccount");
+		String bankType=getString(request, "bankType");
 		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
-		}else if(firstName=="")
+		}
+
+		else if(firstName=="")
 		{
 			resultDesc=ShowMsg.FirstNameNull;
 			resultCode=2;
 		}
-		else
+		else if(lastName=="")
 		{
-			//用户名修改
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}
-	
-	@RequestMapping("phone/user/update/phone")
-	@ResponseBody
-	protected Object updatePhone(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String mobilePhone="";
-	    String phoneCode="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-			mobilePhone=jsonObject.getString("mobilePhone");
-			phoneCode=jsonObject.getString("phoneCode");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
+			resultDesc=ShowMsg.LastNameNull;
 			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
 		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
-		
-		
-		if(uid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}else if(mobilePhone=="")
-		{
-			resultDesc=ShowMsg.MobilePhoneNull;
-			resultCode=2;
-		}else{
-			//手机格式验证
-			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
-			Matcher matcher2=pattern2.matcher(mobilePhone);
-			
-			if(matcher2.matches()==false)
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.mobilePhoneErr;
-			}else{
-				//验证码判断
-				
-				//判断手机号是否存在
-				
-				//修改手机号
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}
-	
-	@RequestMapping("phone/user/update/email")
-	@ResponseBody
-	protected Object updateEmail(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String email="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-			email=jsonObject.getString("email");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
-		
-		
-		if(uid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}else if(email=="")
+		else if(email=="")
 		{
 			resultDesc=ShowMsg.EmailNull;
 			resultCode=2;
 		}
+		else if(address=="")
+		{
+			resultDesc=ShowMsg.AddressNull;
+			resultCode=2;
+		}
+		
+		else if(longitude==""||latitude=="")
+		{
+			resultDesc=ShowMsg.LonLatNull;
+			resultCode=2;
+		}
+		else if(bankAccount=="")
+		{
+			resultDesc=ShowMsg.bankAccountNull;
+			resultCode=2;
+		}
+		else if(bankType=="")
+		{
+			resultDesc=ShowMsg.bankTypeNull;
+			resultCode=2;
+		}
 		else
 		{
-			//邮箱验证
 			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
 			Matcher matcher=pattern.matcher(email);
 			if(matcher.matches()==false)
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.emailErr;
-			}else{
-				//邮箱修改
 			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}
-	
-	@RequestMapping("phone/user/update/account")
-	@ResponseBody
-	protected Object updateBankAccount(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String bankAccount="";
-	    String bankType="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-			bankAccount=jsonObject.getString("bankAccount");
-			bankType=jsonObject.getString("bankType");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
 		
-		
-		if(uid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}else if(bankAccount=="")
-		{
-			//判断支出账号不可为空
-		}else if(bankType=="")
-		{
-			//判断支出账号类型不可为空
-		}
-		else
-		{
-			//修改支付账户
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}
-	
-	@RequestMapping("phone/user/update/file")
-	@ResponseBody
-	protected Object updatefile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
-		
-		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/user/images");
-		if(uid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			if("false".equals(logo))
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.imageUploadFail;
-			}
 			else
 			{
 				User u=new User();
 				u.setUid(uid);
-				u.setLogo("/WEB-INF/upload/user/images/"+logo);
-				result=userService.updateLogo(u);
+				u.setFirstName(firstName);
+				u.setLastName(lastName);
+				u.setEmail(email);
+				u.setAddress(address);
+				u.setLongitude(longitude);
+				u.setLatitude(latitude);
+				u.setBankAccount(bankAccount);
+				u.setBankType(bankType);
+
+				result=userService.update(u);
 				if(result==true)
 				{
 					resultCode=0;
@@ -600,40 +388,20 @@ public class UserController extends MyController {
 					resultCode=1;
 					resultDesc=ShowMsg.updateFail;
 				}
-				
 			}
 		}
+
 		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
+		model.put("resultDesc", resultDesc);	
 		return model;
-	}	
-	
-	@RequestMapping("phone/user/pwd/update")
+	}
+
+	@RequestMapping("/user/pwd/update")
 	@ResponseBody
 	protected Object pwdupdate(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String oldPassword="";
-	    String newPassword="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-			oldPassword=jsonObject.getString("oldPassword");
-			newPassword=jsonObject.getString("newPassword");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -643,8 +411,12 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-		
+		String uid=getString(request, "uid");
+		String oldPassword=getString(request, "oldPassword");
+		String newPassword=getString(request, "newPassword");
+
 		if(uid==""||oldPassword==""||newPassword=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -691,70 +463,12 @@ public class UserController extends MyController {
 		return model;
 	}
 	
-	@RequestMapping("phone/user/pwd/forget")
-	@ResponseBody
-	protected Object pwdForget(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String mobilePhone="";
-	    String phoneCode="";
-	    String newPassword="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			mobilePhone=jsonObject.getString("mobilePhone");
-			phoneCode=jsonObject.getString("phoneCode");
-			newPassword=jsonObject.getString("newPassword");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		
-		
-		if(mobilePhone==""||phoneCode==""||newPassword=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			//判断手机验证码是否正确
-			//修改密码
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}
-	
-	@RequestMapping("phone/user/status")
+	@RequestMapping("/user/status")
 	@ResponseBody
 	protected Object apply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String myStatus="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-			myStatus=jsonObject.getString("status");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -764,8 +478,10 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-		
+		String uid=getString(request, "uid");
+		String myStatus=getString(request, "status");
 
 		if(uid==""||myStatus=="")
 		{
@@ -803,49 +519,6 @@ public class UserController extends MyController {
 		return model;
 	}
 	
-	@RequestMapping("/user/info")
-	@ResponseBody
-	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-		String uid=getString(request, "uid");
-		if(uid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			User u=userService.getByUId(uid);
-			if(u!=null)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.findSuc;
-				model.put("data", u);
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.findFail;
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}
-
 	@RequestMapping("/user/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -906,9 +579,66 @@ public class UserController extends MyController {
 		return model;
 	}
 	
-	@RequestMapping("/user/list/balance")
+	@RequestMapping("/user/upload")
 	@ResponseBody
-	protected Object listBalance(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object upload(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String uid=getString(request, "uid");
+		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/user/images");
+		if(uid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			if("false".equals(logo))
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.imageUploadFail;
+			}
+			else
+			{
+				User u=new User();
+				u.setUid(uid);
+				u.setLogo(logo);
+				result=userService.updateLogo(u);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
+				}
+				
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
+	
+	@RequestMapping("/user/update/file")
+	@ResponseBody
+	protected Object updatefile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
@@ -921,11 +651,44 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-		//获取用户余额大于零的用户列表
+		String uid=getString(request, "uid");
+		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/user/images");
+		if(uid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			if("false".equals(logo))
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.imageUploadFail;
+			}
+			else
+			{
+				User u=new User();
+				u.setUid(uid);
+				u.setLogo(logo);
+				result=userService.updateLogo(u);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
+				}
+				
+			}
+		}
 		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
+		model.put("resultDesc", resultDesc);
 		return model;
-	}
-	
+	}	
+
 }
