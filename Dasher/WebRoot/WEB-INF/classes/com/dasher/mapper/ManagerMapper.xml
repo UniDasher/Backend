@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dasher.mapper.ManagerMapper">
+   <resultMap type="Manager" id="managerMap">
+     <result property="id" column="id"/>
+     <result property="account" column="account"/>
+     <result property="password" column="password"/>
+     <result property="salt" column="salt"/>
+     <result property="firstName" column="firstName"/>
+     <result property="lastName" column="lastName"/>
+     <result property="email" column="email"/>
+     <result property="type" column="type"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="status" column="status"/>
+   </resultMap>
+   
+   <insert id="add" parameterType="Manager" useGeneratedKeys="true" keyProperty="id">
+     insert into manager(account,password,salt,firstName,lastName,email,type,createBy,createDate,status)
+     values(#{account},#{password},#{salt},#{firstName},#{lastName},#{email},#{type},#{createBy},#{createDate},1)
+   </insert>
+   
+   <select id="getByAccount" parameterType="String" resultType="Manager">
+     select * from manager where account=#{account} and status>0
+   </select>
+   
+   <select id="getById" resultType="Manager">
+     select * from manager where id=#{id} and status>0
+   </select>
+   
+   <update id="update" parameterType="Manager">
+     update manager
+     set firstName=#{firstName},lastName=#{lastName},email=#{email},type=#{type},updateBy=#{updateBy},updateDate=#{updateDate}
+     where id=#{id}
+   </update>
+   
+   <update id="delete" parameterType="Manager">
+     update manager
+     set updateBy=#{updateBy},updateDate=#{updateDate},status=0
+     where id=#{id}
+   </update>
+   
+   <select id="list" resultType="Manager">
+     select id,account,firstName,lastName,email,type from manager where status>0
+   </select>
+   
+   <select id="listAll" resultType="Manager">
+     select * from manager where status>0
+   </select>
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dasher.mapper.ShopDishTypeMapper">
+   <resultMap type="ShopDishType" id="shopDishTypeMap">
+     <result property="id" column="id"/>
+     <result property="name" column="name"/>
+     <result property="type" column="type"/>
+     <result property="sortNum" column="sortNum"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="status" column="status"/>
+   </resultMap>
+   
+   <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="ShopDishType">
+     insert into shop_dish_type(name,type,sortNum,createBy,createDate,status)
+     values(#{name},#{type},#{sortNum},#{createBy},#{createDate},1)
+   </insert>
+   
+   <select id="getById" resultType="ShopDishType">
+     select * from shop_dish_type where id=#{id} and status>0
+   </select>
+   
+   <update id="update" parameterType="ShopDishType">
+     update shop_dish_type 
+     set name=#{name},updateBy=#{updateBy},updateDate=#{updateDate}
+     where id=#{id}
+   </update>
+   
+   <update id="delete" parameterType="ShopDishType">
+     update shop_dish_type 
+     set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
+     where id=#{id}
+   </update>
+   
+   <select id="getByName" resultType="ShopDishType" parameterType="String">
+     select * from shop_dish_type 
+     where name=#{name} and status>0
+   </select>
+   
+   <select id="getMax" resultType="String">
+     select max(sortNum) from shop_dish_type where status>0
+   </select>
+   
+   <select id="list" resultType="ShopDishType" parameterType="Integer">
+     select * from shop_dish_type 
+     where status>0 and type=#{type}
+     order by sortNum asc
+   </select>
+   
+   <update id="updateSortNum" parameterType="ShopDishType">
+     update shop_dish_type 
+     set sortNum=#{sortNum},updateBy=#{updateBy},updateDate=#{updateDate}
+     where id=#{id}
+   </update>
+   
+   <select id="listBySid" resultType="ShopDishType" parameterType="String">
+     select * from shop_dish_type 
+     where id in(select typeId from shop_dish where sid=#{sid}) and type=1 and status>0
+   </select>
+   
+   <select id="listBySmid" resultType="ShopDishType" parameterType="String">
+     select * from shop_dish_type 
+     where id in(select typeId from market_commodity where smid=#{smid}) and type=2 and status>0
+   </select>
+   
+</mapper>

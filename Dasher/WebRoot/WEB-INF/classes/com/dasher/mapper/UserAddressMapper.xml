@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dasher.mapper.UserAddressMapper">
+   <resultMap type="UserAddress" id="userAddressMap">
+     <result property="id" column="id"/>
+     <result property="uid" column="uid"/>
+     <result property="address" column="address"/>
+     <result property="longitude" column="longitude"/>
+     <result property="latitude" column="latitude"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="status" column="status"/>
+   </resultMap>
+   
+   <insert id="add" keyProperty="id" useGeneratedKeys="true">
+     insert into user_address(uid,address,longitude,latitude,createBy,createDate,status)
+     values(#{uid},#{address},#{longitude},#{latitude},#{createBy},#{createDate},1)
+   </insert>
+   
+   <update id="update" parameterType="UserAddress">
+     update user_address 
+     set address=#{address},longitude=#{longitude},latitude=#{latitude},updateBy=#{updateBy},updateDate=#{updateDate}
+     where id=#{id}
+   </update>
+   
+   <update id="delete" parameterType="UserAddress">
+     update user_address 
+     set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
+     where id=#{id}
+   </update>
+   
+   <select id="getById" parameterType="Integer" resultType="UserAddress">
+     select * from user_address where id=#{id} and status>0
+   </select>
+   
+   <update id="updateStatus" parameterType="UserAddress">
+     update user_address 
+     set status=#{status},updateBy=#{updateBy},updateDate=#{updateDate}
+     where id=#{id}
+   </update>
+   
+   <select id="list" parameterType="String" resultType="UserAddress">
+     select * from user_address where uid=#{uid} and status>0
+   </select>
+   
+   <select id="getByStatus" resultType="UserAddress">
+     select * from user_address where status=2
+   </select>
+  
+</mapper>
