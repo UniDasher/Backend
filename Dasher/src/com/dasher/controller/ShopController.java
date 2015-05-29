@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,6 +39,124 @@ public class ShopController extends MyController {
 	private int resultCode;
 	private String resultDesc;
 	private ModelMap model;
+	
+	@RequestMapping("phone/shop/list/near")
+	@ResponseBody
+	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String longitude="";
+	    String latitude="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			longitude=jsonObject.getString("longitude");
+			latitude=jsonObject.getString("latitude");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		//业务逻辑
+		if(longitude==""||latitude=="")
+		{
+			resultDesc=ShowMsg.LonLatNull;
+			resultCode=2;
+		}
+		else
+		{
+			String mycurPage=getString(request, "curPage");  
+			String mypageSize=getString(request, "countPage");//每页的数据数
+			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+			{
+				int curPage=Integer.parseInt(mycurPage);
+				int pageSize=Integer.parseInt(mypageSize);
+				int startRow=(curPage-1)*pageSize;
+				List<Shop> shopList=shopService.getListByLati(Integer.parseInt(longitude), Integer.parseInt(latitude), startRow, pageSize);
+				model.put("list", shopList);
+			}
+		}
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
+	@RequestMapping("phone/shop/info")
+	@ResponseBody
+	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String sid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			sid=jsonObject.getString("sid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(sid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			Shop s=shopService.getBySid(sid);
+			if(s==null)
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+			else
+			{
+				model.put("data", s);
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
 	
 	@RequestMapping("/shop/add")
 	@ResponseBody
@@ -138,7 +258,7 @@ public class ShopController extends MyController {
 					s.setSubscribe(subscribe);
 					s.setEmail(email);
 					s.setPhone(phone);
-					s.setLogo("/image/default.jpg");
+					s.setLogo("/WEB-INF/upload/shop/images/default.png");
 					s.setLongitude(longitude);
 					s.setLatitude(latitude);
 					s.setCreateBy(Integer.parseInt(myloginId));
@@ -313,6 +433,71 @@ public class ShopController extends MyController {
 		return model;
 	}	
 
+	@RequestMapping("/shop/upload")
+	@ResponseBody
+	protected Object upload(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		String sid=getString(request, "sid");
+		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/images");
+		if(sid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			if("false".equals(logo))
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.imageUploadFail;
+			}
+			else
+			{
+				Shop s=new Shop();
+				s.setSid(sid);
+				s.setLogo("/WEB-INF/upload/shop/images/"+logo);
+				s.setUpdateBy(Integer.parseInt(myloginId));
+				s.setUpdateDate(DateUtil.getCurrentDateStr());
+				result=shopService.updateLogo(s);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
+				}
+				
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+
 	@RequestMapping("/shop/delete")
 	@ResponseBody
 	protected Object delete(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -328,7 +513,6 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		String sid=getString(request, "sid");
 		if(sid=="")
@@ -403,43 +587,24 @@ public class ShopController extends MyController {
 		return model;
 	}
 
-	@RequestMapping("/shop/list/near")
-	@ResponseBody
-	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-
-		String longitude=getString(request, "longitude");
-		String latitude=getString(request, "latitude");
-		if(longitude==""||latitude=="")
-		{
-			resultDesc=ShowMsg.LonLatNull;
-			resultCode=2;
-		}
-		else
-		{
-			String mycurPage=getString(request, "curPage");  
-			String mypageSize=getString(request, "countPage");//每页的数据数
-			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
-			{
-				int curPage=Integer.parseInt(mycurPage);
-				int pageSize=Integer.parseInt(mypageSize);
-				int startRow=(curPage-1)*pageSize;
-				List<Shop> shopList=shopService.getListByLati(Integer.parseInt(longitude), Integer.parseInt(latitude), startRow, pageSize);
-				model.put("list", shopList);
-			}
-		}
-
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}	
-
 	@RequestMapping("/shop/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		String searchStr=getString(request, "searchStr");
@@ -479,71 +644,4 @@ public class ShopController extends MyController {
 		return model;
 	}	
 	
-	@RequestMapping("/shop/upload")
-	@ResponseBody
-	protected Object upload(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		Login l=loginService.getByLogId(myloginId);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		else if(l.getType()>0)
-		{
-			resultDesc=ShowMsg.NoPermiss;
-			resultCode=4;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-		String sid=getString(request, "sid");
-		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/images");
-		if(sid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			if("false".equals(logo))
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.imageUploadFail;
-			}
-			else
-			{
-				Shop s=new Shop();
-				s.setSid(sid);
-				s.setLogo(logo);
-				s.setUpdateBy(Integer.parseInt(myloginId));
-				s.setUpdateDate(DateUtil.getCurrentDateStr());
-				result=shopService.updateLogo(s);
-				if(result==true)
-				{
-					resultCode=0;
-					resultDesc=ShowMsg.updateSuc;
-				}
-				else
-				{
-					resultCode=1;
-					resultDesc=ShowMsg.updateFail;
-				}
-				
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}	
-
-
 }
