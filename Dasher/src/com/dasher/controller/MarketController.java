@@ -1,33 +1,23 @@
 package com.dasher.controller;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
+import javax.servlet.http.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Login;
-import com.dasher.model.Market;
-import com.dasher.model.Menu;
-import com.dasher.model.MenuEvaluate;
-import com.dasher.model.Shop;
-import com.dasher.service.LoginService;
-import com.dasher.service.MarketService;
-import com.dasher.service.MenuEvaluateService;
-import com.dasher.service.MenuService;
-import com.dasher.util.DateUtil;
-import com.dasher.util.ShowMsg;
+import com.dasher.model.*;
+import com.dasher.service.*;
+import com.dasher.util.*;
+
 
 @Controller
 public class MarketController extends MyController {
@@ -41,6 +31,133 @@ public class MarketController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
+	@RequestMapping("phone/market/info")
+	@ResponseBody
+	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String smid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			smid=jsonObject.getString("smid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(smid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			
+			Market m=marketService.getBySmid(smid);
+			if(m==null)
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+			else
+			{
+				model.put("data", m);
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
+	@RequestMapping("phone/market/list/near")
+	@ResponseBody
+	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String longitude="";
+	    String latitude="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			longitude=jsonObject.getString("longitude");
+			latitude=jsonObject.getString("latitude");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(!longitude.equals("")&&!latitude.equals(""))
+		{
+			//获取用户附近的超市列表
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+		
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
 	@RequestMapping("/market/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -57,7 +174,7 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()==0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -187,7 +304,7 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()==0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -300,7 +417,7 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()==0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -396,6 +513,27 @@ public class MarketController extends MyController {
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()==0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		String searchStr=getString(request, "searchStr");

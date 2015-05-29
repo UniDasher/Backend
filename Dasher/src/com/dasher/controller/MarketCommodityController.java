@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,6 +49,133 @@ public class MarketCommodityController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
+	@RequestMapping("phone/commodity/list")
+	@ResponseBody
+	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String smid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			smid=jsonObject.getString("smid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(!smid.equals(""))
+		{
+			//手机端获取超市的商品列表
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
+	@RequestMapping("phone/commodity/info")
+	@ResponseBody
+	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mcid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mcid=jsonObject.getString("mcid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()>0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+
+		if(mcid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+
+			MarketCommodity mc=marketCommodityService.getByMcid(mcid);
+			if(mc==null)
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+			else
+			{
+				model.put("data", mc);
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+
+		}
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
 	@RequestMapping("/commodity/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -63,7 +192,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()==0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -181,7 +310,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()==0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -189,7 +318,6 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
 		String mcid=getString(request, "mcid");
@@ -285,7 +413,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()==0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -328,99 +456,6 @@ public class MarketCommodityController extends MyController {
 		return model;
 	}	
 
-
-	@RequestMapping("/commodity/info")
-	@ResponseBody
-	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-
-		String mcid=getString(request, "mcid");
-		if(mcid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-
-			MarketCommodity mc=marketCommodityService.getByMcid(mcid);
-			if(mc==null)
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.findFail;
-			}
-			else
-			{
-				model.put("data", mc);
-				resultCode=0;
-				resultDesc=ShowMsg.findSuc;
-			}
-
-		}
-
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}	
-
-	@RequestMapping("/commodity/list")
-	@ResponseBody
-	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String mycurPage=getString(request, "curPage");  
-		String mypageSize=getString(request, "countPage");//每页的数据数
-		String smid=getString(request, "smid");
-		String searchStr=getString(request, "searchStr");
-		if(!mycurPage.equals("")&&!mypageSize.equals(""))
-		{
-			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
-			{
-				int curPage=Integer.parseInt(mycurPage);
-				int pageSize=Integer.parseInt(mypageSize);
-				int startRow=(curPage-1)*pageSize;
-				int count=marketCommodityService.getListCount(smid, searchStr);
-				if(count>0)
-				{
-					model.put("count", count);
-					List<MarketCommodity> list=marketCommodityService.list(smid, searchStr, startRow, pageSize);
-					model.put("list", list);
-					resultDesc=ShowMsg.findSuc;
-					resultCode=0;
-				}
-				else
-				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
-				}
-
-			}
-		}
-		else
-		{
-			resultDesc=ShowMsg.searchFail;
-			resultCode=2;
-		}
-
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}	
-
-
 	@RequestMapping("/commodity/file")
 	@ResponseBody
 	protected Object uploadFile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -436,7 +471,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()==0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -444,7 +479,6 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
 		String smid=getString(request, "smid");
@@ -529,4 +563,108 @@ public class MarketCommodityController extends MyController {
 		return model;
 	}
 
+	@RequestMapping("/commodity/info")
+	@ResponseBody
+	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+
+		String mcid=getString(request, "mcid");
+		if(mcid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+
+			MarketCommodity mc=marketCommodityService.getByMcid(mcid);
+			if(mc==null)
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+			else
+			{
+				model.put("data", mc);
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+
+		}
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+
+	@RequestMapping("/commodity/list")
+	@ResponseBody
+	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String mycurPage=getString(request, "curPage");  
+		String mypageSize=getString(request, "countPage");//每页的数据数
+		String smid=getString(request, "smid");
+		
+		String typeId=getString(request, "typeId");
+		
+		String searchStr=getString(request, "searchStr");
+		if(!mycurPage.equals("")&&!mypageSize.equals(""))
+		{
+			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+			{
+				//此处查询修改，参数typeId查询
+				int curPage=Integer.parseInt(mycurPage);
+				int pageSize=Integer.parseInt(mypageSize);
+				int startRow=(curPage-1)*pageSize;
+				int count=marketCommodityService.getListCount(smid, searchStr);
+				if(count>0)
+				{
+					model.put("count", count);
+					List<MarketCommodity> list=marketCommodityService.list(smid, searchStr, startRow, pageSize);
+					model.put("list", list);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
+				}
+				else
+				{
+					resultDesc=ShowMsg.findFail;
+					resultCode=1;
+				}
+			}
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
 }
