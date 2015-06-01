@@ -5,7 +5,7 @@
    <resultMap type="MarketMenu" id="marketMenuMap">
      <result property="id" column="id"/>
      <result property="mid" column="mid"/>
-     <result property="mcid" column="mcid"/>
+     <result property="smid" column="smid"/>
      <result property="uid" column="uid"/>
      <result property="wid" column="wid"/>
      <result property="dishsMoney" column="dishsMoney"/>
@@ -30,8 +30,8 @@
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MarketMenu">
-     insert into market_menu(mid,mcid,uid,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,address,longitude,latitude,mealStartDate,mealEndDate,createBy,createDate,status)
-     values(#{mid},#{mcid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{address},#{longitude},#{latitude},#{mealStartDate},#{mealEndDate},#{createBy},#{createDate},1)
+     insert into market_menu(mid,smid,uid,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,address,longitude,latitude,mealStartDate,mealEndDate,createBy,createDate,status)
+     values(#{mid},#{smid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{address},#{longitude},#{latitude},#{mealStartDate},#{mealEndDate},#{createBy},#{createDate},1)
    </insert>
    
    <update id="receive" parameterType="MarketMenu">
@@ -39,5 +39,33 @@
      set wid=#{wid},startDate=#{startDate},updateBy=#{updateBy},updateDate=#{updateDate},status=2
      where mid=#{mid}
    </update>
+   
+   <update id="updateStatus" parameterType="MarketMenu">
+	 update market_menu 
+	 set status=#{status},updateBy=#{updateBy},updateDate=#{updateDate}
+	 where mid=#{mid}
+   </update>
+   
+   <select id="list" resultType="MarketMenu">
+      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+	  from market_menu as mm
+	  join market_info as m
+	  on mm.smid=m.smid
+	  join user_info as u
+	  on mm.uid=u.uid
+	  left join user_info u2
+	  on mm.wid=u2.uid
+      where 1=1
+      <if test="status!=''">
+		and mm.status=#{status}
+      </if>
+	  <if test="smid!=''">
+		and mm.smid=#{smid}
+      </if>
+	  <if test="searchStr!=''">
+		and mm.address like CONCAT(CONCAT('%',#{searchStr}),'%')
+      </if>
+      limit #{startRow},#{pageSize}
+   </select>
   
 </mapper>

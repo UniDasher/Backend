@@ -6,7 +6,7 @@ public class MarketMenu implements Serializable {
 
 	private int id;
 	private String mid;
-	private String mcid;
+	private String smid;
 	private String uid;
 	private String wid;
 	private float dishsMoney;
@@ -19,6 +19,9 @@ public class MarketMenu implements Serializable {
 	private String address;
 	private String longitude;
 	private String latitude;
+	private String marketName;
+	private String userName;
+	private String serverName;
 	private String mealStartDate;
 	private String mealEndDate;
 	private String startDate;
@@ -33,17 +36,18 @@ public class MarketMenu implements Serializable {
 
 	}
 
-	public MarketMenu(int id, String mid, String mcid, String uid, String wid,
+	public MarketMenu(int id, String mid, String smid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
 			float serviceMoney, float tipMoney, int menuCount, int payType,
 			String address, String longitude, String latitude,
+			String marketName, String userName, String serverName,
 			String mealStartDate, String mealEndDate, String startDate,
 			String endDate, String createBy, String createDate,
 			String updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.mid = mid;
-		this.mcid = mcid;
+		this.smid = smid;
 		this.uid = uid;
 		this.wid = wid;
 		this.dishsMoney = dishsMoney;
@@ -56,6 +60,9 @@ public class MarketMenu implements Serializable {
 		this.address = address;
 		this.longitude = longitude;
 		this.latitude = latitude;
+		this.marketName = marketName;
+		this.userName = userName;
+		this.serverName = serverName;
 		this.mealStartDate = mealStartDate;
 		this.mealEndDate = mealEndDate;
 		this.startDate = startDate;
@@ -66,6 +73,8 @@ public class MarketMenu implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
+
+
 
 
 
@@ -85,13 +94,13 @@ public class MarketMenu implements Serializable {
 		this.mid = mid;
 	}
 
-	
-	public String getMcid() {
-		return mcid;
+
+	public String getSmid() {
+		return smid;
 	}
 
-	public void setMcid(String mcid) {
-		this.mcid = mcid;
+	public void setSmid(String smid) {
+		this.smid = smid;
 	}
 
 	public String getUid() {
@@ -108,6 +117,30 @@ public class MarketMenu implements Serializable {
 
 	public void setWid(String wid) {
 		this.wid = wid;
+	}
+
+	public String getMarketName() {
+		return marketName;
+	}
+
+	public void setMarketName(String marketName) {
+		this.marketName = marketName;
+	}
+
+	public String getServerName() {
+		return serverName;
+	}
+
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public float getDishsMoney() {

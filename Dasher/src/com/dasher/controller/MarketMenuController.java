@@ -19,14 +19,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Login;
 import com.dasher.model.Market;
+import com.dasher.model.MarketMenu;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuEvaluate;
 import com.dasher.model.Shop;
+import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MarketService;
 import com.dasher.service.MenuEvaluateService;
 import com.dasher.service.MenuService;
+import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
 
@@ -37,6 +40,8 @@ public class MarketMenuController extends MyController {
 	private MarketMenuService marketMenuService;
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private UserService userService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -61,7 +66,7 @@ public class MarketMenuController extends MyController {
 		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
-		String mcid=getString(request, "mcid");
+		String smid=getString(request, "smid");
 		String uid=getString(request, "uid");
 		String dishsMoney=getString(request, "dishsMoney");
 		String carriageMoney=getString(request, "carriageMoney");
@@ -75,7 +80,7 @@ public class MarketMenuController extends MyController {
 		String latitude=getString(request, "latitude");
 		String mealStartDate=getString(request, "mealStartDate");
 		String mealEndDate=getString(request, "mealEndDate");
-		if(mcid==""||uid=="")
+		if(smid==""||uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
@@ -122,25 +127,118 @@ public class MarketMenuController extends MyController {
 		}
 		else
 		{
-//			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
-//			Matcher matcher=pattern.matcher(email);
-//			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
-//			Matcher matcher2=pattern2.matcher(phone);
-//			if(matcher.matches()==false)
-//			{
-//				resultCode=2;
-//				resultDesc=ShowMsg.emailErr;
-//			}
-//			else if(matcher2.matches()==false)
-//			{
-//				resultCode=2;
-//				resultDesc=ShowMsg.mobilePhoneErr;
-//			}
-//			else
-//			{
-//
-//				
-//			}
+			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+			Matcher matcher=pattern.matcher(dishsMoney);
+			if(matcher.matches()==false)
+			{
+				resultDesc=ShowMsg.dishsMoneyErr;
+				resultCode=2;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);
+				return model;
+			}
+			if(!carriageMoney.equals(""))
+			{
+				Matcher matcher2=pattern.matcher(carriageMoney);
+				if(matcher2.matches()==false)
+				{
+					resultDesc=ShowMsg.carriageMoneyErr;
+					resultCode=2;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
+			}
+			if(!taxesMoney.equals(""))
+			{
+				Matcher matcher2=pattern.matcher(taxesMoney);
+				if(matcher2.matches()==false)
+				{
+					resultDesc=ShowMsg.taxesMoneyErr;
+					resultCode=2;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
+			}
+			if(!serviceMoney.equals(""))
+			{
+				Matcher matcher2=pattern.matcher(serviceMoney);
+				if(matcher2.matches()==false)
+				{
+					resultDesc=ShowMsg.serviceMoneyErr;
+					resultCode=2;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
+			}
+			if(!tipMoney.equals(""))
+			{
+				Matcher matcher2=pattern.matcher(tipMoney);
+				if(matcher2.matches()==false)
+				{
+					resultDesc=ShowMsg.tipMoneyErr;
+					resultCode=2;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
+			}
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+			Date date=new Date();
+			String strs[]=sdf.format(date).split("-");
+			String mid="";
+			for(int i=0;i<strs.length;i++)
+			{
+				mid=mid+strs[i];
+			}
+            MarketMenu mm=new MarketMenu();
+            mm.setMid(mid);
+            mm.setSmid(smid);
+            mm.setUid(uid);
+            if(!dishsMoney.equals(""))
+			{
+            	mm.setDishsMoney(Float.parseFloat(dishsMoney));
+			}
+			if(!carriageMoney.equals(""))
+			{
+				mm.setCarriageMoney(Float.parseFloat(carriageMoney));
+			}
+			if(!taxesMoney.equals(""))
+			{
+				mm.setTaxesMoney(Float.parseFloat(taxesMoney));
+			}
+			if(!serviceMoney.equals(""))
+			{
+				mm.setServiceMoney(Float.parseFloat(serviceMoney));
+			}
+			if(!tipMoney.equals(""))
+			{
+				mm.setTipMoney(Float.parseFloat(tipMoney));
+			}
+			
+			mm.setMenuCount(Integer.parseInt(menuCount));
+			mm.setPayType(Integer.parseInt(payType));
+			mm.setAddress(address);
+			mm.setLatitude(latitude);
+			mm.setLongitude(longitude);
+			mm.setMealStartDate(mealStartDate);
+            mm.setMealEndDate(mealEndDate);
+            mm.setCreateBy(myloginId);
+            mm.setCreateDate(DateUtil.getCurrentDateStr());
+            result=marketMenuService.add(mm);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.menuSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.menuFail;
+			}
+
 
 		}
 
@@ -149,6 +247,196 @@ public class MarketMenuController extends MyController {
 		return model;
 	}	
 
+	@RequestMapping("/market/menu/receive")
+	@ResponseBody
+	protected Object receive(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+
+		String mid=getString(request, "mid");
+		if(mid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+
+			User u=userService.getByUId(myloginId);
+			if(u.getStatus()==2)
+			{
+				MarketMenu mm=new MarketMenu();
+				mm.setWid(myloginId);
+				mm.setMid(mid);
+				mm.setStartDate(DateUtil.getCurrentDateStr());
+				mm.setUpdateBy(myloginId);
+				mm.setUpdateDate(DateUtil.getCurrentDateStr());
+				result=marketMenuService.receive(mm);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.receiveSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.receiveFail;
+				}
+
+			}
+			else
+			{
+				resultDesc=ShowMsg.NoPermiss2;
+				resultCode=4;
+			}
+
+		}
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+
+
+	@RequestMapping("/market/menu/status")
+	@ResponseBody
+	protected Object updateStatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+
+		String mid=getString(request, "mid");
+		String status=getString(request, "status");
+		if(mid==""||status=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else if(!status.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.statusErr;
+			resultCode=2;
+		}
+		else
+		{
+			MarketMenu mm=new MarketMenu();
+			mm.setMid(mid);
+			mm.setUpdateBy(myloginId);
+			mm.setUpdateDate(DateUtil.getCurrentDateStr());
+			mm.setStatus(Integer.parseInt(status));
+			result=marketMenuService.updateStatus(mm);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
+
+		}
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
 	
+//	@RequestMapping("/market/menu/list")
+//	@ResponseBody
+//	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+//		response.setContentType("text/html;charset=utf-8");
+//		model=new ModelMap();
+//		String authCode=getString(request, "authCode");
+//		String myloginId=loginService.getByAuthCode(authCode);
+//		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+//		{
+//			resultDesc=ShowMsg.NoLogin;
+//			resultCode=3;
+//			model.put("resultCode", resultCode);	
+//			model.put("resultDesc", resultDesc);	
+//			return model;
+//		}
+//		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+//		model.put("authCode", authCode);
+//		String status=getString(request, "status");
+//		String smid=getString(request, "smid");
+//		String searchStr=getString(request, "searchStr");
+//		String mycurPage=getString(request, "curPage");  
+//		String mypageSize=getString(request, "countPage");//每页的数据数
+//		if(!mycurPage.equals("")&&!mypageSize.equals(""))
+//		{
+//			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+//			{
+//
+//				if(!status.equals("")&&!status.matches("^[0-9]*$"))
+//				{
+//					resultDesc=ShowMsg.statusErr;
+//					resultCode=2;
+//					model.put("resultCode", resultCode);	
+//					model.put("resultDesc", resultDesc);
+//					return model;
+//				}
+//				int curPage=Integer.parseInt(mycurPage);
+//				int pageSize=Integer.parseInt(mypageSize);
+//				int startRow=(curPage-1)*pageSize;
+//				int count=marketMenuService.getCount(status, smid, searchStr);
+//				if(count>0)
+//				{
+//
+//					model.put("count", count);
+//					List<Menu> list=menuService.list(status, sid, searchStr, startDate, endDate, startRow, pageSize);
+//					model.put("list", list);
+//					resultDesc=ShowMsg.findSuc;
+//					resultCode=0;
+//				}
+//				else
+//				{
+//					resultDesc=ShowMsg.findFail;
+//					resultCode=1;
+//				}
+//			}
+//			else
+//			{
+//				resultDesc=ShowMsg.inputErr;
+//				resultCode=2;
+//			}
+//		}
+//		else
+//		{
+//			resultDesc=ShowMsg.searchFail;
+//			resultCode=2;
+//		}
+//
+//
+//		model.put("resultCode", resultCode);	
+//		model.put("resultDesc", resultDesc);
+//		return model;
+//	}	
+
 
 }
