@@ -60,9 +60,6 @@ public class User implements Serializable {
 		this.bankType = bankType;
 		this.status = status;
 	}
-
-
-
 	public int getId() {
 		return id;
 	}

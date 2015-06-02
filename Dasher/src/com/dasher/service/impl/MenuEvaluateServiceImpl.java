@@ -10,7 +10,6 @@ public class MenuEvaluateServiceImpl implements MenuEvaluateService {
 
 	private MenuEvaluateMapper menuEvaluateMapper;
 	
-	
 	public MenuEvaluateMapper getMenuEvaluateMapper() {
 		return menuEvaluateMapper;
 	}

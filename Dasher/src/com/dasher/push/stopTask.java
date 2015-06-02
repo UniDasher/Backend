@@ -1,11 +1,7 @@
 ﻿package com.dasher.push;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
-import com.gexin.rp.sdk.base.IQueryResult;
 import com.gexin.rp.sdk.http.IGtPush;
 
 public class stopTask {

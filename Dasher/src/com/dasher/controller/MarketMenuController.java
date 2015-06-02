@@ -17,18 +17,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Login;
-import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
-import com.dasher.model.Menu;
-import com.dasher.model.MenuEvaluate;
-import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
-import com.dasher.service.MarketService;
-import com.dasher.service.MenuEvaluateService;
-import com.dasher.service.MenuService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
@@ -273,7 +265,6 @@ public class MarketMenuController extends MyController {
 		}
 		else
 		{
-
 			User u=userService.getByUId(myloginId);
 			if(u.getStatus()==2)
 			{
@@ -303,7 +294,6 @@ public class MarketMenuController extends MyController {
 			}
 
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
@@ -360,83 +350,189 @@ public class MarketMenuController extends MyController {
 			}
 
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
 	
-//	@RequestMapping("/market/menu/list")
-//	@ResponseBody
-//	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-//		response.setContentType("text/html;charset=utf-8");
-//		model=new ModelMap();
-//		String authCode=getString(request, "authCode");
-//		String myloginId=loginService.getByAuthCode(authCode);
-//		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-//		{
-//			resultDesc=ShowMsg.NoLogin;
-//			resultCode=3;
-//			model.put("resultCode", resultCode);	
-//			model.put("resultDesc", resultDesc);	
-//			return model;
-//		}
-//		//		model.put("authCode", loginService.userHandleLogin(myloginId));
-//		model.put("authCode", authCode);
-//		String status=getString(request, "status");
-//		String smid=getString(request, "smid");
-//		String searchStr=getString(request, "searchStr");
-//		String mycurPage=getString(request, "curPage");  
-//		String mypageSize=getString(request, "countPage");//每页的数据数
-//		if(!mycurPage.equals("")&&!mypageSize.equals(""))
-//		{
-//			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
-//			{
-//
-//				if(!status.equals("")&&!status.matches("^[0-9]*$"))
-//				{
-//					resultDesc=ShowMsg.statusErr;
-//					resultCode=2;
-//					model.put("resultCode", resultCode);	
-//					model.put("resultDesc", resultDesc);
-//					return model;
-//				}
-//				int curPage=Integer.parseInt(mycurPage);
-//				int pageSize=Integer.parseInt(mypageSize);
-//				int startRow=(curPage-1)*pageSize;
-//				int count=marketMenuService.getCount(status, smid, searchStr);
-//				if(count>0)
-//				{
-//
-//					model.put("count", count);
-//					List<Menu> list=menuService.list(status, sid, searchStr, startDate, endDate, startRow, pageSize);
-//					model.put("list", list);
-//					resultDesc=ShowMsg.findSuc;
-//					resultCode=0;
-//				}
-//				else
-//				{
-//					resultDesc=ShowMsg.findFail;
-//					resultCode=1;
-//				}
-//			}
-//			else
-//			{
-//				resultDesc=ShowMsg.inputErr;
-//				resultCode=2;
-//			}
-//		}
-//		else
-//		{
-//			resultDesc=ShowMsg.searchFail;
-//			resultCode=2;
-//		}
-//
-//
-//		model.put("resultCode", resultCode);	
-//		model.put("resultDesc", resultDesc);
-//		return model;
-//	}	
+	@RequestMapping("/market/menu/list")
+	@ResponseBody
+	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String status=getString(request, "status");
+		String smid=getString(request, "smid");
+		String searchStr=getString(request, "searchStr");
+		String mycurPage=getString(request, "curPage");  
+		String mypageSize=getString(request, "countPage");//每页的数据数
+		if(!mycurPage.equals("")&&!mypageSize.equals(""))
+		{
+			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+			{
 
+				if(!status.equals("")&&!status.matches("^[0-9]*$"))
+				{
+					resultDesc=ShowMsg.statusErr;
+					resultCode=2;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
+				int curPage=Integer.parseInt(mycurPage);
+				int pageSize=Integer.parseInt(mypageSize);
+				int startRow=(curPage-1)*pageSize;
+				int count=marketMenuService.getCount(status, smid, searchStr);
+				if(count>0)
+				{
+
+					model.put("count", count);
+					List<MarketMenu> list=marketMenuService.list(status, smid, searchStr, startRow, pageSize);
+					model.put("list", list);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
+				}
+				else
+				{
+					resultDesc=ShowMsg.findFail;
+					resultCode=1;
+				}
+			}
+			else
+			{
+				resultDesc=ShowMsg.inputErr;
+				resultCode=2;
+			}
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+
+	
+	@RequestMapping("/market/menu/info")
+	@ResponseBody
+	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String mid=getString(request, "mid");
+		if(mid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			MarketMenu mm=marketMenuService.getByMid(mid);
+			if(mm!=null)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+				model.put("data", mm);
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+
+	
+	@RequestMapping("/market/menu/user/list")
+	@ResponseBody
+	protected Object userlist(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		//		model.put("authCode", loginService.userHandleLogin(myloginId));
+		model.put("authCode", authCode);
+		String uid=getString(request, "uid");
+		String type=getString(request, "type");
+		String mycurPage=getString(request, "curPage");  
+		String mypageSize=getString(request, "countPage");//每页的数据数
+		if(!mycurPage.equals("")&&!mypageSize.equals("")&&!type.equals(""))
+		{
+			if(mycurPage.matches("^[0-9]*$")&&type.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+			{
+
+				int curPage=Integer.parseInt(mycurPage);
+				int pageSize=Integer.parseInt(mypageSize);
+				int startRow=(curPage-1)*pageSize;
+				int count=marketMenuService.getListByUidCount(Integer.parseInt(type), uid);
+				if(count>0)
+				{
+
+					model.put("count", count);
+					List<MarketMenu> list=marketMenuService.getListByUid(Integer.parseInt(type), uid, startRow, pageSize);
+					model.put("list", list);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
+				}
+				else
+				{
+					resultDesc=ShowMsg.findFail;
+					resultCode=1;
+				}
+			}
+			else
+			{
+				resultDesc=ShowMsg.inputErr;
+				resultCode=2;
+			}
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+
+
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
 
 }

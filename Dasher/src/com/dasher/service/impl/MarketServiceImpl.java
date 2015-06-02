@@ -10,7 +10,6 @@ public class MarketServiceImpl implements MarketService {
 
 	private MarketMapper marketMapper;
 	
-	
 	public MarketMapper getMarketMapper() {
 		return marketMapper;
 	}
@@ -18,7 +17,6 @@ public class MarketServiceImpl implements MarketService {
 	public void setMarketMapper(MarketMapper marketMapper) {
 		this.marketMapper = marketMapper;
 	}
-
 	
 	public boolean add(Market m) {
 		// TODO Auto-generated method stub

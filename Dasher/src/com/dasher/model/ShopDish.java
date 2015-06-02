@@ -21,8 +21,6 @@ public class ShopDish implements Serializable {
 	public ShopDish() {
 		
 	}
-	
-	
 
 	public ShopDish(int id, String sid, String did, String name, float price,
 			int typeId, String chilies, String description, int createBy,
@@ -146,6 +144,4 @@ public class ShopDish implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	
 }

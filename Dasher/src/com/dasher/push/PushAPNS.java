@@ -1,17 +1,9 @@
 ﻿package com.dasher.push;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.gexin.rp.sdk.base.IPushResult;
-import com.gexin.rp.sdk.base.impl.ListMessage;
-import com.gexin.rp.sdk.base.impl.PushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
-import com.gexin.rp.sdk.base.impl.Target;
 import com.gexin.rp.sdk.http.IGtPush;
 import com.gexin.rp.sdk.template.APNTemplate;
-import com.gexin.rp.sdk.template.TransmissionTemplate;
 
 /**
  * IPushResult pushMessageToSingle(SingleMessage message, Target target)

@@ -117,7 +117,6 @@ public class ManagerController extends MyController {
 					{
 						resultCode=0;
 						resultDesc=ShowMsg.addSuc;
-						
 					}
 					else
 					{

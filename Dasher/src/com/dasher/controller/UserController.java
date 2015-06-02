@@ -20,8 +20,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Login;
-import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserService;

@@ -46,6 +46,21 @@
 	 where mid=#{mid}
    </update>
    
+   <select id="getCount" resultType="Integer">
+      select count(*)
+      from market_menu
+      where 1=1
+      <if test="status!=''">
+		and status=#{status}
+      </if>
+	  <if test="smid!=''">
+		and smid=#{smid}
+      </if>
+	  <if test="searchStr!=''">
+		and address like CONCAT(CONCAT('%',#{searchStr}),'%')
+      </if>
+   </select>
+   
    <select id="list" resultType="MarketMenu">
       select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
 	  from market_menu as mm
@@ -66,6 +81,49 @@
 		and mm.address like CONCAT(CONCAT('%',#{searchStr}),'%')
       </if>
       limit #{startRow},#{pageSize}
+   </select>
+   
+   <select id="getByMid" resultType="MarketMenu" parameterType="MarketMenu">
+      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+	  from market_menu as mm
+	  join market_info as m
+	  on mm.smid=m.smid
+	  join user_info as u
+	  on mm.uid=u.uid
+	  left join user_info u2
+	  on mm.wid=u2.uid
+      where mm.mid=#{mid}
+   </select>
+   
+   <select id="getListByUidCount" resultType="Integer">
+      select count(*) 
+      from market_menu
+      where 1=1
+      <if test="type==0 and searchStr!=''">
+		and uid=#{searchStr}
+      </if>
+	  <if test="type==1 and searchStr!=''">
+		and wid=#{searchStr}
+      </if>
+   </select>
+   
+   <select id="getListByUid" resultType="MarketMenu">
+      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+	  from market_menu as mm
+	  join market_info as m
+	  on mm.smid=m.smid
+	  join user_info as u
+	  on mm.uid=u.uid
+	  left join user_info u2
+	  on mm.wid=u2.uid
+      where 1=1
+      <if test="type==0 and searchStr!=''">
+		and mm.uid=#{searchStr}
+      </if>
+	  <if test="type==1 and searchStr!=''">
+		and mm.wid=#{searchStr}
+      </if>
+	  limit #{curPage},#{countPage}
    </select>
   
 </mapper>

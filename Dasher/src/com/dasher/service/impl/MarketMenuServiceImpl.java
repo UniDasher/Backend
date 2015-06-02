@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.dasher.mapper.MarketMenuMapper;
 import com.dasher.model.MarketMenu;
-import com.dasher.model.Menu;
 import com.dasher.service.MarketMenuService;
 
 public class MarketMenuServiceImpl implements MarketMenuService {
@@ -43,6 +42,22 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 			int startRow, int pageSize) {
 		// TODO Auto-generated method stub
 		return marketMenuMapper.list(status, smid, searchStr, startRow, pageSize);
+	}
+
+	public MarketMenu getByMid(String mid) {
+		// TODO Auto-generated method stub
+		return marketMenuMapper.getByMid(mid);
+	}
+
+	public List<MarketMenu> getListByUid(int type, String searchStr,
+			int curPage, int countPage) {
+		// TODO Auto-generated method stub
+		return marketMenuMapper.getListByUid(type, searchStr, curPage, countPage);
+	}
+
+	public int getListByUidCount(int type, String searchStr) {
+		// TODO Auto-generated method stub
+		return marketMenuMapper.getListByUidCount(type, searchStr);
 	}
 
 }

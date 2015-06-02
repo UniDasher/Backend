@@ -209,5 +209,4 @@ public class Shop implements Serializable {
 		this.serviceTimes = serviceTimes;
 	}
 	
-	
 }

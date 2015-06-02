@@ -23,7 +23,6 @@ public class MenuEvaluate implements Serializable {
 	public MenuEvaluate() {
 
 	}
-	
 
 	public MenuEvaluate(int id, String sid, String mid, String uid, String wid,
 			int evalShop, int evalServer, String evalContent, String createBy,
@@ -141,31 +140,21 @@ public class MenuEvaluate implements Serializable {
 		return shopName;
 	}
 
-
 	public void setShopName(String shopName) {
 		this.shopName = shopName;
 	}
-
 
 	public String getUserName() {
 		return userName;
 	}
 
-
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
-
 	public String getWaiterName() {
 		return waiterName;
 	}
-
-
 	public void setWaiterName(String waiterName) {
 		this.waiterName = waiterName;
 	}
-
-
-
 }

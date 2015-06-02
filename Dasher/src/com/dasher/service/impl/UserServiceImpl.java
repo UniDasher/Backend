@@ -64,7 +64,6 @@ public class UserServiceImpl implements UserService {
 		}
 		return flag;
 	}
-
 	
 	public boolean updatePwd(User u) {
 		// TODO Auto-generated method stub
@@ -115,9 +114,5 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateLogo(u)>0? true:false;
 	}
 
-	
-
-	
-	
 
 }

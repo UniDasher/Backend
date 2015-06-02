@@ -22,6 +22,4 @@ public class ComplainDealServiceImpl implements ComplainDealService {
 		return complainDealMapper.add(cd)>0? true:false;
 	}
 
-	
-
 }

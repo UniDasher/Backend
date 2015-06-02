@@ -16,7 +16,6 @@ public class MenuDish implements Serializable {
 	public MenuDish() {
 		
 	}
-
 	
 	public MenuDish(int id, String mid, String did, String name, float price,
 			int count, String createBy, String createDate) {
@@ -95,6 +94,4 @@ public class MenuDish implements Serializable {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	
-	
 }

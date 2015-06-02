@@ -27,7 +27,5 @@ public class MenuDishServiceImpl implements MenuDishService {
 		// TODO Auto-generated method stub
 		return menuDishMapper.getListByMid(mid);
 	}
-
-
 	
 }

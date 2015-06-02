@@ -114,6 +114,4 @@ public class UserAddress implements Serializable {
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
-	
-	
 }

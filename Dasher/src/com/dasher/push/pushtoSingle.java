@@ -1,12 +1,8 @@
 ﻿package com.dasher.push;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.transform.Templates;
-
-import com.gexin.rp.sdk.base.IAliasResult;
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
 import com.gexin.rp.sdk.base.impl.Target;

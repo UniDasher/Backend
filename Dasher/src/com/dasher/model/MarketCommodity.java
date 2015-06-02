@@ -42,8 +42,6 @@ public class MarketCommodity implements Serializable {
 		this.status = status;
 	}
 
-
-
 	public int getId() {
 		return id;
 	}
@@ -147,6 +145,4 @@ public class MarketCommodity implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	
 }

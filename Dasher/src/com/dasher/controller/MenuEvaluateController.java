@@ -13,13 +13,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Login;
-import com.dasher.model.Menu;
 import com.dasher.model.MenuEvaluate;
-import com.dasher.model.Shop;
 import com.dasher.service.LoginService;
 import com.dasher.service.MenuEvaluateService;
-import com.dasher.service.MenuService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
 
@@ -105,7 +101,6 @@ public class MenuEvaluateController extends MyController {
 		   }
 
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;

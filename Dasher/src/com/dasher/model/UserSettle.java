@@ -114,6 +114,4 @@ public class UserSettle implements Serializable {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	
-	
 }
