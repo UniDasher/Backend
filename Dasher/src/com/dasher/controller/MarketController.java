@@ -174,7 +174,7 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -304,7 +304,7 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -417,7 +417,7 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -524,7 +524,7 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;

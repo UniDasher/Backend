@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,12 +35,36 @@ public class MenuDishController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
-	@RequestMapping("/menu/dish/add")
+	@RequestMapping("phone/menu/dish/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+	    String did="";
+	    String name="";
+	    String price="";
+	    String count="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+			did=jsonObject.getString("did");
+			name=jsonObject.getString("name");
+			price=jsonObject.getString("price");
+			count=jsonObject.getString("count");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -48,14 +74,7 @@ public class MenuDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-
-		String mid=getString(request, "mid");
-		String did=getString(request, "did");
-		String name=getString(request, "name");
-		String price=getString(request, "price");
-		String count=getString(request, "count");
 		
 		if(mid==""||did=="")
 		{
@@ -115,14 +134,69 @@ public class MenuDishController extends MyController {
 				resultCode=1;
 				resultDesc=ShowMsg.menuDiahFail;
 			}
-
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
+	@RequestMapping("phone/menu/dish/list")
+	@ResponseBody
+	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(mid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		
+		else
+		{
+			List<MenuDish> list=menuDishService.getListByMid(mid);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				resultDesc=ShowMsg.findFail;
+				resultCode=1;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
 
 	@RequestMapping("/menu/dish/list")
 	@ResponseBody
@@ -162,9 +236,7 @@ public class MenuDishController extends MyController {
 				resultDesc=ShowMsg.findFail;
 				resultCode=1;
 			}
-
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
