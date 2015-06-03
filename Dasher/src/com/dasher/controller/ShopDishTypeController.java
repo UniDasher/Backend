@@ -305,12 +305,11 @@ public class ShopDishTypeController extends MyController {
 			}
 			else
 			{
-				resultCode=1;
-				resultDesc=ShowMsg.findFail;
+				model.put("list", null);
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
 			}
 		}
-		
-		
 		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
@@ -404,7 +403,7 @@ public class ShopDishTypeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -412,7 +411,7 @@ public class ShopDishTypeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
+
 		model.put("authCode", authCode);
 		String sid=getString(request, "sid");
 		List<ShopDishType> list=shopDishTypeService.listBySid(sid);
@@ -424,8 +423,9 @@ public class ShopDishTypeController extends MyController {
 		}
 		else
 		{
-			resultCode=1;
-			resultDesc=ShowMsg.findFail;
+			model.put("list", null);
+			resultCode=0;
+			resultDesc=ShowMsg.findSuc;
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);

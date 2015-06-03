@@ -473,7 +473,8 @@ public class MarketCommodityController extends MyController {
 		model.put("authCode", authCode);
 
 		String smid=getString(request, "smid");
-		String fileName=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/market/commodity");
+		//String fileName=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/market/commodity");
+		String fileName="";
 		if("false".equals(fileName)){
 			resultCode=1;
 			resultDesc=ShowMsg.imageUploadFail;

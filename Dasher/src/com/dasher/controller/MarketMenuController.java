@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.MarketMenu;
+import com.dasher.model.Menu;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
@@ -39,12 +42,54 @@ public class MarketMenuController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
-	@RequestMapping("/market/menu/add")
+	@RequestMapping("phone/market/menu/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String smid="";
+	    String uid="";
+	    String dishsMoney="";
+	    String carriageMoney="";
+	    String taxesMoney="";
+	    String serviceMoney="";
+	    String tipMoney="";
+	    String menuCount="";
+	    String payType="";
+	    String mealStartDate="";
+	    String mealEndDate="";
+	    String address="";
+	    String longitude="";
+	    String latitude="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			smid=jsonObject.getString("smid");
+			uid=jsonObject.getString("uid");
+			dishsMoney=jsonObject.getString("dishsMoney");
+			carriageMoney=jsonObject.getString("carriageMoney");
+			taxesMoney=jsonObject.getString("taxesMoney");
+			serviceMoney=jsonObject.getString("serviceMoney");
+			tipMoney=jsonObject.getString("tipMoney");
+			menuCount=jsonObject.getString("menuCount");
+			payType=jsonObject.getString("payType");
+			mealStartDate=jsonObject.getString("mealStartDate");
+			mealEndDate=jsonObject.getString("mealEndDate");
+			address=jsonObject.getString("address");
+			longitude=jsonObject.getString("longitude");
+			latitude=jsonObject.getString("latitude");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -54,24 +99,8 @@ public class MarketMenuController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 
-		String smid=getString(request, "smid");
-		String uid=getString(request, "uid");
-		String dishsMoney=getString(request, "dishsMoney");
-		String carriageMoney=getString(request, "carriageMoney");
-		String taxesMoney=getString(request, "taxesMoney");
-		String serviceMoney=getString(request, "serviceMoney");
-		String tipMoney=getString(request, "tipMoney");
-		String menuCount=getString(request, "menuCount");
-		String payType=getString(request, "payType");
-		String address=getString(request, "address");
-		String longitude=getString(request, "longitude");
-		String latitude=getString(request, "latitude");
-		String mealStartDate=getString(request, "mealStartDate");
-		String mealEndDate=getString(request, "mealEndDate");
 		if(smid==""||uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -141,6 +170,7 @@ public class MarketMenuController extends MyController {
 					return model;
 				}
 			}
+			/*
 			if(!taxesMoney.equals(""))
 			{
 				Matcher matcher2=pattern.matcher(taxesMoney);
@@ -176,7 +206,7 @@ public class MarketMenuController extends MyController {
 					model.put("resultDesc", resultDesc);
 					return model;
 				}
-			}
+			}*/
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 			Date date=new Date();
 			String strs[]=sdf.format(date).split("-");
@@ -197,6 +227,7 @@ public class MarketMenuController extends MyController {
 			{
 				mm.setCarriageMoney(Float.parseFloat(carriageMoney));
 			}
+			/*
 			if(!taxesMoney.equals(""))
 			{
 				mm.setTaxesMoney(Float.parseFloat(taxesMoney));
@@ -208,7 +239,10 @@ public class MarketMenuController extends MyController {
 			if(!tipMoney.equals(""))
 			{
 				mm.setTipMoney(Float.parseFloat(tipMoney));
-			}
+			}*/
+			mm.setTaxesMoney(0);
+			mm.setServiceMoney(0);
+			mm.setTipMoney(0);
 			
 			mm.setMenuCount(Integer.parseInt(menuCount));
 			mm.setPayType(Integer.parseInt(payType));
@@ -230,21 +264,34 @@ public class MarketMenuController extends MyController {
 				resultCode=1;
 				resultDesc=ShowMsg.menuFail;
 			}
-
-
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
 
-	@RequestMapping("/market/menu/receive")
+	@RequestMapping("phone/market/menu/receive")
 	@ResponseBody
 	protected Object receive(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -254,10 +301,8 @@ public class MarketMenuController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-
-		String mid=getString(request, "mid");
+		
 		if(mid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -300,12 +345,30 @@ public class MarketMenuController extends MyController {
 	}	
 
 
-	@RequestMapping("/market/menu/status")
+	@RequestMapping("phone/market/menu/status")
 	@ResponseBody
 	protected Object updateStatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+	    String status="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+			status=jsonObject.getString("status");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -315,11 +378,8 @@ public class MarketMenuController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-
-		String mid=getString(request, "mid");
-		String status=getString(request, "status");
+		
 		if(mid==""||status=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -354,6 +414,220 @@ public class MarketMenuController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
+	@RequestMapping("phone/market/menu/list/near")
+	@ResponseBody
+	protected Object nearList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String longitude="";
+	    String latitude="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			longitude=jsonObject.getString("longitude");
+			latitude=jsonObject.getString("latitude");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败"; 
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(!longitude.equals("")&&!latitude.equals(""))
+		{
+			//送餐人获取附近订单
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}	
+	@RequestMapping("phone/market/menu/user/list")
+	@ResponseBody
+	protected Object userListStatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String uid="";
+	    String type="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			uid=jsonObject.getString("uid");
+			type=jsonObject.getString("type");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败"; 
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(!uid.equals("")&&!type.equals(""))
+		{
+			//用户获取下单列表
+		}
+		else
+		{
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	@RequestMapping("phone/market/menu/update/mealdate")
+	@ResponseBody
+	protected Object mealdate(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+	    String mealStartDate="";
+	    String mealEndDate="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("uid");
+			mealStartDate=jsonObject.getString("mealStartDate");
+			mealEndDate=jsonObject.getString("mealEndDate");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败"; 
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(mid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else if(mealStartDate=="")
+		{
+			resultDesc=ShowMsg.mealStartDateNull;
+			resultCode=2;
+		}
+		else if(mealEndDate=="")
+		{
+			resultDesc=ShowMsg.mealEndDateNull;
+			resultCode=2;
+		}
+		else
+		{
+			//超市订单延时代码
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	
+	@RequestMapping("phone/market/menu/info")
+	@ResponseBody
+	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败"; 
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		if(mid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			MarketMenu mm=marketMenuService.getByMid(mid);
+			if(mm!=null)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+				model.put("data", mm);
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
 	
 	@RequestMapping("/market/menu/list")
 	@ResponseBody
@@ -487,7 +761,6 @@ public class MarketMenuController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		String uid=getString(request, "uid");
 		String type=getString(request, "type");
@@ -497,7 +770,6 @@ public class MarketMenuController extends MyController {
 		{
 			if(mycurPage.matches("^[0-9]*$")&&type.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 			{
-
 				int curPage=Integer.parseInt(mycurPage);
 				int pageSize=Integer.parseInt(mypageSize);
 				int startRow=(curPage-1)*pageSize;

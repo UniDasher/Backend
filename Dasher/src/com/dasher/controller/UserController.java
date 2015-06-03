@@ -569,7 +569,8 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/user/images");
+		//String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/user/images");
+		String logo="";
 		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;

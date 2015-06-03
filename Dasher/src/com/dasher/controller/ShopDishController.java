@@ -2,6 +2,7 @@ package com.dasher.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -179,7 +180,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -272,7 +273,21 @@ public class ShopDishController extends MyController {
 	@ResponseBody
 	protected Object uploadFile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		
+		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/dish");
+		if(dataMap==null){
+			resultCode=1;
+			resultDesc=ShowMsg.imageUploadFail;
+			
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		
+		String authCode=dataMap.get("authCode");
+		String sid=dataMap.get("sid");
+		String fileName=dataMap.get("fileName");
+		
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -283,7 +298,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -291,23 +306,15 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		
-		String sid=getString(request, "sid");
-		String fileName=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/dish");
-		if("false".equals(fileName)){
-			resultCode=1;
-			resultDesc=ShowMsg.imageUploadFail;
-		}
-		else if(sid=="")
+		if(sid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
 		else
 		{
-			
 			List<ShopDish> list=null;
 			try 
 			{
@@ -397,7 +404,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -495,7 +502,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -552,7 +559,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -607,7 +614,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -615,7 +622,6 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		
 		String mycurPage=getString(request, "curPage");
@@ -639,8 +645,10 @@ public class ShopDishController extends MyController {
 			}
 			else
 			{
-				resultDesc=ShowMsg.findFail;
-				resultCode=1;
+				model.put("count", 0);
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
 			}
 		
 		}

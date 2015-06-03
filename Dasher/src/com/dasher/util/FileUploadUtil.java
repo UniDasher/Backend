@@ -7,7 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,18 +31,9 @@ import com.dasher.model.ShopDish;
 
 public class FileUploadUtil {
 
-	
-	public static String uploadFile(HttpServletRequest request,String path){
-		//得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
-		String savePath = request.getSession().getServletContext().getRealPath(path);
-		File file = new File(savePath);
+	public static Map<String,String> uploadFile(HttpServletRequest request,String path){
+		Map<String,String> dataMap=new HashMap<String,String>();
 		String uploadFileName="";
-		//判断上传文件的保存目录是否存在
-		if (!file.exists() && !file.isDirectory()) {
-			//创建目录
-			file.mkdir();
-		}
-
 		try{
 			//使用Apache文件上传组件处理文件上传步骤：
 			//1、创建一个DiskFileItemFactory工厂
@@ -52,7 +45,7 @@ public class FileUploadUtil {
 			//3、判断提交上来的数据是否是上传表单的数据
 			if(!ServletFileUpload.isMultipartContent(request)){
 				//按照传统方式获取数据
-				return "false";
+				return null;
 			}
 			//4、使用ServletFileUpload解析器解析上传数据，解析结果返回的是一个List<FileItem>集合，每一个FileItem对应一个Form表单的输入项
 			List<FileItem> list = upload.parseRequest(request);
@@ -62,8 +55,7 @@ public class FileUploadUtil {
 					String name = item.getFieldName();
 					//解决普通输入项的数据的中文乱码问题
 					String value = item.getString("UTF-8");
-					//value = new String(value.getBytes("iso8859-1"),"UTF-8");
-					//System.out.println(name + "=" + value);
+					dataMap.put(name, value);
 				}else{//如果fileitem中封装的是上传文件
 					//得到上传的文件名称，
 					String filename = item.getName();
@@ -74,7 +66,6 @@ public class FileUploadUtil {
 					//注意：不同的浏览器提交的文件名是不一样的，有些浏览器提交上来的文件名是带有路径的，如：  c:\a\b\1.txt，而有些只是单纯的文件名，如：1.txt
 					//处理获取到的上传文件的文件名的路径部分，只保留文件名部分
 					filename = filename.substring(filename.lastIndexOf("\\")+1);
-
 					UUID uuid=UUID.randomUUID();
 					String str[]=uuid.toString().split("-");
 					for(int i=0;i<str.length;i++)
@@ -82,10 +73,24 @@ public class FileUploadUtil {
 						uploadFileName=uploadFileName+str[i];
 					}
 					uploadFileName=uploadFileName+filename.substring(filename.lastIndexOf("."));
+					//得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
+					String savePath = request.getSession().getServletContext().getRealPath(path);
+					File file = new File(savePath);
+					//判断上传文件的保存目录是否存在
+					if (!file.exists()) {
+						//创建目录
+						file.mkdir();
+					}
 					//获取item中的上传文件的输入流
 					InputStream in = item.getInputStream();
+					String filePath=savePath + "\\" + uploadFileName;
+					file = new File(filePath);
+					//判断上传文件的保存目录是否存在
+					if (!file.exists()) {
+						file.createNewFile();
+					}
 					//创建一个文件输出流
-					FileOutputStream out = new FileOutputStream(savePath + "\\" + uploadFileName);
+					FileOutputStream out = new FileOutputStream(file);
 					//创建一个缓冲区
 					byte buffer[] = new byte[1024];
 					//判断输入流中的数据是否已经读完的标识
@@ -101,14 +106,14 @@ public class FileUploadUtil {
 					out.close();
 					//删除处理文件上传时生成的临时文件
 					item.delete();
-
-
+					
+					dataMap.put("fileName", uploadFileName);
 				}
 			}
 		}catch (Exception e) {
-			return "false";
+			return null;
 		}
-		return uploadFileName;
+		return dataMap;
 	}
 
 	//解析xls文件
@@ -151,7 +156,7 @@ public class FileUploadUtil {
 		String savePath = request.getSession().getServletContext().getRealPath(path);
 		File file = new File(savePath);
 
-		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file);
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(file));
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
 
 		int rowstart = xssfSheet.getFirstRowNum();

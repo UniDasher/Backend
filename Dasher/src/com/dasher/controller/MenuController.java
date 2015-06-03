@@ -456,7 +456,7 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	@RequestMapping("phone/menu/user/list/status")
+	@RequestMapping("phone/menu/user/list")
 	@ResponseBody
 	protected Object liststatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");

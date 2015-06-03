@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -174,7 +175,7 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -270,6 +271,7 @@ public class ShopController extends MyController {
 					{
 						resultCode=0;
 						resultDesc=ShowMsg.addSuc;
+						model.put("sid", sid);
 					}
 					else
 					{
@@ -305,7 +307,7 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -438,7 +440,19 @@ public class ShopController extends MyController {
 	protected Object upload(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		
+		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/images");
+		if(dataMap==null){
+			resultCode=1;
+			resultDesc=ShowMsg.imageUploadFail;
+			
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//获取参数
+	    String authCode=dataMap.get("authCode");
+	    String sid=dataMap.get("sid");
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -449,7 +463,7 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -458,8 +472,8 @@ public class ShopController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
-		String sid=getString(request, "sid");
-		String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/images");
+		String logo=dataMap.get("fileName");
+		
 		if(sid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -477,7 +491,7 @@ public class ShopController extends MyController {
 				Shop s=new Shop();
 				s.setSid(sid);
 				s.setLogo("/WEB-INF/upload/shop/images/"+logo);
-				s.setUpdateBy(Integer.parseInt(myloginId));
+				s.setUpdateBy(0);
 				s.setUpdateDate(DateUtil.getCurrentDateStr());
 				result=shopService.updateLogo(s);
 				if(result==true)
@@ -602,7 +616,6 @@ public class ShopController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		
 		String mycurPage=getString(request, "curPage");  
@@ -618,7 +631,6 @@ public class ShopController extends MyController {
 				int count=shopService.getShopCount(searchStr);
 				if(count>0)
 				{
-
 					model.put("count", count);
 					List<Shop> shopList=shopService.list(searchStr, startRow, pageSize);
 					model.put("list", shopList);
@@ -627,10 +639,11 @@ public class ShopController extends MyController {
 				}
 				else
 				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
+					model.put("count", 0);
+					model.put("list", null);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
 				}
-				
 			}
 		}
 		else
@@ -638,7 +651,6 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.searchFail;
 			resultCode=2;
 		}
-		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;

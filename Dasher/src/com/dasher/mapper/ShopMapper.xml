@@ -57,7 +57,7 @@
    
    <select id="getShopCount" resultType="Integer" parameterType="String">
      select count(*) from shop_info
-     where 1=1
+     where status>0
      <if test="searchStr!=''">
        and name like CONCAT(CONCAT('%',#{searchStr}),'%')
      </if>
@@ -65,7 +65,7 @@
    
    <select id="list" resultType="Shop">
      select * from shop_info
-     where 1=1
+     where status>0
      <if test="searchStr!=''">
        and name like CONCAT(CONCAT('%',#{searchStr}),'%')
      </if>
