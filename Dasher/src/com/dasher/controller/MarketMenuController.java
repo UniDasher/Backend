@@ -776,7 +776,6 @@ public class MarketMenuController extends MyController {
 				int count=marketMenuService.getListByUidCount(Integer.parseInt(type), uid);
 				if(count>0)
 				{
-
 					model.put("count", count);
 					List<MarketMenu> list=marketMenuService.getListByUid(Integer.parseInt(type), uid, startRow, pageSize);
 					model.put("list", list);
@@ -800,8 +799,6 @@ public class MarketMenuController extends MyController {
 			resultDesc=ShowMsg.searchFail;
 			resultCode=2;
 		}
-
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;

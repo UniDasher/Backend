@@ -123,5 +123,6 @@ public class ShowMsg {
 	public static final String marketaddRepeat="超市名称已存在！";
 	public static final String unitNull="商品单位为空";
 	public static final String typeNull="商品类型为空！";
-
+	public static final String proNameNull="商品名为空！";
+	public static final String contentNull="投诉内容为空，请重新输入！";
 }

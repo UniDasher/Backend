@@ -7,26 +7,34 @@ public class MarketMenuRecord implements Serializable {
 	private int id;
 	private String mid;
 	private String name;
+	private Float price;
 	private String unit;
 	private int count;
 	private String subscribe;
-	private String image;
+	private String createBy;
+	private String createDate;
 	
 	public MarketMenuRecord() {
 
 	}
+	
 
-	public MarketMenuRecord(int id, String mid, String name, String unit,
-			int count, String subscribe, String image) {
+	public MarketMenuRecord(int id, String mid, String name, Float price,
+			String unit, int count, String subscribe, String createBy,
+			String createDate) {
 		super();
 		this.id = id;
 		this.mid = mid;
 		this.name = name;
+		this.price = price;
 		this.unit = unit;
 		this.count = count;
 		this.subscribe = subscribe;
-		this.image = image;
+		this.createBy = createBy;
+		this.createDate = createDate;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -76,11 +84,35 @@ public class MarketMenuRecord implements Serializable {
 		this.subscribe = subscribe;
 	}
 
-	public String getImage() {
-		return image;
+
+	public Float getPrice() {
+		return price;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+
+	public void setPrice(Float price) {
+		this.price = price;
 	}
+
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	
 }

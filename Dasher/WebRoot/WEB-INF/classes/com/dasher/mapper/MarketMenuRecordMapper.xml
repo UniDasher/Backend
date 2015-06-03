@@ -4,8 +4,23 @@
 <mapper namespace="com.dasher.mapper.MarketMenuRecordMapper">
    <resultMap type="MarketMenuRecord" id="marketMenuRecordMap">
      <result property="id" column="id"/>
-    
+     <result property="mid" column="mid"/>
+     <result property="name" column="name"/>
+     <result property="price" column="price"/>
+     <result property="unit" column="unit"/>
+     <result property="count" column="count"/>
+     <result property="subscribe" column="subscribe"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
    </resultMap>
    
+   <insert id="add" parameterType="MarketMenuRecord" keyProperty="id" useGeneratedKeys="true">
+      insert into market_menu_record(mid,name,price,unit,count,subscribe,createBy,createDate)
+      values(#{mid},#{name},#{price},#{unit},#{count},#{subscribe},#{createBy},#{createDate})
+   </insert>
+   
+   <select id="list" parameterType="String" resultType="MarketMenuRecord">
+      select * from market_menu_record where mid=#{mid}
+   </select>
   
 </mapper>

@@ -20,4 +20,14 @@ public class ComplainServiceImpl implements ComplainService {
 		// TODO Auto-generated method stub
 		return complainMapper.add(c)>0? true:false;
 	}
+
+	public Complain getByComId(String comId) {
+		// TODO Auto-generated method stub
+		return complainMapper.getByComId(comId);
+	}
+
+	public boolean update(Complain c) {
+		// TODO Auto-generated method stub
+		return complainMapper.update(c)>0? true:false;
+	}
 }

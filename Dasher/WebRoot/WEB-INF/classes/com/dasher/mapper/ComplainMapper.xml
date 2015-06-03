@@ -3,9 +3,26 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dasher.mapper.ComplainMapper">
    <resultMap type="Complain" id="complainMap">
-     <result property="id" column="id"/>
-    
+      <result property="id" column="id"/>
+      <result property="comId" column="comId"/>
+      <result property="uid" column="uid"/>
+      <result property="mid" column="mid"/>
+      <result property="wid" column="wid"/>
+      <result property="content" column="content"/>
+      <result property="comContent" column="comContent"/>
+      <result property="returnMoney" column="returnMoney"/>
+      <result property="deductMoney" column="deductMoney"/>
+      <result property="createBy" column="createBy"/>
+      <result property="createDate" column="createDate"/>
+      <result property="updateBy" column="updateBy"/>
+      <result property="updateDate" column="updateDate"/>
+      <result property="status" column="status"/>
    </resultMap>
+   
+   <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Complain">
+     insert into complain(comId,uid,mid,content,createBy,createDate,status)
+     values(#{comId},#{uid},#{mid},#{content},#{createBy},#{createDate},1)
+   </insert>
    
   
 </mapper>
