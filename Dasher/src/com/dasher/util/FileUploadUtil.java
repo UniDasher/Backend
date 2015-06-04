@@ -137,9 +137,13 @@ public class FileUploadUtil {
 			//int cellEnd = row.getLastCellNum();
 
 			ShopDish sd=new ShopDish();
-			sd.setName(row.getCell(0).getStringCellValue());
-			sd.setPrice(Float.parseFloat(row.getCell(1).getStringCellValue()));
-			sd.setTypeId(Integer.parseInt(row.getCell(2).getStringCellValue()));
+			String na=row.getCell(0).getStringCellValue();
+			sd.setName(na);
+			String pr=row.getCell(1).getNumericCellValue()+"";
+			String ty=row.getCell(2).getNumericCellValue()+"";
+			
+			sd.setPrice(Float.parseFloat(pr));
+			sd.setTypeId(Integer.parseInt(ty.substring(0, ty.indexOf("."))));
 			sd.setChilies(row.getCell(3).getStringCellValue());
 			sd.setDescription(row.getCell(4).getStringCellValue());
 
@@ -150,32 +154,39 @@ public class FileUploadUtil {
 
 	//解析xlsx文件
 	public static List<ShopDish> readXlsx(HttpServletRequest request,String path) throws InvalidFormatException, IOException{
+		try{
+			List<ShopDish> list=new ArrayList<ShopDish>();
 
-		List<ShopDish> list=new ArrayList<ShopDish>();
+			String savePath = request.getSession().getServletContext().getRealPath(path);
+			File file = new File(savePath);
 
-		String savePath = request.getSession().getServletContext().getRealPath(path);
-		File file = new File(savePath);
+			XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(file));
+			XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
 
-		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(file));
-		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
+			int rowstart = xssfSheet.getFirstRowNum();
+			int rowEnd = xssfSheet.getLastRowNum();
+			for(int i=rowstart+1;i<=rowEnd;i++)
+			{
+				XSSFRow row = xssfSheet.getRow(i);
+				if(null == row) continue;
 
-		int rowstart = xssfSheet.getFirstRowNum();
-		int rowEnd = xssfSheet.getLastRowNum();
-		for(int i=rowstart+1;i<=rowEnd;i++)
-		{
-			XSSFRow row = xssfSheet.getRow(i);
-			if(null == row) continue;
+				ShopDish sd=new ShopDish();
+				String na=row.getCell(0).getStringCellValue();
+				sd.setName(na);
+				String pr=row.getCell(1).getNumericCellValue()+"";
+				String ty=row.getCell(2).getNumericCellValue()+"";
+				
+				sd.setPrice(Float.parseFloat(pr));
+				sd.setTypeId(Integer.parseInt(ty.substring(0, ty.indexOf("."))));
+				sd.setChilies(row.getCell(3).getStringCellValue());
+				sd.setDescription(row.getCell(4).getStringCellValue());
 
-			ShopDish sd=new ShopDish();
-			sd.setName(row.getCell(0).getStringCellValue());
-			sd.setPrice(Float.parseFloat(row.getCell(1).getStringCellValue()));
-			sd.setTypeId(Integer.parseInt(row.getCell(2).getStringCellValue()));
-			sd.setChilies(row.getCell(3).getStringCellValue());
-			sd.setDescription(row.getCell(4).getStringCellValue());
-
-			list.add(sd);
+				list.add(sd);
+			}
+			return list;
+		}catch(Exception e){
+			return null;
 		}
-		return list;
 	}
 	
 	
@@ -199,12 +210,14 @@ public class FileUploadUtil {
 			//int cellStart = row.getFirstCellNum();
 			//int cellEnd = row.getLastCellNum();
 
-
 			MarketCommodity mc=new MarketCommodity();
-			mc.setSmid(row.getCell(0).getStringCellValue());
-			mc.setName(row.getCell(1).getStringCellValue());
-			mc.setUnit(row.getCell(2).getStringCellValue());
-			mc.setSubscribe(row.getCell(3).getStringCellValue());
+			mc.setName(row.getCell(0).getStringCellValue());
+			String pr=row.getCell(1).getNumericCellValue()+"";
+			String ty=row.getCell(2).getNumericCellValue()+"";
+			mc.setPrice(Float.parseFloat(pr));
+			mc.setTypeId(Integer.parseInt(ty.substring(0, ty.indexOf("."))));
+			mc.setUnit(row.getCell(3).getStringCellValue());
+			mc.setSubscribe(row.getCell(4).getStringCellValue());
 			list.add(mc);
 		}
 		return list;
@@ -218,7 +231,7 @@ public class FileUploadUtil {
 		String savePath = request.getSession().getServletContext().getRealPath(path);
 		File file = new File(savePath);
 
-		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file);
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(file));
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
 
 		int rowstart = xssfSheet.getFirstRowNum();
@@ -229,10 +242,13 @@ public class FileUploadUtil {
 			if(null == row) continue;
 
 			MarketCommodity mc=new MarketCommodity();
-			mc.setSmid(row.getCell(0).getStringCellValue());
-			mc.setName(row.getCell(1).getStringCellValue());
-			mc.setUnit(row.getCell(2).getStringCellValue());
-			mc.setSubscribe(row.getCell(3).getStringCellValue());
+			mc.setName(row.getCell(0).getStringCellValue());
+			String pr=row.getCell(1).getNumericCellValue()+"";
+			String ty=row.getCell(2).getNumericCellValue()+"";
+			mc.setPrice(Float.parseFloat(pr));
+			mc.setTypeId(Integer.parseInt(ty.substring(0, ty.indexOf("."))));
+			mc.setUnit(row.getCell(3).getStringCellValue());
+			mc.setSubscribe(row.getCell(4).getStringCellValue());
 			list.add(mc);
 		}
 		return list;

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,12 +42,40 @@ public class MarketMenuRecordController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
-	@RequestMapping("/market/menu/commodity/add")
+	@RequestMapping("phone/market/menu/commodity/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+	    String mcid="";
+	    String name="";
+	    String unit="";
+	    String price="";
+	    String count="";
+	    String subscribe="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+			mcid=jsonObject.getString("mcid");
+			name=jsonObject.getString("name");
+			price=jsonObject.getString("price");
+			count=jsonObject.getString("count");
+			unit=jsonObject.getString("unit");
+			subscribe=jsonObject.getString("subscribe");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -55,16 +85,8 @@ public class MarketMenuRecordController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
-
-		String mid=getString(request, "mid");
-		String name=getString(request, "name");
-		String price=getString(request, "price");
-		String unit=getString(request, "unit");
-		String count=getString(request, "count");
-		String subscribe=getString(request, "subscribe");
+		
 		if(mid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -131,13 +153,70 @@ public class MarketMenuRecordController extends MyController {
 				resultCode=1;
 				resultDesc=ShowMsg.addFail;
 			}
-
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
+	@RequestMapping("phone/market/menu/commodity/list")
+	@ResponseBody
+	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		if(mid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		
+		else
+		{
+			List<MarketMenuRecord> list=marketMenuRecordService.list(mid);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
 	@RequestMapping("/market/menu/commodity/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -153,7 +232,6 @@ public class MarketMenuRecordController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		String mid=getString(request, "mid");
 		if(mid=="")
@@ -173,8 +251,9 @@ public class MarketMenuRecordController extends MyController {
 			}
 			else
 			{
-				resultDesc=ShowMsg.findFail;
-				resultCode=1;
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
 			}
 		}
 		model.put("resultCode", resultCode);	

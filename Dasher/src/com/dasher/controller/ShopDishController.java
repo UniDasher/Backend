@@ -337,35 +337,35 @@ public class ShopDishController extends MyController {
 					result=shopDishService.deleteList(sd);
 				}
 				
-				//餐品保存
-				for(ShopDish s:list)
-				{
-					String name=s.getName();
-					String price=s.getPrice()+"";
-					String typeId=s.getTypeId()+"";
-					String chilies=s.getChilies();
-					String description=s.getDescription();
-					UUID uuid=UUID.randomUUID();
-					String str[]=uuid.toString().split("-");
-					String did="";
-					for(int i=0;i<str.length;i++)
+				if(list!=null){
+					//餐品保存
+					for(ShopDish s:list)
 					{
-						did=did+str[i];
+						String name=s.getName();
+						String price=s.getPrice()+"";
+						String typeId=s.getTypeId()+"";
+						String chilies=s.getChilies();
+						String description=s.getDescription();
+						UUID uuid=UUID.randomUUID();
+						String str[]=uuid.toString().split("-");
+						String did="";
+						for(int i=0;i<str.length;i++)
+						{
+							did=did+str[i];
+						}
+						ShopDish sd2=new ShopDish();
+						sd2.setSid(sid);
+						sd2.setDid(did);
+						sd2.setName(name);
+						sd2.setPrice(Float.parseFloat(price));
+						sd2.setTypeId(Integer.parseInt(typeId));
+						sd2.setChilies(chilies);
+						sd2.setDescription(description);
+						sd2.setCreateBy(Integer.parseInt(myloginId));
+						sd2.setCreateDate(DateUtil.getCurrentDateStr());
+						result=shopDishService.add(sd2);
 					}
-					ShopDish sd2=new ShopDish();
-					sd2.setSid(sid);
-					sd2.setDid(did);
-					sd2.setName(name);
-					sd2.setPrice(Float.parseFloat(price));
-					sd2.setTypeId(Integer.parseInt(typeId));
-					sd2.setChilies(chilies);
-					sd2.setDescription(description);
-					sd2.setCreateBy(Integer.parseInt(myloginId));
-					sd2.setCreateDate(DateUtil.getCurrentDateStr());
-					result=shopDishService.add(sd2);
-					
 				}
-				
 				if(result==true)
 				{
 					resultCode=0;
@@ -376,8 +376,6 @@ public class ShopDishController extends MyController {
 					resultCode=1;
 					resultDesc=ShowMsg.addFail;
 				}	
-				
-				
 			} catch (InvalidFormatException e) {
 				e.printStackTrace();
 			}

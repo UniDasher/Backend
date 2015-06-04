@@ -555,8 +555,10 @@ public class MarketController extends MyController {
 				}
 				else
 				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
+					model.put("count", 0);
+					model.put("list", null);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
 				}
 				
 			}

@@ -39,15 +39,15 @@ public class MarketCommodityServiceImpl implements MarketCommodityService {
 		return marketCommodityMapper.update(mc)>0? true:false;
 	}
 
-	public int getListCount(String smid, String searchStr) {
+	public int getListCount(String smid,String typeId, String searchStr) {
 		// TODO Auto-generated method stub
-		return marketCommodityMapper.getListCount(smid, searchStr);
+		return marketCommodityMapper.getListCount(smid,typeId, searchStr);
 	}
 
-	public List<MarketCommodity> list(String smid, String searchStr,
+	public List<MarketCommodity> list(String smid,String typeId, String searchStr,
 			int startRow, int pageSize) {
 		// TODO Auto-generated method stub
-		return marketCommodityMapper.list(smid, searchStr, startRow, pageSize);
+		return marketCommodityMapper.list(smid,typeId, searchStr, startRow, pageSize);
 	}
 
 	public boolean deleteList(MarketCommodity mc) {

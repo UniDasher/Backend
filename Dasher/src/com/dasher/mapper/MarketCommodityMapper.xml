@@ -47,6 +47,9 @@
      <if test="searchStr!=''">
       and name like CONCAT(CONCAT('%',#{searchStr}),'%')
      </if>
+     <if test="typeId!=''">
+      and typeId=#{typeId}
+     </if>
    </select>
    
    <select id="list" resultType="MarketCommodity">
@@ -56,6 +59,9 @@
      </if>
      <if test="searchStr!=''">
       and name like CONCAT(CONCAT('%',#{searchStr}),'%')
+     </if>
+     <if test="typeId!=''">
+      and typeId=#{typeId}
      </if>
      limit #{startRow},#{pageSize}
    </select>

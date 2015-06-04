@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -183,7 +184,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -301,7 +302,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -404,7 +405,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -451,7 +452,20 @@ public class MarketCommodityController extends MyController {
 	@ResponseBody
 	protected Object uploadFile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		
+		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/market/dish");
+		if(dataMap==null){
+			resultCode=1;
+			resultDesc=ShowMsg.imageUploadFail;
+			
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		String authCode=dataMap.get("authCode");
+		String smid=dataMap.get("smid");
+		String fileName=dataMap.get("fileName");
+		
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -462,7 +476,7 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()==0)
+		else if(l.getType()!=0)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -472,14 +486,7 @@ public class MarketCommodityController extends MyController {
 		}
 		model.put("authCode", authCode);
 
-		String smid=getString(request, "smid");
-		//String fileName=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/market/commodity");
-		String fileName="";
-		if("false".equals(fileName)){
-			resultCode=1;
-			resultDesc=ShowMsg.imageUploadFail;
-		}
-		else if(smid=="")
+		if(smid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
@@ -492,11 +499,11 @@ public class MarketCommodityController extends MyController {
 			{
 				if(fileName.toUpperCase().indexOf(".xls")>0)
 				{
-					list=FileUploadUtil.readCommodityXls(request, "/WEB-INF/upload/shop/dish/"+fileName);
+					list=FileUploadUtil.readCommodityXls(request, "/WEB-INF/upload/market/dish/"+fileName);
 				}
 				else
 				{
-					list=FileUploadUtil.readCommodityXlsx(request, "/WEB-INF/upload/shop/dish/"+fileName);
+					list=FileUploadUtil.readCommodityXlsx(request, "/WEB-INF/upload/market/dish/"+fileName);
 				}
 
 				int count=marketCommodityService.getCountBySmid(smid);
@@ -508,31 +515,31 @@ public class MarketCommodityController extends MyController {
 					mc.setUpdateDate(DateUtil.getCurrentDateStr());
 					result=marketCommodityService.deleteList(mc);
 				}
-
-				for(MarketCommodity mc:list)
-				{
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
-					Date date=new Date();
-					String strs[]=sdf.format(date).split("-");
-					String mcid="";
-					for(int i=0;i<strs.length;i++)
+				if(list!=null){
+					for(MarketCommodity mc:list)
 					{
-						mcid=mcid+strs[i];
+						SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+						Date date=new Date();
+						String strs[]=sdf.format(date).split("-");
+						String mcid="";
+						for(int i=0;i<strs.length;i++)
+						{
+							mcid=mcid+strs[i];
+						}
+						MarketCommodity mc2=new MarketCommodity();
+						mc2.setSmid(smid);
+						mc2.setMcid(mcid);
+						mc2.setName(mc.getName());
+						mc2.setPrice(mc.getPrice());
+						mc2.setTypeId(mc.getTypeId());
+						mc2.setUnit(mc.getUnit());
+						mc2.setSubscribe(mc.getSubscribe());
+						mc2.setCreateBy(myloginId);
+						mc2.setCreateDate(DateUtil.getCurrentDateStr());
+						result=marketCommodityService.add(mc2);
 					}
-
-					MarketCommodity mc2=new MarketCommodity();
-					mc2.setSmid(mc.getSmid());
-					mc2.setMcid(mcid);
-					mc2.setName(mc.getName());
-					mc2.setUnit(mc.getUnit());
-					mc2.setSubscribe(mc.getSubscribe());
-					mc2.setCreateBy(myloginId);
-					mc2.setCreateDate(DateUtil.getCurrentDateStr());
-
-					result=marketCommodityService.add(mc2);
-
 				}
-
+				
 				if(result==true)
 				{
 					resultCode=0;
@@ -543,12 +550,9 @@ public class MarketCommodityController extends MyController {
 					resultCode=1;
 					resultDesc=ShowMsg.addFail;
 				}	
-
-
 			} catch (InvalidFormatException e) {
 				e.printStackTrace();
 			}
-
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
@@ -621,9 +625,7 @@ public class MarketCommodityController extends MyController {
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		String smid=getString(request, "smid");
-		
 		String typeId=getString(request, "typeId");
-		
 		String searchStr=getString(request, "searchStr");
 		if(!mycurPage.equals("")&&!mypageSize.equals(""))
 		{
@@ -633,19 +635,22 @@ public class MarketCommodityController extends MyController {
 				int curPage=Integer.parseInt(mycurPage);
 				int pageSize=Integer.parseInt(mypageSize);
 				int startRow=(curPage-1)*pageSize;
-				int count=marketCommodityService.getListCount(smid, searchStr);
+				int count=marketCommodityService.getListCount(smid,typeId, searchStr);
 				if(count>0)
 				{
 					model.put("count", count);
-					List<MarketCommodity> list=marketCommodityService.list(smid, searchStr, startRow, pageSize);
+					List<MarketCommodity> list=marketCommodityService.list(smid,typeId, 
+							searchStr, startRow, pageSize);
 					model.put("list", list);
 					resultDesc=ShowMsg.findSuc;
 					resultCode=0;
 				}
 				else
 				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
+					model.put("count", 0);
+					model.put("list", null);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
 				}
 			}
 		}

@@ -470,8 +470,9 @@ public class ShopDishTypeController extends MyController {
 		}
 		else
 		{
-			resultCode=1;
-			resultDesc=ShowMsg.findFail;
+			model.put("list", null);
+			resultCode=0;
+			resultDesc=ShowMsg.findSuc;
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
