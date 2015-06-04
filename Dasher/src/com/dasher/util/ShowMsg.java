@@ -125,4 +125,10 @@ public class ShowMsg {
 	public static final String typeNull="商品类型为空！";
 	public static final String proNameNull="商品名为空！";
 	public static final String contentNull="投诉内容为空，请重新输入！";
+	public static final String handleSuc="投诉处理成功！";
+	public static final String comResultNull="投诉结果为空！";
+	public static final String comResultErr="投诉结果格式不正确！";
+	public static final String returnMoneyErr="返还金额格式错误!";
+	public static final String deductMoneyErr="扣除金额格式错误!";
+	public static final String handleFail="投诉处理失败！";
 }

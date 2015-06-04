@@ -194,7 +194,6 @@ public class FileUploadUtil {
 	public static List<MarketCommodity> readCommodityXls(HttpServletRequest request,String path) throws FileNotFoundException, IOException{
 
 		List<MarketCommodity> list=new ArrayList<MarketCommodity>();
-
 		String savePath = request.getSession().getServletContext().getRealPath(path);
 		File file = new File(savePath);
 		POIFSFileSystem poifsFileSystem = new POIFSFileSystem(new FileInputStream(file));

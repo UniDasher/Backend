@@ -24,5 +24,32 @@
      values(#{comId},#{uid},#{mid},#{content},#{createBy},#{createDate},1)
    </insert>
    
+   <select id="getCount" resultType="Integer" parameterType="Integer">
+     select count(*)
+     from complain
+	 where status=#{status}
+   </select>
+   
+   <select id="list" resultType="Complain">
+     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone,m.status as menuStatus
+	 from complain c
+	 join user_info u
+	 on c.uid=u.uid
+	 join menu m
+	 on c.mid=m.mid
+	 where c.status=#{status}
+	 order by c.createDate desc
+	 limit #{startRow},#{pageSize}
+   </select>
+   
+   <select id="getByComId" parameterType="String" resultType="Complain">
+     select * from complain where comId=#{comId}
+   </select>
+   
+   <update id="handle" parameterType="Complain">
+     update complain 
+     set wid=#{wid},comContent=#{comContent},returnMoney=#{returnMoney},deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
+     where comId=#{comId} 
+   </update>
   
 </mapper>
