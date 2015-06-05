@@ -573,5 +573,46 @@ public class MarketController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
+	
+	@RequestMapping("/market/list/menu")
+	@ResponseBody
+	protected Object menuList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()!=0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		List<Market> marketList=marketService.menuList();
+		List<ModelMap> list=new ArrayList<ModelMap>();
+		ModelMap shopModel=new ModelMap();
+		for(Market s:marketList){
+			shopModel.put("smid", s.getSmid());
+			shopModel.put("name", s.getName());
+			list.add(shopModel);
+		}
+		model.put("list", list);
+		resultDesc=ShowMsg.findSuc;
+		resultCode=0;
+		
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
 }

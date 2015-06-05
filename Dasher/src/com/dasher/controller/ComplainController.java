@@ -44,13 +44,34 @@ public class ComplainController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
-	@RequestMapping("/complain/add")
+	@RequestMapping("phone/complain/add")
 	@ResponseBody
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+	    String uid="";
+	    String content="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			mid=jsonObject.getString("mid");
+			uid=jsonObject.getString("uid");
+			content=jsonObject.getString("content");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
@@ -59,10 +80,15 @@ public class ComplainController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//model.put("authCode", loginService.userHandleLogin(myloginId));
+		else if(l.getType()!=0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
 		model.put("authCode", authCode);
-		String mid=getString(request, "mid");
-		String content=getString(request, "content");
 
 		if(mid=="")
 		{
@@ -103,11 +129,121 @@ public class ComplainController extends MyController {
 				resultDesc=ShowMsg.addFail;
 			}
 		}
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	@RequestMapping("phone/complain/user/list")
+	@ResponseBody
+	protected Object phoneUserList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String uid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			uid=jsonObject.getString("uid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()!=0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(uid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			//获取用户投诉列表
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
+	
+	@RequestMapping("phone/complain/deal/info")
+	@ResponseBody
+	protected Object phoneDealInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String comId="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			comId=jsonObject.getString("comId");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()!=0)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(comId=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			//获取投诉处理结果信息
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
 	
 	@RequestMapping("complain/list")
 	@ResponseBody
@@ -308,6 +444,33 @@ public class ComplainController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
+	@RequestMapping("complain/deal/list")
+	@ResponseBody
+	protected Object deallist(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String mycurPage=getString(request, "curPage");
+		String mypageSize=getString(request, "countPage");
+		String searchStr=getString(request, "searchStr");
+		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$")&&!"".equals(searchStr))
+		{
+			//获取投诉处理接口列表
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
 	
 }

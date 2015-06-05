@@ -15,5 +15,6 @@ public interface MarketMapper {
 	public Market getByMarketName(String name);
 	public int getListCount(@Param(value="searchStr") String searchStr);
 	public List<Market> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public List<Market> menuList();
 
 }

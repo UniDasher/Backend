@@ -53,4 +53,9 @@ public class MarketServiceImpl implements MarketService {
 		return marketMapper.list(searchStr, startRow, pageSize);
 	}
 
+	public List<Market> menuList() {
+		// TODO Auto-generated method stub
+		return marketMapper.menuList();
+	}
+
 }

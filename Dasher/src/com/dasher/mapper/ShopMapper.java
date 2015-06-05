@@ -17,4 +17,5 @@ public interface ShopMapper {
 	public List<Shop> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public int getShopCount(@Param(value="searchStr") String searchStr);
 	public int updateLogo(Shop s);
+	public List<Shop> menuList();
 }

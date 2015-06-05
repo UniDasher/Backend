@@ -59,21 +59,19 @@
 		<if test="searchStr!=''">
 			and address like CONCAT(CONCAT('%',#{searchStr}),'%')
         </if>
-		<if test="startDate!=''">
-			and startDate=#{startDate}
-        </if>
-		<if test="endDate!=''">
-			and endDate=#{endDate}
+		<if test="startDate!='' and endDate!=''">
+			and endDate between #{startDate} and #{endDate}
         </if>
 	</select>
 
 	<select id="list" resultType="Menu">
 	    <!--select * from menu where 1=1-->
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName,
+			concat(u2.firstName,u2.lastName) as serverName
 		from menu m
-		join shop_info s
+		left join shop_info s
 		on m.sid=s.sid
-		join user_info u
+		left join user_info u
 		on m.uid=u.uid
 		left join user_info u2
 	    on m.wid=u2.uid
@@ -81,19 +79,20 @@
 		<if test="status!=''">
 			and m.status=#{status}
         </if>
+          
 		<if test="sid!=''">
 			and m.sid=#{sid}
         </if>
 		<if test="searchStr!=''">
 			and m.address like CONCAT(CONCAT('%',#{searchStr}),'%')
         </if>
-		<if test="startDate!=''">
-			and m.startDate=#{startDate}
+		<if test="startDate!='' and endDate!=''">
+			and endDate between #{startDate} and #{endDate}
         </if>
-		<if test="endDate!=''">
-			and m.endDate=#{endDate}
+        <if test="status=='3'">
+			limit #{curPage},#{countPage}
         </if>
-		limit #{curPage},#{countPage}
+		
 	</select>
 
 	<select id="getListByUidCount" resultType="Integer">

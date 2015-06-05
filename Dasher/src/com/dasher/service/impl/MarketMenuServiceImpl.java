@@ -33,15 +33,15 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return marketMenuMapper.updateStatus(mm)>0? true:false;
 	}
 
-	public int getCount(String status, String smid, String searchStr) {
+	public int getCount(String status, String smid, String searchStr,String startDate,String endDate) {
 		// TODO Auto-generated method stub
-		return marketMenuMapper.getCount(status, smid, searchStr);
+		return marketMenuMapper.getCount(status, smid, searchStr,startDate,endDate);
 	}
 
-	public List<MarketMenu> list(String status, String smid, String searchStr,
+	public List<MarketMenu> list(String status, String smid, String searchStr,String startDate,String endDate,
 			int startRow, int pageSize) {
 		// TODO Auto-generated method stub
-		return marketMenuMapper.list(status, smid, searchStr, startRow, pageSize);
+		return marketMenuMapper.list(status, smid, searchStr,startDate,endDate, startRow, pageSize);
 	}
 
 	public MarketMenu getByMid(String mid) {

@@ -2,6 +2,7 @@ package com.dasher.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -651,6 +652,39 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.searchFail;
 			resultCode=2;
 		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	@RequestMapping("/shop/menu/list")
+	@ResponseBody
+	protected Object menuList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		List<Shop> shopList=shopService.menuList();
+		List<ModelMap> list=new ArrayList<ModelMap>();
+		ModelMap shopModel=new ModelMap();
+		for(Shop s:shopList){
+			shopModel.put("sid", s.getSid());
+			shopModel.put("name", s.getName());
+			list.add(shopModel);
+		}
+		model.put("list", list);
+		resultDesc=ShowMsg.findSuc;
+		resultCode=0;
+		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;

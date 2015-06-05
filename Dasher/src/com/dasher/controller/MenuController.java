@@ -667,7 +667,6 @@ public class MenuController extends MyController {
 		{
 			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 			{
-
 				if(!status.equals("")&&!status.matches("^[0-9]*$"))
 				{
 					resultDesc=ShowMsg.statusErr;
@@ -691,8 +690,10 @@ public class MenuController extends MyController {
 				}
 				else
 				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
+					model.put("count", 0);
+					model.put("list", null);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
 				}
 			}
 			else
@@ -710,7 +711,6 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
 
 	@RequestMapping("/menu/user/list")
 	@ResponseBody
@@ -752,8 +752,10 @@ public class MenuController extends MyController {
 				}
 				else
 				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
+					model.put("count", 0);
+					model.put("list", null);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
 				}
 			}
 			else

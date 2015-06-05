@@ -15,4 +15,5 @@ public interface ShopService {
 	public List<Shop> list(String searchStr, int startRow,int pageSize);
 	public int getShopCount(String searchStr);
 	public boolean updateLogo(Shop s);
+	public List<Shop> menuList();
 }

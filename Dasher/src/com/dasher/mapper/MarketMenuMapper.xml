@@ -59,14 +59,17 @@
 	  <if test="searchStr!=''">
 		and address like CONCAT(CONCAT('%',#{searchStr}),'%')
       </if>
+      <if test="startDate!='' and endDate!=''">
+		and endDate between #{startDate} and #{endDate}
+      </if>
    </select>
    
    <select id="list" resultType="MarketMenu">
       select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
 	  from market_menu as mm
-	  join market_info as m
+	  left join market_info as m
 	  on mm.smid=m.smid
-	  join user_info as u
+	  left join user_info as u
 	  on mm.uid=u.uid
 	  left join user_info u2
 	  on mm.wid=u2.uid
@@ -80,7 +83,13 @@
 	  <if test="searchStr!=''">
 		and mm.address like CONCAT(CONCAT('%',#{searchStr}),'%')
       </if>
-      limit #{startRow},#{pageSize}
+      <if test="startDate!='' and endDate!=''">
+		and endDate between #{startDate} and #{endDate}
+      </if>
+      <if test="status!='3'">
+		limit #{startRow},#{pageSize}
+      </if>
+      
    </select>
    
    <select id="getByMid" resultType="MarketMenu" parameterType="MarketMenu">

@@ -64,4 +64,9 @@ public class ShopServiceImpl implements ShopService {
 		return shopMapper.getShopCount(searchStr);
 	}
 
+	public List<Shop> menuList() {
+		// TODO Auto-generated method stub
+		return shopMapper.menuList();
+	}
+
 }

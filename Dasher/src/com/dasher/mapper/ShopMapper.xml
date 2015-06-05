@@ -77,5 +77,10 @@
      set logo=#{logo},updateBy=#{updateBy},updateDate=#{updateDate}
      where sid=#{sid}
    </update>
+   
+   <select id="menuList" resultType="Shop">
+     select sid,name from shop_info
+     where status>0
+   </select>
   
 </mapper>

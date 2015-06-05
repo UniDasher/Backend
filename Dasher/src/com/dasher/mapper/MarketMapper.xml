@@ -61,5 +61,9 @@
        </if>
        limit #{startRow},#{pageSize}
    </select>
+   
+   <select id="menuList" resultType="Market">
+       select smid,name from market_info where status>0
+   </select>
   
 </mapper>

@@ -13,4 +13,5 @@ public interface MarketService {
 	public Market getByMarketName(String name);
 	public int getListCount(String searchStr);
 	public List<Market> list(String searchStr,int startRow,int pageSize);
+	public List<Market> menuList();
 }

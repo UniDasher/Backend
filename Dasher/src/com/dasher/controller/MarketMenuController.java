@@ -644,18 +644,18 @@ public class MarketMenuController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
 		String status=getString(request, "status");
 		String smid=getString(request, "smid");
 		String searchStr=getString(request, "searchStr");
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		if(!mycurPage.equals("")&&!mypageSize.equals(""))
 		{
 			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 			{
-
 				if(!status.equals("")&&!status.matches("^[0-9]*$"))
 				{
 					resultDesc=ShowMsg.statusErr;
@@ -667,12 +667,12 @@ public class MarketMenuController extends MyController {
 				int curPage=Integer.parseInt(mycurPage);
 				int pageSize=Integer.parseInt(mypageSize);
 				int startRow=(curPage-1)*pageSize;
-				int count=marketMenuService.getCount(status, smid, searchStr);
+				int count=marketMenuService.getCount(status, smid, searchStr,startDate,endDate);
 				if(count>0)
 				{
-
 					model.put("count", count);
-					List<MarketMenu> list=marketMenuService.list(status, smid, searchStr, startRow, pageSize);
+					List<MarketMenu> list=marketMenuService.list(status, smid, searchStr,startDate,endDate, 
+							startRow, pageSize);
 					model.put("list", list);
 					resultDesc=ShowMsg.findSuc;
 					resultCode=0;
@@ -694,8 +694,6 @@ public class MarketMenuController extends MyController {
 			resultDesc=ShowMsg.searchFail;
 			resultCode=2;
 		}
-
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
