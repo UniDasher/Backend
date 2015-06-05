@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.User;
+import com.dasher.model.UserSettle;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
-import com.dasher.util.FileUploadUtil;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
 
@@ -266,7 +266,6 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		
 		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -340,6 +339,22 @@ public class UserController extends MyController {
 		else
 		{
 			//用户名修改
+			User u=new User();
+			u.setFirstName(firstName);
+			u.setUid(uid);
+			result=userService.updateUserName(u);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
+			
+			
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -448,8 +463,6 @@ public class UserController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
-		
-		
 		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -468,8 +481,24 @@ public class UserController extends MyController {
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.emailErr;
-			}else{
+			}
+			else
+			{
 				//邮箱修改
+				User u=new User();
+				u.setUid(uid);
+				u.setEmail(email);
+				result=userService.updateEmail(u);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
+				}
 			}
 		}
 		model.put("resultCode", resultCode);	
@@ -514,21 +543,38 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		
 		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
-		}else if(bankAccount=="")
+		}
+		else if(bankAccount=="")
 		{
-			//判断支出账号不可为空
-		}else if(bankType=="")
+			resultDesc=ShowMsg.bankAccountNull;
+			resultCode=2;
+		}
+		else if(bankType=="")
 		{
-			//判断支出账号类型不可为空
+			resultDesc=ShowMsg.bankTypeNull;
+			resultCode=2;
 		}
 		else
 		{
-			//修改支付账户
+			User u=new User();
+			u.setUid(uid);
+			u.setBankAccount(bankAccount);
+			u.setBankType(bankType);
+			result=userService.update(u);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -907,7 +953,7 @@ public class UserController extends MyController {
 	
 	@RequestMapping("/user/list/balance")
 	@ResponseBody
-	protected Object listBalance(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object listbalance(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
@@ -921,11 +967,31 @@ public class UserController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
-		//获取用户余额大于零的用户列表
+		
+		String mycurPage=getString(request, "curPage");
+		String mypageSize=getString(request, "countPage");
+		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
+		{
+			int curPage=Integer.parseInt(mycurPage);
+			int pageSize=Integer.parseInt(mypageSize);
+			int startRow=(curPage-1)*pageSize;
+			List<User> list=userService.balanceList(startRow, pageSize);
+			if(list.size()>0)
+			{
+				model.put("count", list.size());
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				resultDesc=ShowMsg.findFail;
+				resultCode=0;
+			}
+		}
 		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
+		model.put("resultDesc", resultDesc);
 		return model;
-	}
-	
+	}	
 
 }

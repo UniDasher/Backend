@@ -18,4 +18,9 @@ public interface UserService {
 	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
 	public int getUserByStatus2(int type,String searchStr);
 	public boolean updateLogo(User u);
+	public boolean updateUserName(User u);
+	public boolean updatePhone(User u);
+	public boolean updateEmail(User u);
+	public List<User> balanceList(int startRow,int pageSize);
+	
 }

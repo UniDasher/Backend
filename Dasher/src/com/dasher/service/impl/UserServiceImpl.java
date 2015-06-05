@@ -114,5 +114,25 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateLogo(u)>0? true:false;
 	}
 
+	public boolean updateUserName(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.updateUserName(u)>0? true:false;
+	}
+
+	public boolean updatePhone(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.updatePhone(u)>0? true:false;
+	}
+
+	public boolean updateEmail(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.updateEmail(u)>0? true:false;
+	}
+
+	public List<User> balanceList(int startRow, int pageSize) {
+		// TODO Auto-generated method stub
+		return userMapper.balanceList(startRow, pageSize);
+	}
+
 
 }

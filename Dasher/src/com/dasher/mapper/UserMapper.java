@@ -18,4 +18,8 @@ public interface UserMapper {
 	public List<User> searchUser(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public int getUserByStatus2(@Param(value="type") int type,@Param(value="searchStr") String searchStr);
 	public int updateLogo(User u);
+	public int updateUserName(User u);
+	public int updatePhone(User u);
+	public int updateEmail(User u);
+	public List<User> balanceList(@Param(value="startRow")int startRow,@Param(value="pageSize")int pageSize);
 }

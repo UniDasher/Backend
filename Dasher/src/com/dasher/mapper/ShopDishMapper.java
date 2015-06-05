@@ -13,7 +13,8 @@ public interface ShopDishMapper {
 	public ShopDish getByDid(String did);
 	public int getShopDishCount(@Param(value="sid") String sid,@Param(value="typeId") String typeId,@Param(value="searchStr") String searchStr);
 	public List<ShopDish> list(@Param(value="sid") String sid,@Param(value="typeId") String typeId,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
-    
-	public int deleteList(ShopDish sd);
+    public int deleteList(ShopDish sd);
     public int getCountBySid(String sid);
+    public List<ShopDish> listBySid(String sid);
+    
 }

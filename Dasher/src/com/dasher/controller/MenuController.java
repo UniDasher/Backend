@@ -446,6 +446,7 @@ public class MenuController extends MyController {
 		if(!longitude.equals("")&&!latitude.equals(""))
 		{
 			//送餐人获取附近订单
+			
 		}
 		else
 		{
@@ -493,7 +494,34 @@ public class MenuController extends MyController {
 		
 		if(!uid.equals("")&&!type.equals(""))
 		{
-			//获取用户的下单列表
+			if(type.matches("^[0-9]*$"))
+			{
+				//获取用户的下单列表
+				List<Menu> list=menuService.getListByStr(Integer.parseInt(type), uid);
+				if(list.size()>0)
+				{
+
+					model.put("count", list.size());
+					model.put("list", list);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
+				}
+				else
+				{
+					model.put("count", 0);
+					model.put("list", null);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
+				}
+			
+			}
+			else
+			{
+				resultDesc=ShowMsg.inputErr;
+				resultCode=2;
+			}
+			
+			
 		}
 		else
 		{

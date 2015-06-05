@@ -74,9 +74,19 @@
      where sid=#{sid}
    </update>
    
-   <select id="getCountBySid" parameterType="String">
+   <select id="listBySid" parameterType="String" resultType="ShopDish">
+     select sd.*,sdt.name as typeName
+     from shop_dish sd
+     join shop_dish_type sdt
+     on sd.typeId=sdt.id
+     where sd.sid=#{sid} and sd.status>0
+   </select>
+   
+   <select id="getCountBySid" parameterType="String" resultType="Integer">
      select count(*)
      from shop_dish
      where sid=#{sid} and status>0
    </select>
+   
+   
 </mapper>

@@ -157,6 +157,21 @@ public class ShopDishController extends MyController {
 		else
 		{
 			//获取指定商家的菜品列表
+			List<ShopDish> list=shopDishService.listBySid(sid);
+			if(list.size()>0)
+			{
+				model.put("count", list.size());
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("count", 0);
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
 		}
 		
 		model.put("resultCode", resultCode);	

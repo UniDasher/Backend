@@ -57,4 +57,9 @@ public class ShopDishServiceImpl implements ShopDishService {
 		return shopDishMapper.getCountBySid(sid);
 	}
 
+	public List<ShopDish> listBySid(String sid) {
+		// TODO Auto-generated method stub
+		return shopDishMapper.listBySid(sid);
+	}
+
 }

@@ -10,6 +10,7 @@ public class ShopDish implements Serializable {
 	private String name;
 	private float price;
 	private int typeId;
+	private String typeName;
 	private String chilies;
 	private String description;
 	private int createBy;
@@ -22,9 +23,11 @@ public class ShopDish implements Serializable {
 		
 	}
 
+	
 	public ShopDish(int id, String sid, String did, String name, float price,
-			int typeId, String chilies, String description, int createBy,
-			String createDate, int updateBy, String updateDate, int status) {
+			int typeId, String typeName, String chilies, String description,
+			int createBy, String createDate, int updateBy, String updateDate,
+			int status) {
 		super();
 		this.id = id;
 		this.sid = sid;
@@ -32,6 +35,7 @@ public class ShopDish implements Serializable {
 		this.name = name;
 		this.price = price;
 		this.typeId = typeId;
+		this.typeName = typeName;
 		this.chilies = chilies;
 		this.description = description;
 		this.createBy = createBy;
@@ -40,6 +44,7 @@ public class ShopDish implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
+
 
 	public int getCreateBy() {
 		return createBy;
@@ -94,6 +99,16 @@ public class ShopDish implements Serializable {
 
 	public void setTypeId(int typeId) {
 		this.typeId = typeId;
+	}
+
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 

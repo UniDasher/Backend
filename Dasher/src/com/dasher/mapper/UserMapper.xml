@@ -87,4 +87,30 @@
      where uid=#{uid}
    </update>
    
+   <update id="updateUserName" parameterType="User">
+     update user_info 
+     set firstName=#{firstName}
+     where uid=#{uid}
+   </update>
+   
+   <update id="updatePhone" parameterType="User">
+     update user_info 
+     set mobilePhone=#{mobilePhone}
+     where uid=#{uid}
+   </update>
+   
+   <update id="updateEmail" parameterType="User">
+     update user_info 
+     set email=#{email}
+     where uid=#{uid}
+   </update>
+   
+   <select id="balanceList" resultType="User">
+     select uid,account,firstName,lastName,logo,balance,mobilePhone,email,address,longitude,latitude,goodEvaluate,badEvaluate,status 
+     from user_info
+     where balance>0
+     limit #{startRow},#{pageSize}
+   </select>
+   
+   
 </mapper>

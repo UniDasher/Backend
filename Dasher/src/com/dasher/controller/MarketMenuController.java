@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.MarketMenu;
-import com.dasher.model.Menu;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;

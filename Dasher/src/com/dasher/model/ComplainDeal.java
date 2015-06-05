@@ -24,21 +24,27 @@ public class ComplainDeal extends Complain implements Serializable {
 	public void setComResult(int comResult) {
 		this.comResult = comResult;
 	}
+	@Override
 	public String getComContent() {
 		return comContent;
 	}
+	@Override
 	public void setComContent(String comContent) {
 		this.comContent = comContent;
 	}
+	@Override
 	public float getReturnMoney() {
 		return returnMoney;
 	}
+	@Override
 	public void setReturnMoney(float returnMoney) {
 		this.returnMoney = returnMoney;
 	}
+	@Override
 	public float getDeductMoney() {
 		return deductMoney;
 	}
+	@Override
 	public void setDeductMoney(float deductMoney) {
 		this.deductMoney = deductMoney;
 	}

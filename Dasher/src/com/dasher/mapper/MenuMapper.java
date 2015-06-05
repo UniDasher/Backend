@@ -19,4 +19,6 @@ public interface MenuMapper {
     public int CountByStatus(@Param(value="uid") String uid,@Param(value="status") String status);
 	public List<Menu> listByStatus(@Param(value="uid") String uid,@Param(value="status") String status,@Param(value="curPage") int curPage,@Param(value="countPage") int countPage);
 	public int updateMealDate(Menu m);
+	public List<Menu> getListByStr(@Param(value="type") int type,@Param(value="uid") String uid);
+	    
 }

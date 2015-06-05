@@ -75,6 +75,11 @@ public class MenuServiceImpl implements MenuService {
 		// TODO Auto-generated method stub
 		return menuMapper.updateMealDate(m)>0? true:false;
 	}
+
+	public List<Menu> getListByStr(int type, String uid) {
+		// TODO Auto-generated method stub
+		return menuMapper.getListByStr(type, uid);
+	}
 	
 
 }
