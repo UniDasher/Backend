@@ -245,7 +245,7 @@ public class ComplainController extends MyController {
 		return model;
 	}
 	
-	@RequestMapping("complain/list")
+	@RequestMapping("/complain/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
@@ -292,7 +292,7 @@ public class ComplainController extends MyController {
 	}	
 	
 	
-	@RequestMapping("complain/info")
+	@RequestMapping("/complain/info")
 	@ResponseBody
 	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
@@ -336,7 +336,7 @@ public class ComplainController extends MyController {
 		return model;
 	}	
 	
-	@RequestMapping("complain/deal")
+	@RequestMapping("/complain/deal")
 	@ResponseBody
 	protected Object deal(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");

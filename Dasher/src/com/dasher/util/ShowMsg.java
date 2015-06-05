@@ -131,4 +131,9 @@ public class ShowMsg {
 	public static final String returnMoneyErr="返还金额格式错误!";
 	public static final String deductMoneyErr="扣除金额格式错误!";
 	public static final String handleFail="投诉处理失败！";
+	public static final String settleTypeNull="用户收支类型为空！";
+	public static final String settleNumberTypeNull="账号类型为空";
+	public static final String settleNumberNull="订单号或银行账号为空";
+	public static final String settlePriceNull="收支金额为空";
+	public static final String settlePriceErr="收支金额格式错误";
 }

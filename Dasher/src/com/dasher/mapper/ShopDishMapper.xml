@@ -62,7 +62,7 @@
      <if test="sid!=''">
        and sid=#{sid}
      </if>
-     <if test="typeId!=''">
+     <if test="typeId!=0">
        and typeId=#{typeId}
      </if>
      limit #{startRow},#{pageSize}
@@ -74,7 +74,7 @@
      where sid=#{sid}
    </update>
    
-   <select id="getCountBySid" parameterType="String" resultType="Integer">
+   <select id="getCountBySid" parameterType="String">
      select count(*)
      from shop_dish
      where sid=#{sid} and status>0
