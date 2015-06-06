@@ -9,6 +9,7 @@ public class Complain implements Serializable {
 	private String uid;
 	private String mid;
 	private String wid;
+	private int type;
 	private String content;
 	private String comContent;
 	private float returnMoney;
@@ -45,6 +46,12 @@ public class Complain implements Serializable {
 	}
 	public void setMid(String mid) {
 		this.mid = mid;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 	public String getContent() {
 		return content;

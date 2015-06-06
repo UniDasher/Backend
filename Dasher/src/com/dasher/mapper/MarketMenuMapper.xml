@@ -86,7 +86,7 @@
       <if test="startDate!='' and endDate!=''">
 		and endDate between #{startDate} and #{endDate}
       </if>
-      <if test="status!='3'">
+      <if test="status=='3'">
 		limit #{startRow},#{pageSize}
       </if>
       

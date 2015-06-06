@@ -8,7 +8,8 @@
       <result property="uid" column="uid"/>
       <result property="mid" column="mid"/>
       <result property="wid" column="wid"/>
-      <result property="content" column="content"/>
+      <result property="mid" column="mid"/>
+      <result property="type" column="type"/>
       <result property="comContent" column="comContent"/>
       <result property="returnMoney" column="returnMoney"/>
       <result property="deductMoney" column="deductMoney"/>
@@ -20,8 +21,8 @@
    </resultMap>
    
    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Complain">
-     insert into complain(comId,uid,mid,content,createBy,createDate,status)
-     values(#{comId},#{uid},#{mid},#{content},#{createBy},#{createDate},1)
+     insert into complain(comId,uid,mid,type,content,createBy,createDate,status)
+     values(#{comId},#{uid},#{mid},#{type},#{content},#{createBy},#{createDate},1)
    </insert>
    
    <select id="getCount" resultType="Integer" parameterType="Integer">
@@ -39,11 +40,17 @@
 	 on c.mid=m.mid
 	 where c.status=#{status}
 	 order by c.createDate desc
-	 limit #{startRow},#{pageSize}
+	 <!-- limit #{startRow},#{pageSize} -->
    </select>
    
    <select id="getByComId" parameterType="String" resultType="Complain">
-     select * from complain where comId=#{comId}
+     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone,m.status as menuStatus
+	 from complain c
+	 left join user_info u
+	 on c.uid=u.uid
+	 left join menu m
+	 on c.mid=m.mid 
+	 where comId=#{comId}
    </select>
    
    <update id="handle" parameterType="Complain">
