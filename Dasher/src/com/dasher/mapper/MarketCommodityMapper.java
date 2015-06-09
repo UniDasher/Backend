@@ -12,12 +12,11 @@ public interface MarketCommodityMapper {
 	public int update(MarketCommodity mc);
 	public int delete(MarketCommodity mc);
 	public MarketCommodity getByMcid(String mcid);
-	public int getListCount(@Param(value="smid")String smid,@Param(value="typeId")String typeId,
-			@Param(value="searchStr") String searchStr);
-	public List<MarketCommodity> list(@Param(value="smid")String smid,@Param(value="typeId") String typeId,
-			@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public int getListCount(@Param(value="smid")String smid,@Param(value="typeId")String typeId,@Param(value="searchStr") String searchStr);
+	public List<MarketCommodity> list(@Param(value="smid")String smid,@Param(value="typeId") String typeId,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public int getCountBySmid(String smid);
 	public int deleteList(MarketCommodity mc);
+	public List<MarketCommodity> listBySmid(String smid);
 	
 
 }

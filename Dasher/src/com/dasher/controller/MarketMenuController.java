@@ -19,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
@@ -497,14 +498,31 @@ public class MarketMenuController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		if(!uid.equals("")&&!type.equals(""))
+		if(uid.equals("")||type.equals(""))
 		{
-			//用户获取下单列表
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else if(!type.matches("^[0-9]*$"))
+		{
+			resultDesc=ShowMsg.statusErr;
+			resultCode=2;
 		}
 		else
 		{
-			resultDesc=ShowMsg.searchFail;
-			resultCode=2;
+			List<MarketMenu> list=marketMenuService.ListByUid(type, uid);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -565,6 +583,24 @@ public class MarketMenuController extends MyController {
 		else
 		{
 			//超市订单延时代码
+			MarketMenu mm=new MarketMenu();
+			mm.setMid(mid);
+			mm.setMealStartDate(mealStartDate);
+			mm.setMealEndDate(mealEndDate);
+			mm.setUpdateBy(myloginId);
+			mm.setUpdateDate(DateUtil.getCurrentDateStr());
+			result=marketMenuService.updateDate(mm);
+			
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	

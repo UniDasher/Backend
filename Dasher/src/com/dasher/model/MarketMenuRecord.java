@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class MarketMenuRecord implements Serializable {
 
 	private int id;
+	private String mcid;
 	private String mid;
 	private String name;
 	private Float price;
@@ -18,12 +19,12 @@ public class MarketMenuRecord implements Serializable {
 
 	}
 	
-
-	public MarketMenuRecord(int id, String mid, String name, Float price,
-			String unit, int count, String subscribe, String createBy,
-			String createDate) {
+	public MarketMenuRecord(int id, String mcid, String mid, String name,
+			Float price, String unit, int count, String subscribe,
+			String createBy, String createDate) {
 		super();
 		this.id = id;
+		this.mcid = mcid;
 		this.mid = mid;
 		this.name = name;
 		this.price = price;
@@ -34,14 +35,20 @@ public class MarketMenuRecord implements Serializable {
 		this.createDate = createDate;
 	}
 
-
-
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getMcid() {
+		return mcid;
+	}
+
+	public void setMcid(String mcid) {
+		this.mcid = mcid;
 	}
 
 	public String getMid() {
@@ -58,6 +65,14 @@ public class MarketMenuRecord implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Float getPrice() {
+		return price;
+	}
+
+	public void setPrice(Float price) {
+		this.price = price;
 	}
 
 	public String getUnit() {
@@ -84,35 +99,22 @@ public class MarketMenuRecord implements Serializable {
 		this.subscribe = subscribe;
 	}
 
-
-	public Float getPrice() {
-		return price;
-	}
-
-
-	public void setPrice(Float price) {
-		this.price = price;
-	}
-
-
 	public String getCreateBy() {
 		return createBy;
 	}
-
 
 	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
 	}
 
-
 	public String getCreateDate() {
 		return createDate;
 	}
-
 
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
+	
 	
 }

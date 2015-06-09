@@ -134,5 +134,29 @@
       </if>
 	  limit #{curPage},#{countPage}
    </select>
+   
+   <select id="ListByUid" resultType="MarketMenu">
+      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+	  from market_menu as mm
+	  join market_info as m
+	  on mm.smid=m.smid
+	  join user_info as u
+	  on mm.uid=u.uid
+	  left join user_info u2
+	  on mm.wid=u2.uid
+      where 1=1
+      <if test="searchStr!=''">
+		and mm.uid=#{searchStr}
+      </if>
+	  <if test="type!=''">
+		and mm.status=#{type}
+      </if>
+   </select>
+   
+   <update id="updateDate" parameterType="MarketMenu">
+     update market_menu 
+     set mealStartDate=#{mealStartDate},mealEndDate=#{mealEndDate},updateBy=#{updateBy},updateDate=#{updateDate}
+     where mid=#{mid}
+   </update>
   
 </mapper>

@@ -5,6 +5,7 @@
    <resultMap type="MarketMenuRecord" id="marketMenuRecordMap">
      <result property="id" column="id"/>
      <result property="mid" column="mid"/>
+     <result property="mcid" column="mcid"/>
      <result property="name" column="name"/>
      <result property="price" column="price"/>
      <result property="unit" column="unit"/>
@@ -15,8 +16,8 @@
    </resultMap>
    
    <insert id="add" parameterType="MarketMenuRecord" keyProperty="id" useGeneratedKeys="true">
-      insert into market_menu_record(mid,name,price,unit,count,subscribe,createBy,createDate)
-      values(#{mid},#{name},#{price},#{unit},#{count},#{subscribe},#{createBy},#{createDate})
+      insert into market_menu_record(mid,mcid,name,price,unit,count,subscribe,createBy,createDate)
+      values(#{mid},#{mcid},#{name},#{price},#{unit},#{count},#{subscribe},#{createBy},#{createDate})
    </insert>
    
    <select id="list" parameterType="String" resultType="MarketMenuRecord">

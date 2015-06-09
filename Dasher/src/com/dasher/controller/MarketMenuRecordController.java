@@ -80,7 +80,7 @@ public class MarketMenuRecordController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		if(mid=="")
+		if(mid==""||mcid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
@@ -125,6 +125,7 @@ public class MarketMenuRecordController extends MyController {
 			
 			MarketMenuRecord mmr=new MarketMenuRecord();
 			mmr.setMid(mid);
+			mmr.setMcid(mcid);
 			mmr.setName(name);
 			mmr.setUnit(unit);
 			mmr.setCount(Integer.parseInt(count));

@@ -93,7 +93,7 @@
      update complain 
      set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},
      deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
-     where comId=#{comId};
+     where comId=#{comId}
    </update>
    
   

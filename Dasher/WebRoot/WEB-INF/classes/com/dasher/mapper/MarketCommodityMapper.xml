@@ -75,5 +75,13 @@
      set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
      where smid=#{smid} 
    </update>
+   
+   <select id="listBySmid" resultType="MarketCommodity" parameterType="String">
+    select mc.*,sdt.name as typeName
+	from market_commodity mc
+	join shop_dish_type sdt
+	on mc.typeId=sdt.id
+	where mc.smid=#{smid} and mc.status>0
+   </select>
   
 </mapper>

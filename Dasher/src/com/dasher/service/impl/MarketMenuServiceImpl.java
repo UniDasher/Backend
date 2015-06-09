@@ -60,4 +60,14 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return marketMenuMapper.getListByUidCount(type, searchStr);
 	}
 
+	public List<MarketMenu> ListByUid(String type, String searchStr) {
+		// TODO Auto-generated method stub
+		return marketMenuMapper.ListByUid(type, searchStr);
+	}
+
+	public boolean updateDate(MarketMenu mm) {
+		// TODO Auto-generated method stub
+		return marketMenuMapper.updateDate(mm)>0? true:false;
+	}
+
 }

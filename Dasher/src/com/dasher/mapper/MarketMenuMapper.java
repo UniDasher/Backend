@@ -11,9 +11,7 @@ public interface MarketMenuMapper {
 	public int add(MarketMenu mm);
 	public int receive(MarketMenu mm);
 	public int updateStatus(MarketMenu mm);
-	public int getCount(@Param(value="status") String status,@Param(value="smid") String smid,
-			@Param(value="searchStr") String searchStr,@Param(value="startDate") String startDate,
-			@Param(value="endDate") String endDate);
+	public int getCount(@Param(value="status") String status,@Param(value="smid") String smid,@Param(value="searchStr") String searchStr,@Param(value="startDate") String startDate,@Param(value="endDate") String endDate);
 	public List<MarketMenu> list(@Param(value="status") String status,@Param(value="smid") String smid,
 			@Param(value="searchStr") String searchStr,@Param(value="startDate") String startDate,
 			@Param(value="endDate") String endDate,@Param(value="startRow") int startRow,
@@ -21,5 +19,6 @@ public interface MarketMenuMapper {
 	public MarketMenu getByMid(String mid);
 	public int getListByUidCount(@Param(value="type") int type,@Param(value="searchStr") String searchStr);
     public List<MarketMenu> getListByUid(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="curPage") int curPage,@Param(value="countPage") int countPage);
- 
+    public List<MarketMenu> ListByUid(@Param(value="type") String type,@Param(value="searchStr") String searchStr);
+    public int updateDate(MarketMenu mm);
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Login;
 import com.dasher.model.MarketCommodity;
+import com.dasher.model.Menu;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketCommodityService;
 import com.dasher.util.DateUtil;
@@ -86,6 +87,23 @@ public class MarketCommodityController extends MyController {
 		if(!smid.equals(""))
 		{
 			//手机端获取超市的商品列表
+			//获取用户的下单列表
+			List<MarketCommodity> list=marketCommodityService.listBySmid(smid);
+			if(list.size()>0)
+			{
+
+				model.put("count", list.size());
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("count", 0);
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
 		}
 		else
 		{

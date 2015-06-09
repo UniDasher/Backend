@@ -14,6 +14,7 @@ public class MarketCommodity implements Serializable {
 	private String subscribe;
 	private String createBy;
 	private String createDate;
+	private String typeName;
 	private String updateBy;
 	private String updateDate;
 	private int status;
@@ -24,8 +25,8 @@ public class MarketCommodity implements Serializable {
 
 	public MarketCommodity(int id, String smid, String mcid, String name,
 			float price, String unit, int typeId, String subscribe,
-			String createBy, String createDate, String updateBy,
-			String updateDate, int status) {
+			String createBy, String createDate, String typeName,
+			String updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.smid = smid;
@@ -37,11 +38,11 @@ public class MarketCommodity implements Serializable {
 		this.subscribe = subscribe;
 		this.createBy = createBy;
 		this.createDate = createDate;
+		this.typeName = typeName;
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
 		this.status = status;
 	}
-
 	public int getId() {
 		return id;
 	}
@@ -104,6 +105,14 @@ public class MarketCommodity implements Serializable {
 
 	public void setSmid(String smid) {
 		this.smid = smid;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 	public String getCreateBy() {

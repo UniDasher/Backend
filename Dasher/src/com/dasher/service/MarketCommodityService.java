@@ -15,4 +15,5 @@ public interface MarketCommodityService {
 
 	public int getCountBySmid(String smid);
 	public boolean deleteList(MarketCommodity mc);
+	public List<MarketCommodity> listBySmid(String smid);
 }

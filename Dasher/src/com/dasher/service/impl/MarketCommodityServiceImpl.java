@@ -60,4 +60,9 @@ public class MarketCommodityServiceImpl implements MarketCommodityService {
 		return marketCommodityMapper.getCountBySmid(smid);
 	}
 
+	public List<MarketCommodity> listBySmid(String smid) {
+		// TODO Auto-generated method stub
+		return marketCommodityMapper.listBySmid(smid);
+	}
+
 }
