@@ -20,8 +20,8 @@
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="UserSettle">
-     insert into user_settle(wid,settleType,settlePrice,settleNumberType,settleNumber,settleDesc,createBy,createDate,status)
-     values(#{wid},#{settleType},#{settlePrice},#{settleNumberType},#{settleNumber},#{settleDesc},#{createBy},#{createDate},1)
+     insert into user_settle(wid,oldBalance,type,typeDesc,settlePrice,curBalance,settleNumberType,settleNumber,settleDesc,createBy,createDate,status)
+     values(#{wid},#{oldBalance},#{type},#{typeDesc},#{settlePrice},#{curBalance},#{settleNumberType},#{settleNumber},#{settleDesc},#{createBy},#{createDate},1)
    </insert>
    
    <select id="getCount" resultType="Integer" parameterType="Integer">

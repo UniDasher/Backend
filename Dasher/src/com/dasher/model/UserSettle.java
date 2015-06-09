@@ -7,7 +7,8 @@ public class UserSettle implements Serializable {
 	private int id;
 	private String wid;
 	private float oldBalance;
-	private int settleType;
+	private int type;
+	private String typeDesc;
 	private float settlePrice;
 	private float curBalance;
 	private String settleNumberType;
@@ -24,16 +25,17 @@ public class UserSettle implements Serializable {
 		
 	}
 
-	public UserSettle(int id, String wid, float oldBalance, int settleType,
-			float settlePrice, float curBalance, String settleNumberType,
-			String settleNumber, String settleDesc, String userName,
-			String createBy, String createDate, String updateBy,
-			String updateDate, int status) {
+	public UserSettle(int id, String wid, float oldBalance, int type,
+			String typeDesc, float settlePrice, float curBalance,
+			String settleNumberType, String settleNumber, String settleDesc,
+			String userName, String createBy, String createDate,
+			String updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.wid = wid;
 		this.oldBalance = oldBalance;
-		this.settleType = settleType;
+		this.type = type;
+		this.typeDesc = typeDesc;
 		this.settlePrice = settlePrice;
 		this.curBalance = curBalance;
 		this.settleNumberType = settleNumberType;
@@ -46,8 +48,6 @@ public class UserSettle implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -73,12 +73,20 @@ public class UserSettle implements Serializable {
 		this.oldBalance = oldBalance;
 	}
 
-	public int getSettleType() {
-		return settleType;
+	public int getType() {
+		return type;
 	}
 
-	public void setSettleType(int settleType) {
-		this.settleType = settleType;
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getTypeDesc() {
+		return typeDesc;
+	}
+
+	public void setTypeDesc(String typeDesc) {
+		this.typeDesc = typeDesc;
 	}
 
 	public float getSettlePrice() {
@@ -97,20 +105,20 @@ public class UserSettle implements Serializable {
 		this.curBalance = curBalance;
 	}
 
-	public String getSettleNumber() {
-		return settleNumber;
-	}
-
-	public void setSettleNumber(String settleNumber) {
-		this.settleNumber = settleNumber;
-	}
-
 	public String getSettleNumberType() {
 		return settleNumberType;
 	}
 
 	public void setSettleNumberType(String settleNumberType) {
 		this.settleNumberType = settleNumberType;
+	}
+
+	public String getSettleNumber() {
+		return settleNumber;
+	}
+
+	public void setSettleNumber(String settleNumber) {
+		this.settleNumber = settleNumber;
 	}
 
 	public String getSettleDesc() {
@@ -145,16 +153,13 @@ public class UserSettle implements Serializable {
 		this.createDate = createDate;
 	}
 
-
 	public String getUpdateBy() {
 		return updateBy;
 	}
 
-
 	public void setUpdateBy(String updateBy) {
 		this.updateBy = updateBy;
 	}
-
 
 	public String getUpdateDate() {
 		return updateDate;
@@ -168,10 +173,8 @@ public class UserSettle implements Serializable {
 		return status;
 	}
 
-
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	
+
 }

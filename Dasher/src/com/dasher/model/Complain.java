@@ -11,18 +11,42 @@ public class Complain implements Serializable {
 	private String wid;
 	private int type;
 	private String content;
+	private int comResult;
 	private String comContent;
 	private float returnMoney;
 	private float deductMoney;
-	private String userName;
-	private String mobilePhone;
 	private String createBy;
 	private String createDate;
 	private String updateBy;
 	private String updateDate;
-	private int status;
-	private int menuStatus;
 	
+
+	private String userName;//投诉用户的名字
+	private String userPhone;//投诉用户的电话
+	
+	private String waiterName;//送餐者的名字
+	private String waiterPhone;//送餐者的电话
+	
+	private int status;//投诉的状态
+	private int menuStatus;//订单的状态
+	
+	private float dishsMoney;//订单金额
+	private float carriageMoney;//运费
+	
+	
+	public float getCarriageMoney() {
+		return carriageMoney;
+	}
+	public void setCarriageMoney(float carriageMoney) {
+		this.carriageMoney = carriageMoney;
+	}
+	
+	public float getDishsMoney() {
+		return dishsMoney;
+	}
+	public void setDishsMoney(float dishsMoney) {
+		this.dishsMoney = dishsMoney;
+	}
 	public int getId() {
 		return id;
 	}
@@ -66,6 +90,12 @@ public class Complain implements Serializable {
 	public void setWid(String wid) {
 		this.wid = wid;
 	}
+	public int getComResult() {
+		return comResult;
+	}
+	public void setComResult(int comResult) {
+		this.comResult = comResult;
+	}
 	public String getComContent() {
 		return comContent;
 	}
@@ -90,11 +120,24 @@ public class Complain implements Serializable {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getMobilePhone() {
-		return mobilePhone;
+
+	public String getUserPhone() {
+		return userPhone;
 	}
-	public void setMobilePhone(String mobilePhone) {
-		this.mobilePhone = mobilePhone;
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+	public String getWaiterName() {
+		return waiterName;
+	}
+	public void setWaiterName(String waiterName) {
+		this.waiterName = waiterName;
+	}
+	public String getWaiterPhone() {
+		return waiterPhone;
+	}
+	public void setWaiterPhone(String waiterPhone) {
+		this.waiterPhone = waiterPhone;
 	}
 	public int getMenuStatus() {
 		return menuStatus;
@@ -138,30 +181,66 @@ public class Complain implements Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public Complain(int id, String comId, String uid, String mid, String wid,
-			String content, String comContent, float returnMoney,
-			float deductMoney, String userName, String mobilePhone,
-			String createBy, String createDate, String updateBy,
-			String updateDate, int status, int menuStatus) {
+			int type, String content, int comResult, String comContent,
+			float returnMoney, float deductMoney, String createBy,
+			String createDate, String updateBy, String updateDate,
+			String userName, String userPhone, String waiterName,
+			String waiterPhone, int status, int menuStatus) {
 		super();
 		this.id = id;
 		this.comId = comId;
 		this.uid = uid;
 		this.mid = mid;
 		this.wid = wid;
+		this.type = type;
 		this.content = content;
+		this.comResult = comResult;
 		this.comContent = comContent;
 		this.returnMoney = returnMoney;
 		this.deductMoney = deductMoney;
-		this.userName = userName;
-		this.mobilePhone = mobilePhone;
 		this.createBy = createBy;
 		this.createDate = createDate;
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
+		this.userName = userName;
+		this.userPhone = userPhone;
+		this.waiterName = waiterName;
+		this.waiterPhone = waiterPhone;
 		this.status = status;
 		this.menuStatus = menuStatus;
 	}
-	
+	public Complain(int id, String comId, String uid, String mid, String wid,
+			int type, String content, int comResult, String comContent,
+			float returnMoney, float deductMoney, String createBy,
+			String createDate, String updateBy, String updateDate,
+			String userName, String userPhone, String waiterName,
+			String waiterPhone, int status, int menuStatus,
+			float carriageMoney, float dishsMoney) {
+		super();
+		this.id = id;
+		this.comId = comId;
+		this.uid = uid;
+		this.mid = mid;
+		this.wid = wid;
+		this.type = type;
+		this.content = content;
+		this.comResult = comResult;
+		this.comContent = comContent;
+		this.returnMoney = returnMoney;
+		this.deductMoney = deductMoney;
+		this.createBy = createBy;
+		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
+		this.userName = userName;
+		this.userPhone = userPhone;
+		this.waiterName = waiterName;
+		this.waiterPhone = waiterPhone;
+		this.status = status;
+		this.menuStatus = menuStatus;
+		this.carriageMoney = carriageMoney;
+		this.dishsMoney = dishsMoney;
+	}
 }

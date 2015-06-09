@@ -134,5 +134,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.balanceList(startRow, pageSize);
 	}
 
+	public boolean updateBalance(String uid, float curUserBalance) {
+		// TODO Auto-generated method stub
+		return userMapper.updateBalance(uid,curUserBalance)>0? true:false;
+	}
+
 
 }

@@ -112,5 +112,10 @@
      limit #{startRow},#{pageSize}
    </select>
    
+   <update id="updateBalance" parameterType="String">
+     update user_info 
+     set balance=#{curUserBalance}
+     where uid=#{uid}
+   </update>
    
 </mapper>

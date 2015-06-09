@@ -10,6 +10,7 @@
       <result property="wid" column="wid"/>
       <result property="mid" column="mid"/>
       <result property="type" column="type"/>
+      <result property="comResult" column="comResult"/>
       <result property="comContent" column="comContent"/>
       <result property="returnMoney" column="returnMoney"/>
       <result property="deductMoney" column="deductMoney"/>
@@ -21,9 +22,41 @@
    </resultMap>
    
    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Complain">
-     insert into complain(comId,uid,mid,type,content,createBy,createDate,status)
-     values(#{comId},#{uid},#{mid},#{type},#{content},#{createBy},#{createDate},1)
+     insert into complain(comId,uid,mid,type,wid,content,createBy,createDate,status)
+     values(#{comId},#{uid},#{mid},#{type},#{wid},#{content},#{createBy},#{createDate},1)
    </insert>
+   
+   <select id="userComList" resultType="Complain">
+     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone
+     <!-- ,m.status as menuStatus -->
+	 from complain c
+	 join user_info u
+	 on c.uid=u.uid
+	 <!--join menu m
+	 on c.mid=m.mid  -->
+	 where c.status=#{status}
+	 order by c.createDate desc
+   </select>
+   
+   <select id="getByComId" parameterType="String" resultType="Complain">
+     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone,
+     m.status as menuStatus,m.dishsMoney,m.carriageMoney,
+     CONCAT(w.firstName,w.lastName) as waiterName,w.mobilePhone as waiterPhone
+	 from complain c
+	 left join user_info u
+	 on c.uid=u.uid
+	 left join user_info w
+	 on c.wid=w.uid
+	 <if test="type==1">
+	 	left join menu m
+	 	on c.mid=m.mid 
+	 </if>
+	 <if test="type==2">
+	 	left join market_menu m
+	 	on c.mid=m.mid 
+	 </if>
+	 where comId=#{comId}
+   </select>
    
    <select id="getCount" resultType="Integer" parameterType="Integer">
      select count(*)
@@ -32,31 +65,36 @@
    </select>
    
    <select id="list" resultType="Complain">
-     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone,m.status as menuStatus
-	 from complain c
-	 join user_info u
-	 on c.uid=u.uid
-	 join menu m
-	 on c.mid=m.mid
-	 where c.status=#{status}
-	 order by c.createDate desc
-	 <!-- limit #{startRow},#{pageSize} -->
-   </select>
-   
-   <select id="getByComId" parameterType="String" resultType="Complain">
-     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone,m.status as menuStatus
+     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone
+     <!--,m.status as menuStatus  -->
 	 from complain c
 	 left join user_info u
 	 on c.uid=u.uid
-	 left join menu m
-	 on c.mid=m.mid 
-	 where comId=#{comId}
+	 <!-- left join menu m
+	 on c.mid=m.mid -->
+	 where c.status=#{status}
+	 <if test="searchStr!=''">
+		and c.mid like CONCAT(CONCAT('%',#{searchStr}),'%')
+      </if>
+	 order by c.createDate desc
+	 <if test="status==2">
+	 	limit #{startRow},#{pageSize}
+	 </if>
    </select>
    
    <update id="handle" parameterType="Complain">
      update complain 
-     set wid=#{wid},comContent=#{comContent},returnMoney=#{returnMoney},deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
+     set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
      where comId=#{comId} 
    </update>
+   
+   <update id="handleParse">
+   	<!-- 修改投诉信息 -->
+     update complain 
+     set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},
+     deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
+     where comId=#{comId};
+   </update>
+   
   
 </mapper>

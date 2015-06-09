@@ -22,4 +22,5 @@ public interface UserMapper {
 	public int updatePhone(User u);
 	public int updateEmail(User u);
 	public List<User> balanceList(@Param(value="startRow")int startRow,@Param(value="pageSize")int pageSize);
+	public int updateBalance(@Param(value="uid") String uid,@Param(value="curUserBalance") float curUserBalance);
 }

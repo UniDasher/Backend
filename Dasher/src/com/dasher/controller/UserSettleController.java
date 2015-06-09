@@ -105,7 +105,7 @@ public class UserSettleController extends MyController {
 			}
             UserSettle us=new UserSettle();
             us.setWid(wid);
-            us.setSettleType(Integer.parseInt(settleType));
+            us.setSettleDesc(settleType);
             us.setSettlePrice(Float.parseFloat(settlePrice));
             us.setSettleNumberType(settleNumberType);
             us.setSettleNumber(settleNumber);
