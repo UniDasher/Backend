@@ -5,10 +5,13 @@ import java.io.Serializable;
 public class ServerSettle implements Serializable {
 
 	private int id;
+	private String uid;
 	private float oldBalance;
-	private int settleType;
+	private int type;
+	private String typeDesc;
 	private float settlePrice;
 	private float curBalance;
+	private String settleNumberType;
 	private String settleNumber;
 	private String settleDesc;
 	private String createBy;
@@ -18,20 +21,52 @@ public class ServerSettle implements Serializable {
 	
 	}
 
-	public ServerSettle(int id, float oldBalance, int settleType,
-			float settlePrice, float curBalance, String settleNumber,
-			String settleDesc, String createBy, String createDate) {
+	
+
+	public ServerSettle(int id, String uid, float oldBalance, int type,
+			String typeDesc, float settlePrice, float curBalance,
+			String settleNumberType, String settleNumber, String settleDesc,
+			String createBy, String createDate) {
 		super();
 		this.id = id;
+		this.uid = uid;
 		this.oldBalance = oldBalance;
-		this.settleType = settleType;
+		this.type = type;
+		this.typeDesc = typeDesc;
 		this.settlePrice = settlePrice;
 		this.curBalance = curBalance;
+		this.settleNumberType = settleNumberType;
 		this.settleNumber = settleNumber;
 		this.settleDesc = settleDesc;
 		this.createBy = createBy;
 		this.createDate = createDate;
 	}
+
+
+
+	public int getType() {
+		return type;
+	}
+
+
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+
+
+	public String getTypeDesc() {
+		return typeDesc;
+	}
+
+
+
+	public void setTypeDesc(String typeDesc) {
+		this.typeDesc = typeDesc;
+	}
+
+
 
 	public int getId() {
 		return id;
@@ -39,6 +74,14 @@ public class ServerSettle implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public float getOldBalance() {
@@ -49,13 +92,7 @@ public class ServerSettle implements Serializable {
 		this.oldBalance = oldBalance;
 	}
 
-	public int getSettleType() {
-		return settleType;
-	}
-
-	public void setSettleType(int settleType) {
-		this.settleType = settleType;
-	}
+	
 
 	public float getSettlePrice() {
 		return settlePrice;
@@ -71,6 +108,14 @@ public class ServerSettle implements Serializable {
 
 	public void setCurBalance(float curBalance) {
 		this.curBalance = curBalance;
+	}
+
+	public String getSettleNumberType() {
+		return settleNumberType;
+	}
+
+	public void setSettleNumberType(String settleNumberType) {
+		this.settleNumberType = settleNumberType;
 	}
 
 	public String getSettleNumber() {
@@ -104,6 +149,6 @@ public class ServerSettle implements Serializable {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	
+
 	
 }

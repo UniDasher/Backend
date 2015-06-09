@@ -27,11 +27,13 @@
    </insert>
    
    <select id="userComList" resultType="Complain">
-     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone
-     <!-- ,m.status as menuStatus -->
+     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone,
+     CONCAT(w.firstName,w.lastName) as waiterName,w.mobilePhone as waiterPhone
 	 from complain c
 	 join user_info u
-	 on c.uid=u.uid
+	 on c.uid=u.uid 
+	 left join user_info w
+	 on c.wid=w.uid
 	 <!--join menu m
 	 on c.mid=m.mid  -->
 	 where c.status=#{status}
@@ -55,7 +57,7 @@
 	 	left join market_menu m
 	 	on c.mid=m.mid 
 	 </if>
-	 where comId=#{comId}
+	 where c.comId=#{comId}
    </select>
    
    <select id="getCount" resultType="Integer" parameterType="Integer">
@@ -65,16 +67,18 @@
    </select>
    
    <select id="list" resultType="Complain">
-     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone
-     <!--,m.status as menuStatus  -->
+     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone,
+     CONCAT(w.firstName,w.lastName) as waiterName,w.mobilePhone as waiterPhone
 	 from complain c
 	 left join user_info u
-	 on c.uid=u.uid
+	 on c.uid=u.uid 
+	 left join user_info w
+	 on c.wid=w.uid
 	 <!-- left join menu m
 	 on c.mid=m.mid -->
 	 where c.status=#{status}
 	 <if test="searchStr!=''">
-		and c.mid like CONCAT(CONCAT('%',#{searchStr}),'%')
+		and c.comId like CONCAT(CONCAT('%',#{searchStr}),'%')
       </if>
 	 order by c.createDate desc
 	 <if test="status==2">
@@ -87,14 +91,4 @@
      set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
      where comId=#{comId} 
    </update>
-   
-   <update id="handleParse">
-   	<!-- 修改投诉信息 -->
-     update complain 
-     set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},
-     deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
-     where comId=#{comId}
-   </update>
-   
-  
 </mapper>

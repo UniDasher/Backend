@@ -17,7 +17,6 @@ public class ServerSettleServiceImpl implements ServerSettleService {
 	}
 
 	public boolean add(ServerSettle ss) {
-		// TODO Auto-generated method stub
 		return serverSettleMapper.add(ss)>0? true:false;
 	}
 

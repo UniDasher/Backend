@@ -22,12 +22,15 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.dasher.model.MarketCommodity;
 import com.dasher.model.ShopDish;
+import com.dasher.model.User;
 
 public class FileUploadUtil {
 
@@ -252,5 +255,83 @@ public class FileUploadUtil {
 		}
 		return list;
 	}
-
+	
+	public static void createExcel(HttpServletRequest request,String fileName,List<User> userList) throws IOException{
+		//将用户的列表信息保存为文件
+        String savePath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload/settle/user/"+fileName);
+		File file = new File(savePath);
+		//判断上传文件的保存目录是否存在
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		//创建一个文件输出流
+		FileOutputStream outputStream = new FileOutputStream(file);
+        // 创建一个workbook 对应一个excel应用文件  
+        XSSFWorkbook workBook = new XSSFWorkbook(); 
+        // 在workbook中添加一个sheet,对应Excel文件中的sheet  
+        XSSFSheet sheet = workBook.createSheet("用户结算列表"); 
+        ExcelCreateUtil exportUtil = new ExcelCreateUtil(workBook, sheet);  
+        XSSFCellStyle headStyle = exportUtil.getHeadStyle();  
+        XSSFCellStyle bodyStyle = exportUtil.getBodyStyle();  
+        // 构建表头  
+        XSSFRow headRow = sheet.createRow(0);
+        XSSFCell cell = null;  
+        String[] titles={"用户名","手机号","账户余额","结算账号类型","结算账号"};
+        for (int i = 0; i < titles.length; i++)  
+        {  
+            cell = headRow.createCell(i);  
+            cell.setCellStyle(headStyle);  
+            cell.setCellValue(titles[i]);  
+        }  
+     // 构建表体数据  
+        if (userList != null && userList.size() > 0)  
+        {  
+            for (int j = 0; j < userList.size(); j++)  
+            {  
+                XSSFRow bodyRow = sheet.createRow(j + 1);  
+                User u = userList.get(j);  
+  
+                cell = bodyRow.createCell(0);  
+                cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(u.getFirstName()+u.getLastName());  
+  
+                cell = bodyRow.createCell(1);  
+                cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(u.getMobilePhone());  
+  
+                cell = bodyRow.createCell(2);  
+                cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(u.getBalance());  
+                
+                cell = bodyRow.createCell(3);  
+                cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(u.getBankType()); 
+                
+                cell = bodyRow.createCell(4);  
+                cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(u.getBankAccount()); 
+            }  
+        }  
+        try  
+        {  
+            workBook.write(outputStream);  
+            outputStream.flush();  
+            outputStream.close();  
+        }  
+        catch (IOException e)  
+        {  
+            e.printStackTrace();  
+        }  
+        finally  
+        {  
+            try  
+            {  
+                outputStream.close();  
+            }  
+            catch (IOException e)  
+            {  
+                e.printStackTrace();  
+            }  
+        } 
+	}
 }

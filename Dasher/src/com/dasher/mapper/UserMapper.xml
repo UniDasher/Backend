@@ -106,10 +106,21 @@
    </update>
    
    <select id="balanceList" resultType="User">
-     select uid,account,firstName,lastName,logo,balance,mobilePhone,email,address,longitude,latitude,goodEvaluate,badEvaluate,status 
+     select * 
      from user_info
-     where balance>0
+     where balance>0 
+     <if test="searchStr!=''">
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	 </if>
      limit #{startRow},#{pageSize}
+   </select>
+   <select id="balanceListCount" resultType="Integer">
+     select count(*) 
+     from user_info
+     where balance>0 
+     <if test="searchStr!=''">
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	 </if>
    </select>
    
    <update id="updateBalance" parameterType="String">
@@ -117,5 +128,13 @@
      set balance=#{curUserBalance}
      where uid=#{uid}
    </update>
+   <select id="settleList" resultType="User">
+     select * 
+     from user_info
+     where balance>0 
+     <if test="searchStr!=''">
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	 </if>
+   </select>
    
 </mapper>

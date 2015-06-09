@@ -116,10 +116,7 @@ public class ComplainServiceImpl implements ComplainService {
 				userSettleService.add(us);
 				
 			}
-			boolean result=complainMapper.handleParse(c.getComId(),c.getComResult(),
-					c.getComContent(),c.getReturnMoney(),c.getDeductMoney(),
-					c.getUpdateBy(),c.getUpdateDate(),com.getUid(),userBalance,curUserBalance,
-					com.getWid(),waiterBalance,curWaiterBalance)>0? true:false;
+			boolean result=complainMapper.handle(c)>0? true:false;
 			transactionManager.commit(ts);
 			return result;
 		}else{

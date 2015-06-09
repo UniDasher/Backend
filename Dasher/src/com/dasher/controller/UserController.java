@@ -936,8 +936,10 @@ public class UserController extends MyController {
 				}
 				else
 				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
+					model.put("count", 0);
+					model.put("list", null);
+					resultCode=0;
+					resultDesc=ShowMsg.findSuc;
 				}
 			}
 			else
@@ -968,6 +970,7 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
+		String searchStr=getString(request, "searchStr");
 		String mycurPage=getString(request, "curPage");
 		String mypageSize=getString(request, "countPage");
 		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
@@ -975,17 +978,20 @@ public class UserController extends MyController {
 			int curPage=Integer.parseInt(mycurPage);
 			int pageSize=Integer.parseInt(mypageSize);
 			int startRow=(curPage-1)*pageSize;
-			List<User> list=userService.balanceList(startRow, pageSize);
-			if(list.size()>0)
+			int count =userService.balanceListCount(searchStr);
+			if(count>0)
 			{
-				model.put("count", list.size());
+				model.put("count", count);
+				List<User> list=userService.balanceList(searchStr,startRow, pageSize);
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 			else
 			{
-				resultDesc=ShowMsg.findFail;
+				model.put("count", 0);
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 		}

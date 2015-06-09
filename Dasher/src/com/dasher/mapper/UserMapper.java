@@ -21,6 +21,8 @@ public interface UserMapper {
 	public int updateUserName(User u);
 	public int updatePhone(User u);
 	public int updateEmail(User u);
-	public List<User> balanceList(@Param(value="startRow")int startRow,@Param(value="pageSize")int pageSize);
+	public List<User> balanceList(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public int updateBalance(@Param(value="uid") String uid,@Param(value="curUserBalance") float curUserBalance);
+	public int balanceListCount(@Param(value="searchStr") String searchStr);
+	public List<User> settleList(@Param(value="searchStr") String searchStr);
 }

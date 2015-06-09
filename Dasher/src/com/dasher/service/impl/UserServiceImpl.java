@@ -129,14 +129,23 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateEmail(u)>0? true:false;
 	}
 
-	public List<User> balanceList(int startRow, int pageSize) {
+	public List<User> balanceList(String searchStr,int startRow, int pageSize) {
 		// TODO Auto-generated method stub
-		return userMapper.balanceList(startRow, pageSize);
+		return userMapper.balanceList(searchStr,startRow, pageSize);
 	}
 
 	public boolean updateBalance(String uid, float curUserBalance) {
 		// TODO Auto-generated method stub
 		return userMapper.updateBalance(uid,curUserBalance)>0? true:false;
+	}
+
+	public int balanceListCount(String searchStr) {
+		// TODO Auto-generated method stub
+		return userMapper.balanceListCount(searchStr);
+	}
+
+	public List<User> settleList(String searchStr) {
+		return userMapper.settleList(searchStr);
 	}
 
 

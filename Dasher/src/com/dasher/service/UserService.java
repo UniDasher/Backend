@@ -21,7 +21,9 @@ public interface UserService {
 	public boolean updateUserName(User u);
 	public boolean updatePhone(User u);
 	public boolean updateEmail(User u);
-	public List<User> balanceList(int startRow,int pageSize);
+	public List<User> balanceList(String searchStr,int startRow,int pageSize);
 	public boolean updateBalance(String uid, float curUserBalance);
+	public int balanceListCount(String searchStr);
+	public List<User> settleList(String searchStr);
 	
 }
