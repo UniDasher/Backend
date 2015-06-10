@@ -136,4 +136,6 @@ public class ShowMsg {
 	public static final String settleNumberNull="订单号或银行账号为空";
 	public static final String settlePriceNull="收支金额为空";
 	public static final String settlePriceErr="收支金额格式错误";
+	public static final String phoneCodeErr="手机验证码错误！";
+	public static final String phoneRepeat="该手机号已被绑定！";
 }

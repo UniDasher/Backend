@@ -13,4 +13,5 @@ public interface UserSettleMapper {
 	public int getCount(@Param(value="searchStr") String searchStr);
 	public List<UserSettle> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<UserSettle> getListByWid(String wid);
+	
 }

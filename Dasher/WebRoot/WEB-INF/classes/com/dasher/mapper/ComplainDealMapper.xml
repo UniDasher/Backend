@@ -4,6 +4,24 @@
 <mapper namespace="com.dasher.mapper.ComplainDealMapper">
    <resultMap type="ComplainDeal" id="complainDealMap">
      <result property="id" column="id"/>
-    
+     <result property="mobilePhone" column="mobilePhone"/>
+     <result property="phoneCode" column="phoneCode"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateDate" column="updateDate"/>
    </resultMap>
+   
+   <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="ComplainDeal">
+     insert into phone_code(mobilePhone,phoneCode,createDate)
+     values(#{mobilePhone},#{phoneCode},#{createDate})
+   </insert>
+   
+   <update id="update" parameterType="ComplainDeal">
+     update phone_code 
+     set phoneCode=#{phoneCode},updateDate=#{updateDate}
+     where mobilePhone=#{mobilePhone}
+   </update>
+   
+   <select id="getByTel" parameterType="String" resultType="ComplainDeal">
+     select * from phone_code where mobilePhone=#{mobilePhone}
+   </select>
 </mapper>

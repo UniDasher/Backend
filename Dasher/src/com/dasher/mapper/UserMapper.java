@@ -23,6 +23,7 @@ public interface UserMapper {
 	public int updateEmail(User u);
 	public List<User> balanceList(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public int updateBalance(@Param(value="uid") String uid,@Param(value="curUserBalance") float curUserBalance);
+	public int forgetPwd(User u);
 	public int balanceListCount(@Param(value="searchStr") String searchStr);
 	public List<User> settleList(@Param(value="searchStr") String searchStr);
 }

@@ -106,14 +106,27 @@
    </update>
    
    <select id="balanceList" resultType="User">
-     select * 
+     select *
      from user_info
-     where balance>0 
+     where balance>0
      <if test="searchStr!=''">
 	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
      limit #{startRow},#{pageSize}
    </select>
+   
+   <update id="updateBalance" parameterType="String">
+     update user_info 
+     set balance=#{curUserBalance}
+     where uid=#{uid}
+   </update>
+   
+   <update id="forgetPwd" parameterType="User">
+     update user_info 
+     set password=#{password}
+     where mobilePhone=#{mobilePhone}
+   </update>
+   
    <select id="balanceListCount" resultType="Integer">
      select count(*) 
      from user_info
@@ -123,12 +136,7 @@
 	 </if>
    </select>
    
-   <update id="updateBalance" parameterType="String">
-     update user_info 
-     set balance=#{curUserBalance}
-     where uid=#{uid}
-   </update>
-   <select id="settleList" resultType="User">
+    <select id="settleList" resultType="User">
      select * 
      from user_info
      where balance>0 

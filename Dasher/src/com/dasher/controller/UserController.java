@@ -20,8 +20,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.model.ComplainDeal;
 import com.dasher.model.User;
 import com.dasher.model.UserSettle;
+import com.dasher.service.ComplainDealService;
+import com.dasher.service.ComplainService;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
@@ -37,6 +40,8 @@ public class UserController extends MyController {
 	private UserService userService;
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private ComplainDealService complainDealService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -98,7 +103,16 @@ public class UserController extends MyController {
 			else
 			{
 				//判断验证码是否正确
-				
+				ComplainDeal cd=complainDealService.getByTel(mobilePhone);
+				if(!cd.getPhoneCode().equals(phoneCode))
+				{
+					resultCode=2;
+					resultDesc=ShowMsg.phoneCodeErr;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
+			
 				User user=userService.getUserByTel(mobilePhone);
 				if(user==null)
 				{
@@ -416,12 +430,46 @@ public class UserController extends MyController {
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;
-			}else{
+			}
+			else
+			{
 				//验证码判断
-				
+				ComplainDeal cd=complainDealService.getByTel(mobilePhone);
+				if(!cd.getPhoneCode().equals(phoneCode))
+				{
+					resultCode=2;
+					resultDesc=ShowMsg.phoneCodeErr;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
 				//判断手机号是否存在
+				User u=userService.getUserByTel(mobilePhone);
+				if(u==null)
+				{
+					User user=new User();
+					user.setMobilePhone(mobilePhone);
+					user.setUid(uid);
+					result=userService.updatePhone(user);
+					
+					if(result==true)
+					{
+						resultCode=0;
+						resultDesc=ShowMsg.updateSuc;
+					}
+					else
+					{
+						resultCode=1;
+						resultDesc=ShowMsg.updateFail;
+					}
+					
+				}
+				else
+				{
+					resultDesc=ShowMsg.phoneRepeat;
+					resultCode=2;
+				}
 				
-				//修改手机号
 			}
 		}
 		model.put("resultCode", resultCode);	
@@ -769,7 +817,36 @@ public class UserController extends MyController {
 		else
 		{
 			//判断手机验证码是否正确
+			ComplainDeal cd=complainDealService.getByTel(mobilePhone);
+			if(!cd.getPhoneCode().equals(phoneCode))
+			{
+				resultCode=2;
+				resultDesc=ShowMsg.phoneCodeErr;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);
+				return model;
+			}
+			
 			//修改密码
+			User u=new User();
+			u.setMobilePhone(mobilePhone);
+			try {
+				u.setPassword(MyMD5Util.getEncryptedPwd(newPassword));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			result=userService.forgetPwd(u);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -970,9 +1047,9 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		String searchStr=getString(request, "searchStr");
 		String mycurPage=getString(request, "curPage");
 		String mypageSize=getString(request, "countPage");
+		String searchStr=getString(request, "searchStr");
 		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 		{
 			int curPage=Integer.parseInt(mycurPage);

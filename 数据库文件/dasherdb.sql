@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50530
 File Encoding         : 65001
 
-Date: 2015-06-05 18:04:35
+Date: 2015-06-10 09:43:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,25 +41,8 @@ CREATE TABLE `complain` (
 -- Records of complain
 -- ----------------------------
 INSERT INTO `complain` VALUES ('1', '20150603170925677', '20150508152851965', '20150514171045029', null, '服务态度差', '通过', '5', '5', '20150521133015609', '2015-06-03 17:09:25', '1', '2015-06-03 17:52:02', '2');
-INSERT INTO `complain` VALUES ('2', '20150603171325248', '20150428145032', '20150514163531641', '20150505131348', '不合口味', '通过', '5', '5', '20150521133015609', '2015-06-03 17:13:25', '1', '2015-06-03 17:59:37', '2');
+INSERT INTO `complain` VALUES ('2', '20150603171325248', '20150508152851965', '20150514163531641', '20150505131348', '不合口味', '通过', '5', '5', '20150521133015609', '2015-06-03 17:13:25', '1', '2015-06-03 17:59:37', '2');
 INSERT INTO `complain` VALUES ('3', '20150603171420768', '20150521133015609', '20150514165305438', null, '不合口味', null, null, null, '20150521133015609', '2015-06-03 17:14:20', null, null, '1');
-
--- ----------------------------
--- Table structure for `complain_deal`
--- ----------------------------
-DROP TABLE IF EXISTS `complain_deal`;
-CREATE TABLE `complain_deal` (
-  `comId` varchar(255) NOT NULL DEFAULT '',
-  `comResult` int(11) DEFAULT NULL,
-  `comContent` varchar(255) DEFAULT NULL,
-  `returnMoney` float DEFAULT '0',
-  `deductMoney` float DEFAULT '0',
-  PRIMARY KEY (`comId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of complain_deal
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for `login`
@@ -224,6 +207,7 @@ INSERT INTO `market_menu` VALUES ('3', '20150529161905879', '20150525145921720',
 DROP TABLE IF EXISTS `market_menu_record`;
 CREATE TABLE `market_menu_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mcid` varchar(255) DEFAULT NULL,
   `mid` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `price` float DEFAULT NULL,
@@ -238,10 +222,10 @@ CREATE TABLE `market_menu_record` (
 -- ----------------------------
 -- Records of market_menu_record
 -- ----------------------------
-INSERT INTO `market_menu_record` VALUES ('1', '20150529161657329', '橙汁', '10', '杯', '3', '', '20150428144843', '2015-06-02 11:45:03');
-INSERT INTO `market_menu_record` VALUES ('2', '20150529161657329', '布丁奶茶', '15', '杯', '3', '', '20150428144843', '2015-06-02 11:45:23');
-INSERT INTO `market_menu_record` VALUES ('3', '20150529161657329', '可乐', '7', '杯', '3', '', '20150428144843', '2015-06-02 11:45:42');
-INSERT INTO `market_menu_record` VALUES ('4', '20150529161657329', '可乐', '7.56', '杯', '3', '', '20150428144843', '2015-06-02 11:46:09');
+INSERT INTO `market_menu_record` VALUES ('1', null, '20150529161657329', '橙汁', '10', '杯', '3', '', '20150428144843', '2015-06-02 11:45:03');
+INSERT INTO `market_menu_record` VALUES ('2', null, '20150529161657329', '布丁奶茶', '15', '杯', '3', '', '20150428144843', '2015-06-02 11:45:23');
+INSERT INTO `market_menu_record` VALUES ('3', null, '20150529161657329', '可乐', '7', '杯', '3', '', '20150428144843', '2015-06-02 11:45:42');
+INSERT INTO `market_menu_record` VALUES ('4', null, '20150529161657329', '可乐', '7.56', '杯', '3', '', '20150428144843', '2015-06-02 11:46:09');
 
 -- ----------------------------
 -- Table structure for `menu`
@@ -340,6 +324,24 @@ INSERT INTO `menu_evaluate` VALUES ('4', '20150508152851965', '20150514165722139
 INSERT INTO `menu_evaluate` VALUES ('5', '20150506155823', '20150514171045029', '20150508152851965', '20150428145032', '5', '3', '', '20150428144843', '2015-05-21 09:47:44', null, null);
 
 -- ----------------------------
+-- Table structure for `phone_code`
+-- ----------------------------
+DROP TABLE IF EXISTS `phone_code`;
+CREATE TABLE `phone_code` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mobilePhone` varchar(255) DEFAULT NULL,
+  `phoneCode` varchar(255) DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `updateDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of phone_code
+-- ----------------------------
+INSERT INTO `phone_code` VALUES ('1', '13771904649', 'TCDP', '2015-06-09 15:42:44', null);
+
+-- ----------------------------
 -- Table structure for `server_settle`
 -- ----------------------------
 DROP TABLE IF EXISTS `server_settle`;
@@ -421,10 +423,10 @@ INSERT INTO `shop_dish_type` VALUES ('6', '江浙', '1', '9', '1', '2015-05-07 1
 INSERT INTO `shop_dish_type` VALUES ('7', '烧烤', '1', '7', '2', '2015-05-08 11:22:20', null, null, '1');
 INSERT INTO `shop_dish_type` VALUES ('8', '烧烤2', '1', '5', '6', '2015-05-08 11:33:40', null, null, '1');
 INSERT INTO `shop_dish_type` VALUES ('9', '烧烤3', '1', '11', '1', '2015-05-08 11:34:43', null, null, '1');
-INSERT INTO `shop_dish_type` VALUES ('10', '热菜', '1', '8', '6', '2015-05-08 11:35:34', null, null, '1');
+INSERT INTO `shop_dish_type` VALUES ('10', '热菜', '2', '8', '6', '2015-05-08 11:35:34', null, null, '1');
 INSERT INTO `shop_dish_type` VALUES ('11', '冷菜', '1', '10', '6', '2015-05-08 11:45:44', '2', '2015-05-08 16:25:45', '1');
 INSERT INTO `shop_dish_type` VALUES ('12', '饮料', '2', '12', '1', '2015-05-28 14:58:18', null, null, '2');
-INSERT INTO `shop_dish_type` VALUES ('13', '果汁', '1', '13', '6', '2015-05-28 15:16:14', '6', '2015-05-28 15:49:26', '2');
+INSERT INTO `shop_dish_type` VALUES ('13', '果汁', '2', '13', '6', '2015-05-28 15:16:14', '6', '2015-05-28 15:49:26', '2');
 
 -- ----------------------------
 -- Table structure for `shop_info`
@@ -525,12 +527,12 @@ CREATE TABLE `user_info` (
 -- Records of user_info
 -- ----------------------------
 INSERT INTO `user_info` VALUES ('1', '20150428144843', 'sdf', '23sd2', 'liuqing', '946E554A715E2DCECA744EEEC54759AAAF76795700F581451BF81BC8', '53100d82c556461eb0b3afc1761a5c59', '1377649', null, '0', '1355523', '4821362', '苏州', '112', '23', null, null, null, null, null, '1');
-INSERT INTO `user_info` VALUES ('2', '20150428145032', 'lsd', '4ds', 'liu', '946E554A715E2DCECA744EEEC54759AAAF76795700F581451BF81BC8', '89bbd7fc108549ec95a198d67239f2cf', '137719', 'logo', '0', '13771904', '133482', '平江区', '111', '111', null, null, null, null, null, '2');
-INSERT INTO `user_info` VALUES ('3', '20150429152537', 'v', 'cxv', 'liu3', '1CE0E635F5B44C7810C1489FFA9141A8BF40359F2CCF47ADDCF5096C', '47becd2910fa474dae0847c58360df1d', '149', 'logo', '0', '1355523', '1334821362', '苏州', '112', '23', null, null, null, null, null, '2');
+INSERT INTO `user_info` VALUES ('2', '20150428145032', 'lsd', '4ds', 'liu', '946E554A715E2DCECA744EEEC54759AAAF76795700F581451BF81BC8', '89bbd7fc108549ec95a198d67239f2cf', '137719424', 'logo', '0', '13771904', '133482', '平江区', '111', '111', null, null, null, null, null, '2');
+INSERT INTO `user_info` VALUES ('3', '20150429152537', 'v', 'cxv', 'liu3', '1CE0E635F5B44C7810C1489FFA9141A8BF40359F2CCF47ADDCF5096C', '47becd2910fa474dae0847c58360df1d', '149', 'logo', '0', '135552374', '1334821362', '苏州', '112', '23', null, null, null, null, null, '2');
 INSERT INTO `user_info` VALUES ('4', '20150505131241', 'et4', 'we', 'me', '7223D0248312822C9E9EF9500EDDD795AB8A20C989F74B1483ECC8DF', 'c2b97345aff64dffb82c650fd62473fb', '13771904649', 'logo', '0', '13711911043', '13362@163.com', '江苏', '112', '23', null, null, null, null, null, '1');
 INSERT INTO `user_info` VALUES ('5', '20150505131254', '34', 'sd', 'mee', '8B4CD0A74C67BE890A4000D73B3FE998A9B189A65DD5110B43EB0CD7', '7c10106288ee448293530fcb33dd081f', '1649', 'logo', '0', '13711911049', '13362@163.com', '江苏', '112', '23', null, null, null, null, null, '2');
 INSERT INTO `user_info` VALUES ('6', '20150505131348', 'mg', 'ds', 'tt', 'CE1D2F1AB71DC75032111AAD9E1790AB178A41CBB9033BAEADEAD3A2', '252d963133ed478b910808040abccec5', '137719', 'logo', '0', '13711911045', '13362@163.com', '徐州', '112', '23', null, null, null, null, null, '2');
-INSERT INTO `user_info` VALUES ('7', '20150508152851965', 'liu', 'qing', 'sa', '2C2571F07529A51BBDEC3540B30B76916A2DEE411137858950A7D803', '1db013542f3b4825914e506424369c86', '13774504649', 'logo', '0', '137719049', '121362@qq.com', '苏州', '112', '23', null, null, null, null, null, '1');
+INSERT INTO `user_info` VALUES ('7', '20150508152851965', 'liu', 'qing', 'sa', '2C2571F07529A51BBDEC3540B30B76916A2DEE411137858950A7D803', '1db013542f3b4825914e506424369c86', '13774504212', 'logo', '0', '137719049', '121362@qq.com', '苏州', '112', '23', null, null, null, null, null, '1');
 INSERT INTO `user_info` VALUES ('8', '20150521133015609', 'liu', 'qing', '', '68EFBE717A9BDB0EC56CE516DA53B1FE49AC98AB2642907F65E1883C', '6c8f43dc6c2a446da03550cada4659ef', '13771904612', 'logo', '0', '13711911040', '133482@qq.com', '苏州', '112', '23', null, null, null, '工商', '12321342432', '1');
 
 -- ----------------------------

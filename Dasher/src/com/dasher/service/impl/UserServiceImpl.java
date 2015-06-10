@@ -139,6 +139,11 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateBalance(uid,curUserBalance)>0? true:false;
 	}
 
+	public boolean forgetPwd(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.forgetPwd(u)>0? true:false;
+	}
+
 	public int balanceListCount(String searchStr) {
 		// TODO Auto-generated method stub
 		return userMapper.balanceListCount(searchStr);
@@ -147,6 +152,4 @@ public class UserServiceImpl implements UserService {
 	public List<User> settleList(String searchStr) {
 		return userMapper.settleList(searchStr);
 	}
-
-
 }

@@ -22,4 +22,14 @@ public class ComplainDealServiceImpl implements ComplainDealService {
 		return complainDealMapper.add(cd)>0? true:false;
 	}
 
+	public ComplainDeal getByTel(String mobilePhone) {
+		// TODO Auto-generated method stub
+		return complainDealMapper.getByTel(mobilePhone);
+	}
+
+	public boolean update(ComplainDeal cd) {
+		// TODO Auto-generated method stub
+		return complainDealMapper.update(cd)>0? true:false;
+	}
+
 }
