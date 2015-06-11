@@ -9,7 +9,7 @@ import com.dasher.service.MenuService;
 public class MenuServiceImpl implements MenuService {
 
 	private MenuMapper menuMapper;
-
+	
 	public MenuMapper getMenuMapper() {
 		return menuMapper;
 	}
@@ -80,23 +80,6 @@ public class MenuServiceImpl implements MenuService {
 		// TODO Auto-generated method stub
 		return menuMapper.getListByStr(type, uid);
 	}
-
-	public List<Menu> getNearList(float longitude, float latitude,float distance) {
-		// TODO Auto-generated method stub
-		double r = 6371;
-		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
-		dlng = dlng*180/Math.PI;
-		double dlat = distance/r;
-		dlat = dlat*180/Math.PI;		
-		double minlat =latitude-dlat;
-		double maxlat = latitude+dlat;
-		double minlon = longitude -dlng;
-		double maxlon = longitude + dlng;
-		List<Menu> list=menuMapper.getNearlist(minlon, maxlon, minlat, maxlat);
-		return list;
-
-	}
-
-
+	
 
 }

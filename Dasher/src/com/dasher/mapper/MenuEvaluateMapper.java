@@ -9,10 +9,10 @@ import com.dasher.model.MenuEvaluate;
 public interface MenuEvaluateMapper {
 
 	public int add(MenuEvaluate me);
-	public int WaiterCount(String wid);
-	public int ShopCount(String sid);
 	public MenuEvaluate getEvalByMid(String mid);
 	public List<MenuEvaluate> ListWaiter(@Param(value="wid")String wid,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public int WaiterCount(String wid);
 	public List<MenuEvaluate> ListShop(@Param(value="sid")String sid,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
-	
+	public int ShopCount(String sid);
+
 }

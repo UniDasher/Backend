@@ -112,187 +112,6 @@ public class UserSettleController extends MyController {
 		return model;
 	}	
 	
-	
-	@RequestMapping("/settle/user/add")
-	@ResponseBody
-	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		//model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-		String wid=getString(request, "wid");
-		String settleType=getString(request, "settleType");
-		String settlePrice=getString(request, "settlePrice");
-		String settleNumberType=getString(request, "settleNumberType");
-		String settleNumber=getString(request, "settleNumber");
-		String settleDesc=getString(request, "settleDesc");
-
-		if(wid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else if(settleType=="")
-		{
-			resultDesc=ShowMsg.settleTypeNull;
-			resultCode=2;
-		}
-		else if(!settleType.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.priceErr;
-			resultCode=2;
-		}
-		else if(settlePrice=="")
-		{
-			resultDesc=ShowMsg.settlePriceNull;
-			resultCode=2;
-		}
-		else if(settleNumberType=="")
-		{
-			resultDesc=ShowMsg.settleNumberTypeNull;
-			resultCode=2;
-		}
-		else if(settleNumber=="")
-		{
-			resultDesc=ShowMsg.settleNumberNull;
-			resultCode=2;
-		}
-		
-		else
-		{
-			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
-		    if(!settlePrice.equals(""))
-			{
-				Matcher matcher=pattern.matcher(settlePrice);
-				if(matcher.matches()==false)
-				{
-					resultDesc=ShowMsg.settlePriceErr;
-					resultCode=2;
-					model.put("resultCode", resultCode);	
-					model.put("resultDesc", resultDesc);
-					return model;
-				}
-			}
-            UserSettle us=new UserSettle();
-            us.setWid(wid);
-            us.setSettleDesc(settleType);
-            us.setSettlePrice(Float.parseFloat(settlePrice));
-            us.setSettleNumberType(settleNumberType);
-            us.setSettleNumber(settleNumber);
-            us.setSettleDesc(settleDesc);
-            us.setCreateBy(myloginId);
-            us.setCreateDate(DateUtil.getCurrentDateStr());
-            result=userSettleService.add(us);
-            
-			if(result==true)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.addSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.addFail;
-			}
-		}
-
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}	
-	
-	
-	@RequestMapping("/settle/user/update")
-	@ResponseBody
-	protected Object update(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		//model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-//		String wid=getString(request, "wid");
-//		String settleType=getString(request, "settleType");
-//		String settlePrice=getString(request, "settlePrice");
-//		String settleNumberType=getString(request, "settleNumberType");
-//		String settleNumber=getString(request, "settleNumber");
-//		String settleDesc=getString(request, "settleDesc");
-//
-//		if(wid=="")
-//		{
-//			resultDesc=ShowMsg.ParFail;
-//			resultCode=2;
-//		}
-//		else if(settleType=="")
-//		{
-//			resultDesc=ShowMsg.settleTypeNull;
-//			resultCode=2;
-//		}
-//		else if(settlePrice=="")
-//		{
-//			resultDesc=ShowMsg.settlePriceNull;
-//			resultCode=2;
-//		}
-//		else if(settleNumberType=="")
-//		{
-//			resultDesc=ShowMsg.settleNumberTypeNull;
-//			resultCode=2;
-//		}
-//		else if(settleNumber=="")
-//		{
-//			resultDesc=ShowMsg.settleNumberNull;
-//			resultCode=2;
-//		}
-//		else
-//		{
-//			
-//            UserSettle us=new UserSettle();
-//            us.setWid(wid);
-//            us.setSettleType(Integer.parseInt(settleType));
-//            us.setSettlePrice(Float.parseFloat(settlePrice));
-//            us.setSettleNumberType(settleNumberType);
-//            us.setSettleNumber(settleNumber);
-//            us.setSettleDesc(settleDesc);
-//            us.setCreateBy(myloginId);
-//            us.setCreateDate(DateUtil.getCurrentDateStr());
-//            result=userSettleService.add(us);
-//            
-//			if(result==true)
-//			{
-//				resultCode=0;
-//				resultDesc=ShowMsg.addSuc;
-//			}
-//			else
-//			{
-//				resultCode=1;
-//				resultDesc=ShowMsg.addFail;
-//			}
-//		}
-
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}	
-	
-	
 	@RequestMapping("/settle/user/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -313,23 +132,27 @@ public class UserSettleController extends MyController {
 		String mycurPage=getString(request, "curPage");
 		String mypageSize=getString(request, "countPage");
 		String searchStr=getString(request, "searchStr");
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
 		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
 		{
 			int curPage=Integer.parseInt(mycurPage);
 			int pageSize=Integer.parseInt(mypageSize);
 			int startRow=(curPage-1)*pageSize;
-			int count=userSettleService.getCount(searchStr);
+			int count=userSettleService.getCount(searchStr,startDate,endDate);
 			if(count>0)
 			{
 				model.put("count", count);
-				List<UserSettle> list=userSettleService.list(searchStr, startRow, pageSize);
+				List<UserSettle> list=userSettleService.list(searchStr,startDate,endDate,startRow, pageSize);
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 			else
 			{
-				resultDesc=ShowMsg.findFail;
+				model.put("count", 0);
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 		
@@ -338,6 +161,7 @@ public class UserSettleController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
 	
 	@RequestMapping("/settle/user/info/list")
 	@ResponseBody

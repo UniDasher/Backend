@@ -65,12 +65,5 @@
    <select id="menuList" resultType="Market">
        select smid,name from market_info where status>0
    </select>
-   
-   <select id="getNearlist" resultType="Market">
-	   select * from market_info
-	   where (longitude between #{minlon} and #{maxlon}) 
-	   and (latitude between #{minlat} and #{maxlat}) 
-	   and status>0
-	</select>
   
 </mapper>

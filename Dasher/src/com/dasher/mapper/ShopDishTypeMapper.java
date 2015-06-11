@@ -11,11 +11,11 @@ public interface ShopDishTypeMapper {
 	public int add(ShopDishType sdt);
 	public int update(ShopDishType sdt);
 	public int delete(ShopDishType sdt);
-	public int updateSortNum(ShopDishType sdt);
 	public ShopDishType getById(int id);
 	public ShopDishType getByName(String name);
 	public List<ShopDishType> list(int type);
 	public String getMax();
+	public int updateSortNum(ShopDishType sdt);
 	public List<ShopDishType> listBySid(@Param(value="sid") String sid);
 	public List<ShopDishType> listBySmid(@Param(value="smid") String smid);
 	

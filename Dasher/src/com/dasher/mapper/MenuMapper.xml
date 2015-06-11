@@ -173,21 +173,9 @@
         left join user_info u2
 		on m.wid=u2.uid
 		where m.uid=#{uid} and m.status=#{status} and m.status>0
+		
 	</select>
     
-    <select id="getNearlist" resultType="Menu">
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
-		from menu m
-		join shop_info s
-		on m.sid=s.sid
-		join user_info u
-		on m.uid=u.uid
-        left join user_info u2
-		on m.wid=u2.uid
-		where (m.longitude between #{minlon} and #{maxlon}) 
-		and (m.latitude between #{minlat} and #{maxlat}) 
-		and m.status>0
-	</select>
 
 	
 </mapper>

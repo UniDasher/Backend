@@ -125,7 +125,6 @@ public class MarketController extends MyController {
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
-		String distance="";
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
@@ -144,56 +143,14 @@ public class MarketController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		if(longitude==""||latitude=="")
+		if(!longitude.equals("")&&!latitude.equals(""))
 		{
-			resultDesc=ShowMsg.NoLocatInfo;
-			resultCode=2;
-		}
-		else if(distance=="")
-		{
-			resultDesc=ShowMsg.distanceNull;
-			resultCode=2;
+			//获取用户附近的超市列表
 		}
 		else
 		{
-			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
-			Matcher matcher=pattern.matcher(longitude);
-			Matcher matcher2=pattern.matcher(latitude);
-			Matcher matcher3=pattern.matcher(distance);
-			if(matcher.matches()==false||matcher2.matches()==false)
-			{
-				resultDesc=ShowMsg.LonLatErr;
-				resultCode=2;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
-			
-			if(matcher3.matches()==false)
-			{
-				resultDesc=ShowMsg.distanceErr;
-				resultCode=2;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
-			//送餐人获取附近订单
-			List<Market> list=marketService.getNearList(Float.parseFloat(longitude), Float.parseFloat(latitude), Float.parseFloat(distance));
-			if(list.size()>0)
-			{
-
-				model.put("count", list.size());
-				model.put("list", list);
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-			else
-			{
-				model.put("count", 0);
-				model.put("list", null);
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
+			resultDesc=ShowMsg.searchFail;
+			resultCode=2;
 		}
 		
 		model.put("resultCode", resultCode);	

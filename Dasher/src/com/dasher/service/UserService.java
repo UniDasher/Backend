@@ -5,25 +5,25 @@ import java.util.List;
 import com.dasher.model.User;
 
 public interface UserService {
-	
-	public int userLoin(String mobilePhone,String pwd);
-	public int getPwd(String uid,String pwd);
-	public int getUserByStatus2(int type,String searchStr);
-	public int balanceListCount(String searchStr);
+
 	public boolean addUser(User u);
+	public User getByUId(String uid);
+	public User getUserByTel(String mobilePhone);
 	public boolean update(User u);
 	public boolean delete(User u);
+	public int userLoin(String mobilePhone,String pwd);
 	public boolean updatePwd(User u);
+	public int getPwd(String uid,String pwd);
 	public boolean userApply(User u);
+	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
+	public int getUserByStatus2(int type,String searchStr);
 	public boolean updateLogo(User u);
 	public boolean updateUserName(User u);
 	public boolean updatePhone(User u);
 	public boolean updateEmail(User u);
+	public List<User> balanceList(String searchStr,int startRow,int pageSize);
 	public boolean updateBalance(String uid, float curUserBalance);
 	public boolean forgetPwd(User u);
-	public User getByUId(String uid);
-	public User getUserByTel(String mobilePhone);
-	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
-	public List<User> balanceList(String searchStr,int startRow,int pageSize);
+	public int balanceListCount(String searchStr);
 	public List<User> settleList(String searchStr);
 }
