@@ -14,14 +14,12 @@ public class UserSettle implements Serializable {
 	private String settleNumberType;
 	private String settleNumber;
 	private String settleDesc;
-	
+	private String userName;
 	private String createBy;
 	private String createDate;
 	private String updateBy;
 	private String updateDate;
 	private int status;
-	private String userName;
-	private String mobilePhone;
 	
 	public UserSettle() {
 		
@@ -31,7 +29,7 @@ public class UserSettle implements Serializable {
 			String typeDesc, float settlePrice, float curBalance,
 			String settleNumberType, String settleNumber, String settleDesc,
 			String userName, String createBy, String createDate,
-			String updateBy, String updateDate, int status,String mobilePhone) {
+			String updateBy, String updateDate, int status) {
 		super();
 		this.id = id;
 		this.wid = wid;
@@ -49,7 +47,6 @@ public class UserSettle implements Serializable {
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
 		this.status = status;
-		this.mobilePhone=mobilePhone;
 	}
 
 	public int getId() {
@@ -178,14 +175,6 @@ public class UserSettle implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
-	}
-
-	public String getMobilePhone() {
-		return mobilePhone;
-	}
-
-	public void setMobilePhone(String mobilePhone) {
-		this.mobilePhone = mobilePhone;
 	}
 
 }

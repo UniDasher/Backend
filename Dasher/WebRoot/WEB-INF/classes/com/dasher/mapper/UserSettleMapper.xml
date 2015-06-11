@@ -25,36 +25,25 @@
    </insert>
    
    <select id="getCount" resultType="Integer" parameterType="Integer">
-     select count(us.id)
-	 from user_settle us
-	 join user_info u
-	 on us.wid=u.uid
+     select count(*)
+	 from user_settle
 	 where 1=1
 	 <if test="searchStr!=''">
-       	and u.mobilePhone like CONCAT(CONCAT('%',#{searchStr}),'%')
-     </if>
-     <if test="startDate!='' and endDate!=''">
-		and us.createDate between #{startDate} and #{endDate}
-     </if>
+	   and wid=#{searchStr}
+	 </if>
    </select>
    
    <select id="list" resultType="UserSettle">
-     select us.*,concat(u.firstName,u.lastName) as userName,u.mobilePhone
+     select us.*,concat(u.firstName,u.lastName) as userName
 	 from user_settle us
 	 join user_info u
 	 on us.wid=u.uid
 	 where 1=1
 	 <if test="searchStr!=''">
-       	and u.mobilePhone like CONCAT(CONCAT('%',#{searchStr}),'%')
-     </if>
-     <if test="startDate!='' and endDate!=''">
-		and us.createDate between #{startDate} and #{endDate}
-     </if>
+	   and us.wid=#{searchStr}
+	 </if>
      limit #{startRow},#{pageSize} 
    </select>
-   
-   
-   
    
    <select id="getListByWid" resultType="UserSettle" parameterType="String">
      select us.*,concat(u.firstName,u.lastName) as userName

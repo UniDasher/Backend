@@ -3,6 +3,7 @@ package com.dasher.service;
 import com.dasher.model.Login;
 
 public interface LoginService {
+	
 	public boolean add(Login l);
 	public boolean update(Login l);
 	public Login getByLogId(String loginId);

@@ -138,4 +138,8 @@ public class ShowMsg {
 	public static final String settlePriceErr="收支金额格式错误";
 	public static final String phoneCodeErr="手机验证码错误！";
 	public static final String phoneRepeat="该手机号已被绑定！";
+	public static final String NoLocatInfo = "没有获取位置，请重试！";
+	public static final String distanceNull="附近距离为空！";
+	public static final String LonLatErr = "经纬度格式错误";
+	public static final String distanceErr="附近距离格式错误";
 }

@@ -77,7 +77,6 @@ public class UserSettleServiceImpl implements UserSettleService {
 	            userSettleMapper.add(us);
 	            
 	            //系统结算
-	            
 	            ServerSettle ss=new ServerSettle();
 	            ss.setUid(user.getUid());
 	            ss.setType(2);
@@ -139,7 +138,7 @@ public class UserSettleServiceImpl implements UserSettleService {
 	            ss.setSettleDesc("用户账户余额结算");
 	            ss.setCreateBy(myloginId);
 	            ss.setCreateDate(DateUtil.getCurrentDateStr());
-	            serverSettleService.add(ss);
+	            serverSettleService.add(ss); 
 			}
 	        transactionManager.commit(ts);
 			return true;
@@ -147,13 +146,7 @@ public class UserSettleServiceImpl implements UserSettleService {
 			return false;
 		}
 	}
-	public int getCount(String searchStr, String startDate, String endDate) {
-		return userSettleMapper.getCount(searchStr,startDate,endDate);
-	}
 
-	public List<UserSettle> list(String searchStr, String startDate, String endDate, int startRow, int pageSize) {
-		return userSettleMapper.list(searchStr,startDate,endDate, startRow, pageSize);
-	}
 	
 	
 
@@ -162,10 +155,25 @@ public class UserSettleServiceImpl implements UserSettleService {
 		return userSettleMapper.add(us)>0? true:false;
 	}
 
+
 	public boolean update(UserSettle us) {
 		// TODO Auto-generated method stub
 		return userSettleMapper.update(us)>0? true:false;
 	}
+
+
+	public int getCount(String searchStr) {
+		// TODO Auto-generated method stub
+		return userSettleMapper.getCount(searchStr);
+	}
+
+
+	public List<UserSettle> list(String searchStr, int startRow, int pageSize) {
+		// TODO Auto-generated method stub
+		return userSettleMapper.list(searchStr, startRow, pageSize);
+	}
+
+
 	public List<UserSettle> getListByWid(String wid) {
 		// TODO Auto-generated method stub
 		return userSettleMapper.getListByWid(wid);
