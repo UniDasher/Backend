@@ -17,16 +17,17 @@ public class ServerSettle implements Serializable {
 	private String createBy;
 	private String createDate;
 	
+	private String userName;
+	private String mobilePhone;
+	
 	public ServerSettle() {
 	
 	}
-
-	
-
 	public ServerSettle(int id, String uid, float oldBalance, int type,
 			String typeDesc, float settlePrice, float curBalance,
 			String settleNumberType, String settleNumber, String settleDesc,
-			String createBy, String createDate) {
+			String createBy, String createDate, String userName,
+			String mobilePhone) {
 		super();
 		this.id = id;
 		this.uid = uid;
@@ -40,34 +41,33 @@ public class ServerSettle implements Serializable {
 		this.settleDesc = settleDesc;
 		this.createBy = createBy;
 		this.createDate = createDate;
+		this.userName = userName;
+		this.mobilePhone = mobilePhone;
 	}
-
-
-
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
 	public int getType() {
 		return type;
 	}
-
-
-
 	public void setType(int type) {
 		this.type = type;
 	}
-
-
-
 	public String getTypeDesc() {
 		return typeDesc;
 	}
-
-
-
 	public void setTypeDesc(String typeDesc) {
 		this.typeDesc = typeDesc;
 	}
-
-
-
 	public int getId() {
 		return id;
 	}
