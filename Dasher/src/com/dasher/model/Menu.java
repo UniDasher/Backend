@@ -1,6 +1,7 @@
 package com.dasher.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Menu implements Serializable {
 
@@ -9,6 +10,7 @@ public class Menu implements Serializable {
 	private String sid;
 	private String uid;
 	private String wid;
+	private String did;
 	private float dishsMoney;
 	private float carriageMoney;
 	private float taxesMoney;
@@ -33,46 +35,8 @@ public class Menu implements Serializable {
 	private int status;
 	
 	public Menu() {
-
-	}
-	public Menu(int id, String mid, String sid, String uid, String wid,
-			float dishsMoney, float carriageMoney, float taxesMoney,
-			float serviceMoney, float tipMoney, int menuCount, int payType,
-			String mealStartDate, String mealEndDate, String address,
-			String longitude, String latitude, String createBy,
-			String createDate, String updateBy, String updateDate,
-			String startDate, String endDate, String shopName, String userName,
-			String serverName, int status) {
 		super();
-		this.id = id;
-		this.mid = mid;
-		this.sid = sid;
-		this.uid = uid;
-		this.wid = wid;
-		this.dishsMoney = dishsMoney;
-		this.carriageMoney = carriageMoney;
-		this.taxesMoney = taxesMoney;
-		this.serviceMoney = serviceMoney;
-		this.tipMoney = tipMoney;
-		this.menuCount = menuCount;
-		this.payType = payType;
-		this.mealStartDate = mealStartDate;
-		this.mealEndDate = mealEndDate;
-		this.address = address;
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.createBy = createBy;
-		this.createDate = createDate;
-		this.updateBy = updateBy;
-		this.updateDate = updateDate;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.shopName = shopName;
-		this.userName = userName;
-		this.serverName = serverName;
-		this.status = status;
 	}
-
 
 	public int getId() {
 		return id;
@@ -114,28 +78,14 @@ public class Menu implements Serializable {
 		this.wid = wid;
 	}
 
-	public String getShopName() {
-		return shopName;
+	public String getDid() {
+		return did;
 	}
 
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
+	public void setDid(String did) {
+		this.did = did;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getServerName() {
-		return serverName;
-	}
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
-	}
 	public float getDishsMoney() {
 		return dishsMoney;
 	}
@@ -232,12 +182,36 @@ public class Menu implements Serializable {
 		this.latitude = latitude;
 	}
 
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
 	public String getCreateDate() {
 		return createDate;
 	}
 
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getStartDate() {
@@ -256,6 +230,30 @@ public class Menu implements Serializable {
 		this.endDate = endDate;
 	}
 
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getServerName() {
+		return serverName;
+	}
+
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
 	public int getStatus() {
 		return status;
 	}
@@ -264,35 +262,46 @@ public class Menu implements Serializable {
 		this.status = status;
 	}
 
-
-	public String getCreateBy() {
-		return createBy;
-	}
-
-
-	public void setCreateBy(String createBy) {
+	public Menu(int id, String mid, String sid, String uid, String wid,
+			String did, float dishsMoney, float carriageMoney,
+			float taxesMoney, float serviceMoney, float tipMoney,
+			int menuCount, int payType, String mealStartDate,
+			String mealEndDate, String address, String longitude,
+			String latitude, String createBy, String createDate,
+			String updateBy, String updateDate, String startDate,
+			String endDate, String shopName, String userName,
+			String serverName, int status) {
+		super();
+		this.id = id;
+		this.mid = mid;
+		this.sid = sid;
+		this.uid = uid;
+		this.wid = wid;
+		this.did = did;
+		this.dishsMoney = dishsMoney;
+		this.carriageMoney = carriageMoney;
+		this.taxesMoney = taxesMoney;
+		this.serviceMoney = serviceMoney;
+		this.tipMoney = tipMoney;
+		this.menuCount = menuCount;
+		this.payType = payType;
+		this.mealStartDate = mealStartDate;
+		this.mealEndDate = mealEndDate;
+		this.address = address;
+		this.longitude = longitude;
+		this.latitude = latitude;
 		this.createBy = createBy;
-	}
-
-
-	public String getUpdateBy() {
-		return updateBy;
-	}
-
-
-	public void setUpdateBy(String updateBy) {
+		this.createDate = createDate;
 		this.updateBy = updateBy;
-	}
-
-
-	public String getUpdateDate() {
-		return updateDate;
-	}
-
-
-	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.shopName = shopName;
+		this.userName = userName;
+		this.serverName = serverName;
+		this.status = status;
 	}
+	
 	
 	
 }

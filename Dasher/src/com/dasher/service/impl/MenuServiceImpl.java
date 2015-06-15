@@ -1,14 +1,34 @@
 package com.dasher.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.MenuMapper;
 import com.dasher.model.Menu;
+import com.dasher.model.MenuDish;
+import com.dasher.model.ShopDish;
+import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
+import com.dasher.service.ShopDishService;
+import com.dasher.util.DateUtil;
 
 public class MenuServiceImpl implements MenuService {
 
 	private MenuMapper menuMapper;
+	@Autowired
+	private MenuDishService menuDishService;
+	@Autowired
+	private ShopDishService shopDishService;
+	@Autowired
+    @Qualifier("transactionManager")
+    private PlatformTransactionManager transactionManager = null;
 
 	public MenuMapper getMenuMapper() {
 		return menuMapper;
@@ -20,7 +40,44 @@ public class MenuServiceImpl implements MenuService {
 
 	public boolean add(Menu m) {
 		// TODO Auto-generated method stub
-		return menuMapper.add(m)>0? true:false;
+		//添加事务处理
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        int result=-1;
+        boolean flag=false;
+		result=menuMapper.add(m);
+		if(result>0)
+		{
+			ShopDish sd=shopDishService.getByDid(m.getDid());
+			if(sd!=null)
+			{
+				MenuDish md=new MenuDish();
+				md.setDid(sd.getDid());
+				md.setName(sd.getName());
+				md.setPrice(sd.getPrice());
+				md.setCount(m.getMenuCount());
+				md.setCreateBy(m.getCreateBy());
+				md.setCreateDate(DateUtil.getCurrentDateStr());
+				flag=menuDishService.add(md);
+				if(flag==true)
+				{
+					transactionManager.commit(ts);
+				}
+				else
+				{
+					transactionManager.rollback(ts);  
+				}
+				
+			}
+			
+		}
+		else
+		{
+			transactionManager.rollback(ts);  
+		}
+			
+		return flag;
 	}
 
 	public boolean receive(Menu m) {

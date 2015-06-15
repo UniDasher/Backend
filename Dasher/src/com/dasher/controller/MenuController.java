@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dasher.model.Menu;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
+import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
@@ -36,6 +36,8 @@ public class MenuController extends MyController {
 	private LoginService loginService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private MenuDishService menuDishService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -52,6 +54,7 @@ public class MenuController extends MyController {
 	    String authCode="";
 	    String sid="";
 	    String uid="";
+	    String did="";
 	    String dishsMoney="";
 	    String carriageMoney="";
 	    String taxesMoney="";
@@ -69,6 +72,7 @@ public class MenuController extends MyController {
 			authCode = jsonObject.getString("authCode");
 			sid=jsonObject.getString("sid");
 			uid=jsonObject.getString("uid");
+			did=jsonObject.getString("did");
 			dishsMoney=jsonObject.getString("dishsMoney");
 			carriageMoney=jsonObject.getString("carriageMoney");
 			taxesMoney=jsonObject.getString("taxesMoney");
@@ -81,6 +85,9 @@ public class MenuController extends MyController {
 			address=jsonObject.getString("address");
 			longitude=jsonObject.getString("longitude");
 			latitude=jsonObject.getString("latitude");
+			
+			
+
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
 			resultCode=2;
@@ -100,7 +107,7 @@ public class MenuController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		if(sid==""||uid=="")
+		if(sid==""||uid==""||did=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
@@ -212,6 +219,7 @@ public class MenuController extends MyController {
 			}
 			Menu m=new Menu();
 			m.setMid(mid);
+			m.setDid(did);
 			m.setSid(sid);
 			m.setUid(uid);
 			if(!dishsMoney.equals(""))
@@ -387,6 +395,7 @@ public class MenuController extends MyController {
 		}
 		else
 		{
+			
 			Menu m=new Menu();
 			m.setMid(mid);
 			m.setUpdateBy(myloginId);
@@ -481,7 +490,6 @@ public class MenuController extends MyController {
 			List<Menu> list=menuService.getNearList(Float.parseFloat(longitude), Float.parseFloat(latitude), Float.parseFloat(distance));
 			if(list.size()>0)
 			{
-
 				model.put("count", list.size());
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
