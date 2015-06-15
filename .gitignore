@@ -13,6 +13,7 @@ Dasher/.myeclipse/**
 Dasher/pom.xml
 Dasher/target/**
 Dasher/.classpath
-Dasher/WebRoot/WEB-INF/upload/shop/dish/*
-Dasher/WebRoot/WEB-INF/upload/shop/images/*
-Dasher/WebRoot/WEB-INF/upload/settle/user/*
+Dasher/WebRoot/upload/shop/images/**
+Dasher/WebRoot/upload/shop/dish/**
+Dasher/WebRoot/upload/settle/user/**
+Dasher/WebRoot/upload/user/images/**

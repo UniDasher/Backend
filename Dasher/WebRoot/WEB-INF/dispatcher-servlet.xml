@@ -19,8 +19,11 @@
     default-autowire="constructor"> 
     
     <!-- 注解信息 -->
-    <mvc:annotation-driven />
-    
+    <mvc:resources mapping="/upload/shop/images/**" location="/upload/shop/images/" />
+    <mvc:resources mapping="/upload/shop/dish/**" location="/upload/shop/dish/" />
+    <mvc:resources mapping="/upload/settle/user/**" location="/upload/settle/user/" />
+    <mvc:resources mapping="/upload/user/images/**" location="/upload/user/images/" />
+	<mvc:annotation-driven />
     <!-- Controller所在文件夹 -->
     <context:component-scan base-package="com.dasher.controller" />
     

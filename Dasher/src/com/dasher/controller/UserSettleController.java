@@ -60,7 +60,7 @@ public class UserSettleController extends MyController {
         
 		if(result==true)
 		{
-			model.put("fileName","/WEB-INF/upload/settle/user/"+fileName);	
+			model.put("fileName","/upload/settle/user/"+fileName);	
 			resultCode=0;
 			resultDesc=ShowMsg.addSuc;
 		}
@@ -98,7 +98,7 @@ public class UserSettleController extends MyController {
         
 		if(result==true)
 		{
-			model.put("fileName","/WEB-INF/upload/settle/user/"+fileName);	
+			model.put("fileName","/upload/settle/user/"+fileName);	
 			resultCode=0;
 			resultDesc=ShowMsg.addSuc;
 		}

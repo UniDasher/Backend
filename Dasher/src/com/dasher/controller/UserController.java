@@ -149,7 +149,7 @@ public class UserController extends MyController {
 					u.setAddress("");
 					u.setLongitude("");
 					u.setLatitude("");
-					u.setLogo("/WEB-INF/upload/user/images/default.png");
+					u.setLogo("/upload/user/images/default.png");
 					u.setCreateDate(DateUtil.getCurrentDateStr());
 					u.setBankAccount("");
 					u.setBankType("");
@@ -739,7 +739,7 @@ public class UserController extends MyController {
 			{
 				User u=new User();
 				u.setUid(uid);
-				u.setLogo("/WEB-INF/upload/user/images/"+logo);
+				u.setLogo("/upload/user/images/"+logo);
 				result=userService.updateLogo(u);
 				if(result==true)
 				{

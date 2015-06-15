@@ -108,6 +108,10 @@ public class UserSettleServiceImpl implements UserSettleService {
 	        TransactionStatus ts = transactionManager.getTransaction(dtd);
 	        //获取结算的用户列表
 	        List<User> userList=userService.settleList(searchStr);
+	        if(userList==null||userList.size()<=0){
+	        	transactionManager.commit(ts);
+	        	return false;
+	        }
 	        //保存excel文件
 	        FileUploadUtil.createExcel(request,fileName,userList);
 	        //用户结算记录新增

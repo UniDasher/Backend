@@ -54,16 +54,19 @@
    </select>
    
    <select id="list" resultType="ShopDish">
-     select * from shop_dish 
-     where status>0
+     select sd.*,sdt.name as typeName
+     from shop_dish sd
+     join shop_dish_type sdt 
+     on sd.typeId=sdt.id
+     where sd.status>0
      <if test="searchStr!=''">
-       and name like CONCAT(CONCAT('%',#{searchStr}),'%')
+       and sd.name like CONCAT(CONCAT('%',#{searchStr}),'%')
      </if>
      <if test="sid!=''">
-       and sid=#{sid}
+       and sd.sid=#{sid}
      </if>
      <if test="typeId!=0">
-       and typeId=#{typeId}
+       and sd.typeId=#{typeId}
      </if>
      limit #{startRow},#{pageSize}
    </select>

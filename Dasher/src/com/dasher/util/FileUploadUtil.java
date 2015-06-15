@@ -258,7 +258,7 @@ public class FileUploadUtil {
 	
 	public static void createExcel(HttpServletRequest request,String fileName,List<User> userList) throws IOException{
 		//将用户的列表信息保存为文件
-        String savePath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload/settle/user/"+fileName);
+        String savePath = request.getSession().getServletContext().getRealPath("/upload/settle/user/"+fileName);
 		File file = new File(savePath);
 		//判断上传文件的保存目录是否存在
 		if (!file.exists()) {

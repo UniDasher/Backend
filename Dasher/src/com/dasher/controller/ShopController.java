@@ -260,7 +260,7 @@ public class ShopController extends MyController {
 					s.setSubscribe(subscribe);
 					s.setEmail(email);
 					s.setPhone(phone);
-					s.setLogo("/WEB-INF/upload/shop/images/default.png");
+					s.setLogo("/upload/shop/images/default.png");
 					s.setLongitude(longitude);
 					s.setLatitude(latitude);
 					s.setCreateBy(Integer.parseInt(myloginId));
@@ -442,7 +442,7 @@ public class ShopController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		
-		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/images");
+		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/upload/shop/images");
 		if(dataMap==null){
 			resultCode=1;
 			resultDesc=ShowMsg.imageUploadFail;
@@ -491,7 +491,7 @@ public class ShopController extends MyController {
 			{
 				Shop s=new Shop();
 				s.setSid(sid);
-				s.setLogo("/WEB-INF/upload/shop/images/"+logo);
+				s.setLogo("/upload/shop/images/"+logo);
 				s.setUpdateBy(0);
 				s.setUpdateDate(DateUtil.getCurrentDateStr());
 				result=shopService.updateLogo(s);
@@ -675,8 +675,9 @@ public class ShopController extends MyController {
 		
 		List<Shop> shopList=shopService.menuList();
 		List<ModelMap> list=new ArrayList<ModelMap>();
-		ModelMap shopModel=new ModelMap();
+		
 		for(Shop s:shopList){
+			ModelMap shopModel=new ModelMap();
 			shopModel.put("sid", s.getSid());
 			shopModel.put("name", s.getName());
 			list.add(shopModel);
