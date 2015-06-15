@@ -10,4 +10,5 @@ public interface LoginService {
 	public String getByAuthCode(String authCode);
 	public String handleLogin(String id);
 	public String userHandleLogin(String id);
+	public boolean updateCID(String uid, String cid);
 }

@@ -23,4 +23,8 @@
    <select id="getByAuthCode" parameterType="String" resultType="String">
     select loginId from login where authCode=#{authCode}
    </select>
+   <update id="updateCID" parameterType="String">
+    update login set cid=#{cid}
+    where loginId=#{uid}
+   </update>
 </mapper>
