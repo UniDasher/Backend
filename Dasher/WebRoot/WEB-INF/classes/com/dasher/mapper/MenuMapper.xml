@@ -21,6 +21,8 @@
 		<result property="address" column="address" />
 		<result property="longitude" column="longitude" />
 		<result property="latitude" column="latitude" />
+		<result property="distance" column="distance" />
+		<result property="direction" column="direction" />
 		<result property="createBy" column="createBy" />
 		<result property="createDate" column="createDate" />
 		<result property="updateBy" column="updateBy" />
@@ -33,8 +35,8 @@
 	<insert id="add" parameterType="Menu" keyProperty="id"
 		useGeneratedKeys="true">
 		insert into
-		menu(mid,sid,uid,did,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,mealStartDate,mealEndDate,address,longitude,latitude,createBy,createDate,status)
-		values(#{mid},#{sid},#{uid},#{did},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{createBy},#{createDate},1)
+		menu(mid,sid,uid,did,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,mealStartDate,mealEndDate,address,longitude,latitude,distance,direction,createBy,createDate,status)
+		values(#{mid},#{sid},#{uid},#{did},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{distance},#{direction},#{createBy},#{createDate},1)
 	</insert>
 
 	<update id="receive" parameterType="Menu">

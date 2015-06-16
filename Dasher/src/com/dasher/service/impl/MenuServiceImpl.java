@@ -13,10 +13,13 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.dasher.mapper.MenuMapper;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
+import com.dasher.model.Shop;
 import com.dasher.model.ShopDish;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
 import com.dasher.service.ShopDishService;
+import com.dasher.service.ShopService;
+import com.dasher.util.BaiDuMapUtil;
 import com.dasher.util.DateUtil;
 
 public class MenuServiceImpl implements MenuService {
@@ -24,6 +27,8 @@ public class MenuServiceImpl implements MenuService {
 	private MenuMapper menuMapper;
 	@Autowired
 	private MenuDishService menuDishService;
+	@Autowired
+	private ShopService shopService;
 	@Autowired
 	private ShopDishService shopDishService;
 	@Autowired
@@ -39,38 +44,42 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	public boolean add(Menu m) {
-		// TODO Auto-generated method stub
 		//添加事务处理
 		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
         dtd.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
         TransactionStatus ts = transactionManager.getTransaction(dtd);
         int result=-1;
         boolean flag=false;
+        //获取商家的信息
+        Shop shop=shopService.getBySid(m.getSid());
+        //获取商家和订单地址的距离和方位
+        String direction=BaiDuMapUtil.GetDirection(Double.parseDouble(shop.getLongitude()),
+        		Double.parseDouble(shop.getLatitude()),Double.parseDouble(m.getLongitude()),
+        		Double.parseDouble(m.getLatitude()));
+        double distance =BaiDuMapUtil.GetShortDistance(Double.parseDouble(shop.getLongitude()),
+        		Double.parseDouble(shop.getLatitude()),Double.parseDouble(m.getLongitude()),
+        		Double.parseDouble(m.getLatitude()));
+        m.setDistance(String.valueOf(distance));
+        m.setDirection(direction);
+        //保存订单信息
 		result=menuMapper.add(m);
 		if(result>0)
 		{
-			ShopDish sd=shopDishService.getByDid(m.getDid());
-			if(sd!=null)
-			{
-				MenuDish md=new MenuDish();
-				md.setDid(sd.getDid());
-				md.setName(sd.getName());
-				md.setPrice(sd.getPrice());
-				md.setCount(m.getMenuCount());
-				md.setCreateBy(m.getCreateBy());
-				md.setCreateDate(DateUtil.getCurrentDateStr());
+			List<MenuDish> dishs=m.getDishs();
+			for (MenuDish md : dishs) {
 				flag=menuDishService.add(md);
-				if(flag==true)
-				{
-					transactionManager.commit(ts);
+				if(!flag){
+					break;
 				}
-				else
-				{
-					transactionManager.rollback(ts);  
-				}
-				
 			}
-			
+			if(flag==true)
+			{
+				transactionManager.commit(ts);
+			}
+			else
+			{
+				transactionManager.rollback(ts);  
+			}
 		}
 		else
 		{

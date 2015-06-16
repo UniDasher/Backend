@@ -10,7 +10,6 @@ public class Menu implements Serializable {
 	private String sid;
 	private String uid;
 	private String wid;
-	private String did;
 	private float dishsMoney;
 	private float carriageMoney;
 	private float taxesMoney;
@@ -23,6 +22,8 @@ public class Menu implements Serializable {
 	private String address;
 	private String longitude;
 	private String latitude;
+	private String distance;
+	private String direction;
 	private String createBy;
 	private String createDate;
 	private String updateBy;
@@ -34,6 +35,32 @@ public class Menu implements Serializable {
 	private String serverName;
 	private int status;
 	
+	private List<MenuDish> dishs;
+	
+	public List<MenuDish> getDishs() {
+		return dishs;
+	}
+
+	public void setDishs(List<MenuDish> dishs) {
+		this.dishs = dishs;
+	}
+
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+
 	public Menu() {
 		super();
 	}
@@ -77,15 +104,6 @@ public class Menu implements Serializable {
 	public void setWid(String wid) {
 		this.wid = wid;
 	}
-
-	public String getDid() {
-		return did;
-	}
-
-	public void setDid(String did) {
-		this.did = did;
-	}
-
 	public float getDishsMoney() {
 		return dishsMoney;
 	}
@@ -263,11 +281,11 @@ public class Menu implements Serializable {
 	}
 
 	public Menu(int id, String mid, String sid, String uid, String wid,
-			String did, float dishsMoney, float carriageMoney,
-			float taxesMoney, float serviceMoney, float tipMoney,
-			int menuCount, int payType, String mealStartDate,
-			String mealEndDate, String address, String longitude,
-			String latitude, String createBy, String createDate,
+			float dishsMoney, float carriageMoney, float taxesMoney,
+			float serviceMoney, float tipMoney, int menuCount, int payType,
+			String mealStartDate, String mealEndDate, String address,
+			String longitude, String latitude, String distance,
+			String direction, String createBy, String createDate,
 			String updateBy, String updateDate, String startDate,
 			String endDate, String shopName, String userName,
 			String serverName, int status) {
@@ -277,7 +295,6 @@ public class Menu implements Serializable {
 		this.sid = sid;
 		this.uid = uid;
 		this.wid = wid;
-		this.did = did;
 		this.dishsMoney = dishsMoney;
 		this.carriageMoney = carriageMoney;
 		this.taxesMoney = taxesMoney;
@@ -290,6 +307,8 @@ public class Menu implements Serializable {
 		this.address = address;
 		this.longitude = longitude;
 		this.latitude = latitude;
+		this.distance = distance;
+		this.direction = direction;
 		this.createBy = createBy;
 		this.createDate = createDate;
 		this.updateBy = updateBy;
@@ -301,7 +320,5 @@ public class Menu implements Serializable {
 		this.serverName = serverName;
 		this.status = status;
 	}
-	
-	
-	
+
 }

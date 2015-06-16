@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Login;
 import com.dasher.model.Menu;
+import com.dasher.model.MenuDish;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MenuDishService;
@@ -49,31 +50,43 @@ public class MenuController extends MyController {
 	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String sid="";
-	    String uid="";
-	    String did="";
-	    String dishsMoney="";
-	    String carriageMoney="";
-	    String taxesMoney="";
-	    String serviceMoney="";
-	    String tipMoney="";
-	    String menuCount="";
-	    String payType="";
-	    String mealStartDate="";
-	    String mealEndDate="";
-	    String address="";
-	    String longitude="";
-	    String latitude="";
+		
+		
 		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			//获取参数
+			String JSONStr=getJsonString(request);
+		    JSONObject jsonObject=null;
+		    jsonObject = new JSONObject(JSONStr);
+		    String authCode = jsonObject.getString("authCode");
+		    //判断是否已登录
+			String myloginId=loginService.getByAuthCode(authCode);
+			if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+			{
+				resultDesc=ShowMsg.NoLogin;
+				resultCode=3;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);	
+				return model;
+			}
+			model.put("authCode", authCode); 
+		    //获取订单的信息
+		    String sid="";
+		    String uid="";
+		    String dishsMoney="";
+		    String carriageMoney="";
+		    String taxesMoney="";
+		    String serviceMoney="";
+		    String tipMoney="";
+		    String menuCount="";
+		    String payType="";
+		    String mealStartDate="";
+		    String mealEndDate="";
+		    String address="";
+		    String longitude="";
+		    String latitude="";
+			
 			sid=jsonObject.getString("sid");
 			uid=jsonObject.getString("uid");
-			did=jsonObject.getString("did");
 			dishsMoney=jsonObject.getString("dishsMoney");
 			carriageMoney=jsonObject.getString("carriageMoney");
 			taxesMoney=jsonObject.getString("taxesMoney");
@@ -87,8 +100,235 @@ public class MenuController extends MyController {
 			longitude=jsonObject.getString("longitude");
 			latitude=jsonObject.getString("latitude");
 			
-			
 
+			if(sid==""||uid=="")
+			{
+				resultDesc=ShowMsg.ParFail;
+				resultCode=2;
+			}
+			else if(dishsMoney=="")
+			{
+				resultDesc=ShowMsg.dishsMoneyNull;
+				resultCode=2;
+			}
+			else if(menuCount=="")
+			{
+				resultDesc=ShowMsg.menuCountNull;
+				resultCode=2;
+			}
+			else if(!menuCount.matches("^[0-9]*$"))
+			{
+				resultDesc=ShowMsg.menuCountErr;
+				resultCode=2;
+			}
+			else if(payType=="")
+			{
+				resultDesc=ShowMsg.payTypeNull;
+				resultCode=2;
+			}
+			else if(!payType.matches("^[0-9]*$"))
+			{
+				resultDesc=ShowMsg.payTypeErr;
+				resultCode=2;
+			}
+			else if(address=="")
+			{
+				resultDesc=ShowMsg.AddressNull;
+				resultCode=2;
+			}
+			else if(longitude==""||latitude=="")
+			{
+				resultDesc=ShowMsg.LonLatNull;
+				resultCode=2;
+			}
+			else
+			{
+				//验证金额
+				Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+				Matcher matcher=pattern.matcher(dishsMoney);
+				if(matcher.matches()==false)
+				{
+					resultDesc=ShowMsg.dishsMoneyErr;
+					resultCode=2;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
+				if(!carriageMoney.equals(""))
+				{
+					Matcher matcher2=pattern.matcher(carriageMoney);
+					if(matcher2.matches()==false)
+					{
+						resultDesc=ShowMsg.carriageMoneyErr;
+						resultCode=2;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);
+						return model;
+					}
+				}
+				/*
+				if(!taxesMoney.equals(""))
+				{
+					Matcher matcher2=pattern.matcher(taxesMoney);
+					if(matcher2.matches()==false)
+					{
+						resultDesc=ShowMsg.taxesMoneyErr;
+						resultCode=2;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);
+						return model;
+					}
+				}
+				if(!serviceMoney.equals(""))
+				{
+					Matcher matcher2=pattern.matcher(serviceMoney);
+					if(matcher2.matches()==false)
+					{
+						resultDesc=ShowMsg.serviceMoneyErr;
+						resultCode=2;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);
+						return model;
+					}
+				}
+				if(!tipMoney.equals(""))
+				{
+					Matcher matcher2=pattern.matcher(tipMoney);
+					if(matcher2.matches()==false)
+					{
+						resultDesc=ShowMsg.tipMoneyErr;
+						resultCode=2;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);
+						return model;
+					}
+				}*/
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+				Date date=new Date();
+				String strs[]=sdf.format(date).split("-");
+				String mid="";
+				for(int i=0;i<strs.length;i++)
+				{
+					mid=mid+strs[i];
+				}
+				Menu m=new Menu();
+				m.setMid(mid);
+				m.setSid(sid);
+				m.setUid(uid);
+				if(!dishsMoney.equals(""))
+				{
+					m.setDishsMoney(Float.parseFloat(dishsMoney));
+				}
+				if(!carriageMoney.equals(""))
+				{
+					m.setCarriageMoney(Float.parseFloat(carriageMoney));
+				}
+				/*
+				if(!taxesMoney.equals(""))
+				{
+					m.setTaxesMoney(Float.parseFloat(taxesMoney));
+				}
+				if(!serviceMoney.equals(""))
+				{
+					m.setServiceMoney(Float.parseFloat(serviceMoney));
+				}
+				if(!tipMoney.equals(""))
+				{
+					m.setTipMoney(Float.parseFloat(tipMoney));
+				}*/
+				m.setTaxesMoney(0);
+				m.setServiceMoney(0);
+				m.setTipMoney(0);
+				
+				m.setMenuCount(Integer.parseInt(menuCount));
+				m.setPayType(Integer.parseInt(payType));
+				m.setMealStartDate(mealStartDate);
+				m.setMealEndDate(mealEndDate);
+				m.setAddress(address);
+				m.setLatitude(latitude);
+				m.setLongitude(longitude);
+				m.setCreateBy(myloginId);
+				m.setCreateDate(DateUtil.getCurrentDateStr());
+				
+				//获取订单的菜品信息
+				JSONArray dishArray=jsonObject.getJSONArray("dishs");
+				for(int i=0;i<dishArray.length();i++){
+					JSONObject dishObj=dishArray.getJSONObject(i);
+				    String did="";
+				    String name="";
+				    String price="";
+				    String count="";
+				    did=dishObj.getString("did");
+					name=dishObj.getString("name");
+					price=dishObj.getString("price");
+					count=dishObj.getString("count");
+					if(did=="")
+					{
+						resultDesc=ShowMsg.ParFail;
+						resultCode=2;
+					}
+					else if(name=="")
+					{
+						resultDesc=ShowMsg.nameNull;
+						resultCode=2;
+					}
+					else if(price=="")
+					{
+						resultDesc=ShowMsg.priceNull;
+						resultCode=2;
+					}
+					else if(count=="")
+					{
+						resultDesc=ShowMsg.menuCountNull;
+						resultCode=2;
+					}
+					else if(!count.matches("^[0-9]*$"))
+					{
+						resultDesc=ShowMsg.menuCountErr;
+						resultCode=2;
+					}
+					else
+					{
+						//验证金额
+						pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+						matcher=pattern.matcher(price);
+						if(matcher.matches()==false)
+						{
+							resultDesc=ShowMsg.priceErr;
+							resultCode=2;
+							model.put("resultCode", resultCode);	
+							model.put("resultDesc", resultDesc);
+							return model;
+						}
+						MenuDish md=new MenuDish();
+						md.setMid(mid);
+						md.setDid(did);
+						md.setName(name);
+						md.setPrice(Float.parseFloat(price));
+						md.setCount(Integer.parseInt(count));
+						md.setCreateBy(myloginId);
+						md.setCreateDate(DateUtil.getCurrentDateStr());
+						
+						m.getDishs().add(md);
+					}
+				}
+				//执行订单及订单餐品的新增操作
+				result=menuService.add(m);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.menuSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.menuFail;
+				}
+			}
+			
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
 			resultCode=2;
@@ -96,183 +336,6 @@ public class MenuController extends MyController {
 			model.put("resultDesc", resultDesc);
 			return model;
 		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
-		
-		if(sid==""||uid==""||did=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else if(dishsMoney=="")
-		{
-			resultDesc=ShowMsg.dishsMoneyNull;
-			resultCode=2;
-		}
-		else if(menuCount=="")
-		{
-			resultDesc=ShowMsg.menuCountNull;
-			resultCode=2;
-		}
-		else if(!menuCount.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.menuCountErr;
-			resultCode=2;
-		}
-		else if(payType=="")
-		{
-			resultDesc=ShowMsg.payTypeNull;
-			resultCode=2;
-		}
-		else if(!payType.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.payTypeErr;
-			resultCode=2;
-		}
-		else if(address=="")
-		{
-			resultDesc=ShowMsg.AddressNull;
-			resultCode=2;
-		}
-		else if(longitude==""||latitude=="")
-		{
-			resultDesc=ShowMsg.LonLatNull;
-			resultCode=2;
-		}
-		else
-		{
-			//验证金额
-			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
-			Matcher matcher=pattern.matcher(dishsMoney);
-			if(matcher.matches()==false)
-			{
-				resultDesc=ShowMsg.dishsMoneyErr;
-				resultCode=2;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
-			if(!carriageMoney.equals(""))
-			{
-				Matcher matcher2=pattern.matcher(carriageMoney);
-				if(matcher2.matches()==false)
-				{
-					resultDesc=ShowMsg.carriageMoneyErr;
-					resultCode=2;
-					model.put("resultCode", resultCode);	
-					model.put("resultDesc", resultDesc);
-					return model;
-				}
-			}
-			/*
-			if(!taxesMoney.equals(""))
-			{
-				Matcher matcher2=pattern.matcher(taxesMoney);
-				if(matcher2.matches()==false)
-				{
-					resultDesc=ShowMsg.taxesMoneyErr;
-					resultCode=2;
-					model.put("resultCode", resultCode);	
-					model.put("resultDesc", resultDesc);
-					return model;
-				}
-			}
-			if(!serviceMoney.equals(""))
-			{
-				Matcher matcher2=pattern.matcher(serviceMoney);
-				if(matcher2.matches()==false)
-				{
-					resultDesc=ShowMsg.serviceMoneyErr;
-					resultCode=2;
-					model.put("resultCode", resultCode);	
-					model.put("resultDesc", resultDesc);
-					return model;
-				}
-			}
-			if(!tipMoney.equals(""))
-			{
-				Matcher matcher2=pattern.matcher(tipMoney);
-				if(matcher2.matches()==false)
-				{
-					resultDesc=ShowMsg.tipMoneyErr;
-					resultCode=2;
-					model.put("resultCode", resultCode);	
-					model.put("resultDesc", resultDesc);
-					return model;
-				}
-			}*/
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
-			Date date=new Date();
-			String strs[]=sdf.format(date).split("-");
-			String mid="";
-			for(int i=0;i<strs.length;i++)
-			{
-				mid=mid+strs[i];
-			}
-			Menu m=new Menu();
-			m.setMid(mid);
-			m.setDid(did);
-			m.setSid(sid);
-			m.setUid(uid);
-			if(!dishsMoney.equals(""))
-			{
-				m.setDishsMoney(Float.parseFloat(dishsMoney));
-			}
-			if(!carriageMoney.equals(""))
-			{
-				m.setCarriageMoney(Float.parseFloat(carriageMoney));
-			}
-			/*
-			if(!taxesMoney.equals(""))
-			{
-				m.setTaxesMoney(Float.parseFloat(taxesMoney));
-			}
-			if(!serviceMoney.equals(""))
-			{
-				m.setServiceMoney(Float.parseFloat(serviceMoney));
-			}
-			if(!tipMoney.equals(""))
-			{
-				m.setTipMoney(Float.parseFloat(tipMoney));
-			}*/
-			m.setTaxesMoney(0);
-			m.setServiceMoney(0);
-			m.setTipMoney(0);
-			
-			m.setMenuCount(Integer.parseInt(menuCount));
-			m.setPayType(Integer.parseInt(payType));
-			m.setMealStartDate(mealStartDate);
-			m.setMealEndDate(mealEndDate);
-			m.setAddress(address);
-			m.setLatitude(latitude);
-			m.setLongitude(longitude);
-			m.setCreateBy(myloginId);
-			m.setCreateDate(DateUtil.getCurrentDateStr());
-
-			result=menuService.add(m);
-			if(result==true)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.menuSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.menuFail;
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
 	}	
 
 
