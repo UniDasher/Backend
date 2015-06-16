@@ -2,6 +2,7 @@ package com.dasher.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -251,6 +252,7 @@ public class MenuController extends MyController {
 				m.setCreateDate(DateUtil.getCurrentDateStr());
 				
 				//获取订单的菜品信息
+				List<MenuDish> dishs=new ArrayList<MenuDish>();
 				JSONArray dishArray=jsonObject.getJSONArray("dishs");
 				for(int i=0;i<dishArray.length();i++){
 					JSONObject dishObj=dishArray.getJSONObject(i);
@@ -309,10 +311,11 @@ public class MenuController extends MyController {
 						md.setCreateBy(myloginId);
 						md.setCreateDate(DateUtil.getCurrentDateStr());
 						
-						m.getDishs().add(md);
+						dishs.add(md);
 					}
 				}
 				//执行订单及订单餐品的新增操作
+				m.setDishs(dishs);
 				result=menuService.add(m);
 				if(result==true)
 				{
