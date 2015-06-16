@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.ComplainDeal;
+import com.dasher.model.Login;
 import com.dasher.model.User;
 import com.dasher.model.UserSettle;
 import com.dasher.service.ComplainDealService;
@@ -245,64 +246,6 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 
-	}
-	@RequestMapping("phone/user/push")
-	@ResponseBody
-	protected Object push(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String cid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			uid=jsonObject.getString("uid");
-			cid=jsonObject.getString("cid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
-		
-		if("".equals(uid)||"".equals(cid))
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			result=loginService.updateCID(uid,cid);
-			if(result)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.findSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.findFail;
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
 	}
 	
 	@RequestMapping("phone/user/info")
@@ -1134,5 +1077,68 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
+	@RequestMapping("phone/user/push")
+	@ResponseBody
+	protected Object push(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String uid="";
+	    String cid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = jsonObject.getString("authCode");
+			uid=jsonObject.getString("uid");
+			cid=jsonObject.getString("cid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if("".equals(uid)||"".equals(cid))
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			Login l=new Login();
+			l.setCid(cid);
+			l.setLoginId(uid);
+			result=loginService.updateCID(l);
+			if(result)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	
 
 }

@@ -6,7 +6,6 @@ import com.dasher.model.Manager;
 
 public interface ManagerService {
 
-
 	public int managerLoin(String account,String pwd);
 	public boolean add(Manager m);
 	public boolean update(Manager m);

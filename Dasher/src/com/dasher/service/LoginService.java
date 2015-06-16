@@ -6,9 +6,10 @@ public interface LoginService {
 	
 	public boolean add(Login l);
 	public boolean update(Login l);
-	public Login getByLogId(String loginId);
+	public boolean updateByLoid(Login l);
+	public boolean updateCID(Login l);
 	public String getByAuthCode(String authCode);
 	public String handleLogin(String id);
 	public String userHandleLogin(String id);
-	public boolean updateCID(String uid, String cid);
+	public Login getByLogId(String loginId);
 }

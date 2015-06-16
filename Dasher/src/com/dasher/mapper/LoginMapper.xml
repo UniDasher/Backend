@@ -5,26 +5,38 @@
    <resultMap type="Login" id="loginMap">
      <result property="id" column="id"/>
      <result property="loginId" column="loginId"/>
+     <result property="cid" column="cid"/>
      <result property="authCode" column="authCode"/>
      <result property="type" column="type"/>
      <result property="loginTime" column="loginTime"/>
    </resultMap>
+   
    <insert id="add" parameterType="Login" keyProperty="id" useGeneratedKeys="true">
     insert into login(loginId,authCode,type,loginTime)
     values(#{loginId},#{authCode},#{type},#{loginTime})
    </insert>
+   
    <update id="update" parameterType="Login">
     update login set authCode=#{authCode},loginTime=#{loginTime}
     where loginId=#{loginId}
    </update>
+   
    <select id="getByLogId" parameterType="String" resultType="Login">
     select * from login where loginId=#{loginId}
    </select>
+   
    <select id="getByAuthCode" parameterType="String" resultType="String">
     select loginId from login where authCode=#{authCode}
    </select>
-   <update id="updateCID" parameterType="String">
+   
+   <update id="updateCID" parameterType="Login">
     update login set cid=#{cid}
-    where loginId=#{uid}
+    where loginId=#{loginId}
    </update>
+   
+   <update id="updateByLoid" parameterType="Login">
+    update login set authCode=#{authCode}
+    where loginId=#{loginId}
+   </update>
+   
 </mapper>

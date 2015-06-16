@@ -233,16 +233,6 @@ public class ManagerController extends MyController {
 			resultDesc=ShowMsg.FirstNameNull;
 			resultCode=2;
 		}
-//		else if(lastName=="")
-//		{
-//			resultDesc=ShowMsg.LastNameNull;
-//			resultCode=2;
-//		}
-//		else if(email=="")
-//		{
-//			resultDesc=ShowMsg.EmailNull;
-//			resultCode=2;
-//		}
 		else
 		{
 			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
@@ -411,5 +401,54 @@ public class ManagerController extends MyController {
 		return model;
 	}
 
+	
+	@RequestMapping("/admin/logout")
+	@ResponseBody
+	protected Object logout(HttpServletRequest request,HttpServletResponse response,HttpSession session){
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		if(authCode=="")
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+		}
+		else
+		{
+			String loginId=loginService.getByAuthCode(authCode);
+			if(loginId==null||loginId=="")
+			{
+				resultDesc=ShowMsg.NoLogin;
+				resultCode=3;
+			}
+			else
+			{
+				UUID uuid=UUID.randomUUID();
+				String str[]=uuid.toString().split("-");
+				String myauthCode="";
+				for(int i=0;i<str.length;i++)
+				{
+					myauthCode=myauthCode+str[i];
+				}
+				Login login=new Login();
+				login.setAuthCode(myauthCode);
+				login.setLoginId(loginId);
+				result=loginService.updateByLoid(login);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.updateSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.updateFail;
+				}
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
 
 }

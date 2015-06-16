@@ -94,7 +94,12 @@ public class LoginServiceImpl implements LoginService {
 		}
 		return authCode;
 	}
-	public boolean updateCID(String uid, String cid) {
-		return loginMapper.updateCID(uid,cid)>0?true:false;
+	public boolean updateCID(Login l) {
+		return loginMapper.updateCID(l)>0?true:false;
+	}
+
+	public boolean updateByLoid(Login l) {
+		// TODO Auto-generated method stub
+		return loginMapper.updateByLoid(l)>0? true:false;
 	}
 }

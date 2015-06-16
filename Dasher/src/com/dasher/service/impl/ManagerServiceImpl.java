@@ -74,4 +74,5 @@ public class ManagerServiceImpl implements ManagerService {
 		// TODO Auto-generated method stub
 		return managerMapper.listAll();
 	}
+
 }

@@ -59,7 +59,7 @@
    <select id="listBySid" resultType="ShopDishType" parameterType="String">
      select * from shop_dish_type 
      where id in(select distinct typeId from shop_dish where sid=#{sid} and status>0) and type=1 and status>0
-   </select>
+     </select>
    
    <select id="listBySmid" resultType="ShopDishType" parameterType="String">
      select * from shop_dish_type 
