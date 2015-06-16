@@ -167,43 +167,6 @@ public class MenuController extends MyController {
 						return model;
 					}
 				}
-				/*
-				if(!taxesMoney.equals(""))
-				{
-					Matcher matcher2=pattern.matcher(taxesMoney);
-					if(matcher2.matches()==false)
-					{
-						resultDesc=ShowMsg.taxesMoneyErr;
-						resultCode=2;
-						model.put("resultCode", resultCode);	
-						model.put("resultDesc", resultDesc);
-						return model;
-					}
-				}
-				if(!serviceMoney.equals(""))
-				{
-					Matcher matcher2=pattern.matcher(serviceMoney);
-					if(matcher2.matches()==false)
-					{
-						resultDesc=ShowMsg.serviceMoneyErr;
-						resultCode=2;
-						model.put("resultCode", resultCode);	
-						model.put("resultDesc", resultDesc);
-						return model;
-					}
-				}
-				if(!tipMoney.equals(""))
-				{
-					Matcher matcher2=pattern.matcher(tipMoney);
-					if(matcher2.matches()==false)
-					{
-						resultDesc=ShowMsg.tipMoneyErr;
-						resultCode=2;
-						model.put("resultCode", resultCode);	
-						model.put("resultDesc", resultDesc);
-						return model;
-					}
-				}*/
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 				Date date=new Date();
 				String strs[]=sdf.format(date).split("-");
@@ -224,19 +187,6 @@ public class MenuController extends MyController {
 				{
 					m.setCarriageMoney(Float.parseFloat(carriageMoney));
 				}
-				/*
-				if(!taxesMoney.equals(""))
-				{
-					m.setTaxesMoney(Float.parseFloat(taxesMoney));
-				}
-				if(!serviceMoney.equals(""))
-				{
-					m.setServiceMoney(Float.parseFloat(serviceMoney));
-				}
-				if(!tipMoney.equals(""))
-				{
-					m.setTipMoney(Float.parseFloat(tipMoney));
-				}*/
 				m.setTaxesMoney(0);
 				m.setServiceMoney(0);
 				m.setTipMoney(0);
@@ -495,7 +445,7 @@ public class MenuController extends MyController {
 	    String authCode="";
 	    String longitude="";
 	    String latitude="";
-	    String distance="";
+	    String distance=ShowMsg.distance+"";
 		try {
 			jsonObject = new JSONObject(JSONStr);
 			authCode = jsonObject.getString("authCode");

@@ -1,19 +1,14 @@
 package com.dasher.service.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
@@ -25,7 +20,6 @@ import com.dasher.service.ServerSettleService;
 import com.dasher.service.UserService;
 import com.dasher.service.UserSettleService;
 import com.dasher.util.DateUtil;
-import com.dasher.util.ExcelCreateUtil;
 import com.dasher.util.FileUploadUtil;
 
 public class UserSettleServiceImpl implements UserSettleService {
@@ -50,7 +44,7 @@ public class UserSettleServiceImpl implements UserSettleService {
 		try{
 			//添加事务处理
 			DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
-	        dtd.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+	        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 	        TransactionStatus ts = transactionManager.getTransaction(dtd);
 	        //获取结算的用户
 	        User user=userService.getByUId(uid);
@@ -104,7 +98,7 @@ public class UserSettleServiceImpl implements UserSettleService {
 		try{
 			//添加事务处理
 			DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
-	        dtd.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+	        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 	        TransactionStatus ts = transactionManager.getTransaction(dtd);
 	        //获取结算的用户列表
 	        List<User> userList=userService.settleList(searchStr);

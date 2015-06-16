@@ -125,7 +125,7 @@ public class MarketController extends MyController {
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
-		String distance="";
+		String distance=ShowMsg.distance+"";
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;

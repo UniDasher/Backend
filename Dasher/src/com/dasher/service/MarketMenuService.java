@@ -2,8 +2,6 @@ package com.dasher.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.dasher.model.MarketMenu;
 
 public interface MarketMenuService {
@@ -14,10 +12,10 @@ public interface MarketMenuService {
 	public boolean receive(MarketMenu mm);
 	public boolean updateStatus(MarketMenu mm);
 	public boolean updateDate(MarketMenu mm);
-	public List<MarketMenu> list(String status,String smid,String searchStr,String startDate,
-			String endDate,int startRow,int pageSize);
 	public MarketMenu getByMid(String mid);
-    public List<MarketMenu> getListByUid(int type,String searchStr,int curPage,int countPage);
+	public List<MarketMenu> getNearList(float longitude,float latitude,float distance);
+	public List<MarketMenu> list(String status,String smid,String searchStr,String startDate,String endDate,int startRow,int pageSize);
+	public List<MarketMenu> getListByUid(int type,String searchStr,int curPage,int countPage);
     public List<MarketMenu> ListByUid(String type,String searchStr);
     
 }

@@ -1,7 +1,5 @@
 package com.dasher.mapper;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.dasher.model.Login;
 
 public interface LoginMapper {

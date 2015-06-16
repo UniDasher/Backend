@@ -19,7 +19,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
@@ -366,7 +365,7 @@ public class MarketMenuController extends MyController {
 	
 	@RequestMapping("phone/market/menu/list/near")
 	@ResponseBody
-	protected Object nearList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
@@ -375,6 +374,7 @@ public class MarketMenuController extends MyController {
 	    String authCode="";
 	    String longitude="";
 	    String latitude="";
+	    String distance=ShowMsg.distance+"";
 		try {
 			jsonObject = new JSONObject(JSONStr);
 			authCode = jsonObject.getString("authCode");
@@ -399,19 +399,63 @@ public class MarketMenuController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		if(!longitude.equals("")&&!latitude.equals(""))
+		if(longitude==""||latitude=="")
 		{
-			//送餐人获取附近订单
+			resultDesc=ShowMsg.NoLocatInfo;
+			resultCode=2;
+		}
+		else if(distance=="")
+		{
+			resultDesc=ShowMsg.distanceNull;
+			resultCode=2;
 		}
 		else
 		{
-			resultDesc=ShowMsg.searchFail;
-			resultCode=2;
+			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+			Matcher matcher=pattern.matcher(longitude);
+			Matcher matcher2=pattern.matcher(latitude);
+			Matcher matcher3=pattern.matcher(distance);
+			if(matcher.matches()==false||matcher2.matches()==false)
+			{
+				resultDesc=ShowMsg.LonLatErr;
+				resultCode=2;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);
+				return model;
+			}
+			
+			if(matcher3.matches()==false)
+			{
+				resultDesc=ShowMsg.distanceErr;
+				resultCode=2;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);
+				return model;
+			}
+			List<MarketMenu> list=marketMenuService.getNearList(Float.parseFloat(longitude), Float.parseFloat(latitude), Float.parseFloat(distance));
+			if(list.size()>0)
+			{
+				model.put("count", list.size());
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("count", 0);
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+
+			
 		}
+		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
-	}	
+	}
+	
 	@RequestMapping("phone/market/menu/user/list")
 	@ResponseBody
 	protected Object userListStatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

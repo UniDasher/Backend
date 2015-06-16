@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.ComplainMapper;
-import com.dasher.mapper.UserMapper;
 import com.dasher.model.Complain;
 import com.dasher.model.User;
 import com.dasher.model.UserSettle;
@@ -68,7 +68,7 @@ public class ComplainServiceImpl implements ComplainService {
 		if(c.getComResult()==1&&c.getReturnMoney()>0){
 			//添加事务处理
 			DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
-	        dtd.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+	        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 	        TransactionStatus ts = transactionManager.getTransaction(dtd);
 			//根据投诉编号获取投诉的基本信息
 			Complain com=complainMapper.getByComId(c.getComId(),c.getType());

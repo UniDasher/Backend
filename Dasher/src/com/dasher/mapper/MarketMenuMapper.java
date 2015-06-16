@@ -15,10 +15,8 @@ public interface MarketMenuMapper {
 	public int getListByUidCount(@Param(value="type") int type,@Param(value="searchStr") String searchStr);
 	public int updateDate(MarketMenu mm);
 	public MarketMenu getByMid(String mid);
-	public List<MarketMenu> list(@Param(value="status") String status,@Param(value="smid") String smid,
-			@Param(value="searchStr") String searchStr,@Param(value="startDate") String startDate,
-			@Param(value="endDate") String endDate,@Param(value="startRow") int startRow,
-			@Param(value="pageSize") int pageSize);
+	public List<MarketMenu> getNearlist(@Param(value="minlon")double minlon,@Param(value="maxlon")double maxlon,@Param(value="minlat")double minlat,@Param(value="maxlat")double maxlat);
+    public List<MarketMenu> list(@Param(value="status") String status,@Param(value="smid") String smid,@Param(value="searchStr") String searchStr,@Param(value="startDate") String startDate,@Param(value="endDate") String endDate,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<MarketMenu> getListByUid(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="curPage") int curPage,@Param(value="countPage") int countPage);
     public List<MarketMenu> ListByUid(@Param(value="type") String type,@Param(value="searchStr") String searchStr);
-  }
+}

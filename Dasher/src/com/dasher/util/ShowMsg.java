@@ -142,4 +142,5 @@ public class ShowMsg {
 	public static final String distanceNull="附近距离为空！";
 	public static final String LonLatErr = "经纬度格式错误";
 	public static final String distanceErr="附近距离格式错误";
+	public static final float distance=1000;
 }
