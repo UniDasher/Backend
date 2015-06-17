@@ -1,6 +1,7 @@
 package com.dasher.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class MarketMenu implements Serializable {
 
@@ -16,6 +17,8 @@ public class MarketMenu implements Serializable {
 	private float tipMoney;
 	private int menuCount;
 	private int payType;
+	private String distance;
+	private String direction;
 	private String address;
 	private String longitude;
 	private String latitude;
@@ -31,19 +34,29 @@ public class MarketMenu implements Serializable {
 	private String updateBy;
 	private String updateDate;
 	private int status;
+	private List<MarketMenuRecord> dishs;
 	
 	public MarketMenu() {
 
+	}
+	
+	public List<MarketMenuRecord> getDishs() {
+		return dishs;
+	}
+
+	public void setDishs(List<MarketMenuRecord> dishs) {
+		this.dishs = dishs;
 	}
 
 	public MarketMenu(int id, String mid, String smid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
 			float serviceMoney, float tipMoney, int menuCount, int payType,
-			String address, String longitude, String latitude,
-			String marketName, String userName, String serverName,
-			String mealStartDate, String mealEndDate, String startDate,
-			String endDate, String createBy, String createDate,
-			String updateBy, String updateDate, int status) {
+			String distance, String direction, String address,
+			String longitude, String latitude, String marketName,
+			String userName, String serverName, String mealStartDate,
+			String mealEndDate, String startDate, String endDate,
+			String createBy, String createDate, String updateBy,
+			String updateDate, int status) {
 		super();
 		this.id = id;
 		this.mid = mid;
@@ -57,6 +70,8 @@ public class MarketMenu implements Serializable {
 		this.tipMoney = tipMoney;
 		this.menuCount = menuCount;
 		this.payType = payType;
+		this.distance = distance;
+		this.direction = direction;
 		this.address = address;
 		this.longitude = longitude;
 		this.latitude = latitude;
@@ -73,9 +88,6 @@ public class MarketMenu implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
-
-
-
 
 
 	public int getId() {
@@ -141,6 +153,22 @@ public class MarketMenu implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 
 	public float getDishsMoney() {

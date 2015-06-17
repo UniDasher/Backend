@@ -2,13 +2,36 @@ package com.dasher.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
 import com.dasher.mapper.MarketMenuMapper;
+import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
+import com.dasher.model.MarketMenuRecord;
+import com.dasher.service.MarketCommodityService;
+import com.dasher.service.MarketMenuRecordService;
 import com.dasher.service.MarketMenuService;
+import com.dasher.service.MarketService;
+import com.dasher.util.BaiDuMapUtil;
 
 public class MarketMenuServiceImpl implements MarketMenuService {
 
 	private MarketMenuMapper marketMenuMapper;
+	@Autowired
+	private MarketMenuRecordService marketMenuRecordService;
+	@Autowired
+	private MarketCommodityService marketCommodityService;
+	@Autowired
+	private MarketService marketService;
+	@Autowired
+    @Qualifier("transactionManager")
+    private PlatformTransactionManager transactionManager = null;
+
 	
 	public MarketMenuMapper getMarketMenuMapper() {
 		return marketMenuMapper;
@@ -19,8 +42,49 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 	}
 
 	public boolean add(MarketMenu mm) {
-		// TODO Auto-generated method stub
-		return marketMenuMapper.add(mm)>0? true:false;
+		//添加事务处理
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        int result=-1;
+        boolean flag=false;
+        //获取商家的信息
+        Market market=marketService.getBySmid(mm.getSmid());
+        //获取商家和订单地址的距离和方位
+        String direction=BaiDuMapUtil.GetDirection(Double.parseDouble(market.getLongitude()),
+        		Double.parseDouble(market.getLatitude()),Double.parseDouble(mm.getLongitude()),
+        		Double.parseDouble(mm.getLatitude()));
+        double distance =BaiDuMapUtil.GetShortDistance(Double.parseDouble(market.getLongitude()),
+        		Double.parseDouble(market.getLatitude()),Double.parseDouble(mm.getLongitude()),
+        		Double.parseDouble(mm.getLatitude()));
+        mm.setDistance(String.valueOf(distance));
+        mm.setDirection(direction);
+        //保存订单信息
+		result=marketMenuMapper.add(mm);
+		if(result>0)
+		{
+			List<MarketMenuRecord> dishs=mm.getDishs();
+			for (MarketMenuRecord mmr : dishs) {
+				flag=marketMenuRecordService.add(mmr);
+				if(!flag){
+					break;
+				}
+			}
+			if(flag==true)
+			{
+				transactionManager.commit(ts);
+			}
+			else
+			{
+				transactionManager.rollback(ts);  
+			}
+		}
+		else
+		{
+			transactionManager.rollback(ts);  
+		}
+			
+		return flag;
 	}
 
 	public boolean receive(MarketMenu mm) {

@@ -1,12 +1,11 @@
 package com.dasher.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
@@ -14,13 +13,11 @@ import com.dasher.mapper.MenuMapper;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
 import com.dasher.model.Shop;
-import com.dasher.model.ShopDish;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
 import com.dasher.service.ShopDishService;
 import com.dasher.service.ShopService;
 import com.dasher.util.BaiDuMapUtil;
-import com.dasher.util.DateUtil;
 
 public class MenuServiceImpl implements MenuService {
 
@@ -46,7 +43,7 @@ public class MenuServiceImpl implements MenuService {
 	public boolean add(Menu m) {
 		//添加事务处理
 		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
-        dtd.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         TransactionStatus ts = transactionManager.getTransaction(dtd);
         int result=-1;
         boolean flag=false;

@@ -19,7 +19,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Login;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
 import com.dasher.model.User;
@@ -204,7 +203,8 @@ public class MenuController extends MyController {
 				//获取订单的菜品信息
 				List<MenuDish> dishs=new ArrayList<MenuDish>();
 				JSONArray dishArray=jsonObject.getJSONArray("dishs");
-				for(int i=0;i<dishArray.length();i++){
+				for(int i=0;i<dishArray.length();i++)
+				{
 					JSONObject dishObj=dishArray.getJSONObject(i);
 				    String did="";
 				    String name="";

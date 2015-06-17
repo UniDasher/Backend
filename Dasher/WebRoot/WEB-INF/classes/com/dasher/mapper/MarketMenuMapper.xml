@@ -16,6 +16,8 @@
      <result property="menuCount" column="menuCount"/>
      <result property="payType" column="payType"/>
      <result property="address" column="address"/>
+     <result property="distance" column="distance"/>
+     <result property="direction" column="direction"/>
      <result property="longitude" column="longitude"/>
      <result property="latitude" column="latitude"/>
      <result property="mealStartDate" column="mealStartDate"/>
@@ -30,8 +32,8 @@
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MarketMenu">
-     insert into market_menu(mid,smid,uid,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,address,longitude,latitude,mealStartDate,mealEndDate,createBy,createDate,status)
-     values(#{mid},#{smid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{address},#{longitude},#{latitude},#{mealStartDate},#{mealEndDate},#{createBy},#{createDate},1)
+     insert into market_menu(mid,smid,uid,dishsMoney,distance,direction,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,address,longitude,latitude,mealStartDate,mealEndDate,createBy,createDate,status)
+     values(#{mid},#{smid},#{uid},#{dishsMoney},#{distance},#{direction},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{address},#{longitude},#{latitude},#{mealStartDate},#{mealEndDate},#{createBy},#{createDate},1)
    </insert>
    
    <update id="receive" parameterType="MarketMenu">

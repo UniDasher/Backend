@@ -2,6 +2,7 @@ package com.dasher.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.MarketMenu;
+import com.dasher.model.MarketMenuRecord;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
@@ -43,7 +46,7 @@ public class MarketMenuController extends MyController {
 
 	@RequestMapping("phone/market/menu/add")
 	@ResponseBody
-	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException, JSONException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
@@ -201,6 +204,69 @@ public class MarketMenuController extends MyController {
             mm.setMealEndDate(mealEndDate);
             mm.setCreateBy(myloginId);
             mm.setCreateDate(DateUtil.getCurrentDateStr());
+            
+            List<MarketMenuRecord> dishs=new ArrayList<MarketMenuRecord>();
+            JSONArray dishArray=jsonObject.getJSONArray("dishs");
+            for(int i=0;i<dishArray.length();i++){
+				JSONObject dishObj=dishArray.getJSONObject(i);
+			    String name="";
+			    String price="";
+			    String unit="";
+			    String count="";
+			    String subscribe="";
+			    name=dishObj.getString("name");
+			    price=dishObj.getString("price");
+			    unit=dishObj.getString("unit");
+				count=dishObj.getString("count");
+				subscribe=dishObj.getString("subscribe");
+				if(name=="")
+				{
+					resultDesc=ShowMsg.nameNull;
+					resultCode=2;
+				}
+				else if(price=="")
+				{
+					resultDesc=ShowMsg.priceNull;
+					resultCode=2;
+				}
+				else if(count=="")
+				{
+					resultDesc=ShowMsg.menuCountNull;
+					resultCode=2;
+				}
+				else if(!count.matches("^[0-9]*$"))
+				{
+					resultDesc=ShowMsg.menuCountErr;
+					resultCode=2;
+				}
+				else
+				{
+					//验证金额
+					pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+					matcher=pattern.matcher(price);
+					if(matcher.matches()==false)
+					{
+						resultDesc=ShowMsg.priceErr;
+						resultCode=2;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);
+						return model;
+					}
+					MarketMenuRecord md=new MarketMenuRecord();
+					md.setMid(mid);
+					md.setName(name);
+					md.setPrice(Float.parseFloat(price));
+					md.setCount(Integer.parseInt(count));
+					md.setSubscribe(subscribe);
+					md.setCreateBy(myloginId);
+					md.setCreateDate(DateUtil.getCurrentDateStr());
+					
+					dishs.add(md);
+				}
+            }
+
+            mm.setDishs(dishs);
+
             result=marketMenuService.add(mm);
 			if(result==true)
 			{
