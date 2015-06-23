@@ -6,6 +6,7 @@ import com.dasher.model.Complain;
 
 public interface ComplainService {
 
+
 	public int getCount(int status);
 	public boolean add(Complain c);
 	public boolean update(Complain c);

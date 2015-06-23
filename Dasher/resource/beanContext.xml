@@ -133,12 +133,6 @@
 			value="com.dasher.mapper.ServerSettleMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	<bean id="timeMapper"
-		class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface"
-			value="com.dasher.mapper.TimeMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean>
 	<bean id="shopMapper"
 		class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
@@ -184,10 +178,6 @@
 	<bean id="menuDishService"
 		class="com.dasher.service.impl.MenuDishServiceImpl">
 		<property name="menuDishMapper" ref="menuDishMapper"></property>
-	</bean>
-	<bean id="timeService"
-		class="com.dasher.service.impl.TimeServiceImpl">
-		<property name="timeMapper" ref="timeMapper"></property>
 	</bean>
 	<bean id="complainDealService"
 		class="com.dasher.service.impl.ComplainDealServiceImpl">

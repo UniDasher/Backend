@@ -31,6 +31,7 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
+
 	
 	public MarketMenuMapper getMarketMenuMapper() {
 		return marketMenuMapper;

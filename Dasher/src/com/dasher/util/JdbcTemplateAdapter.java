@@ -28,6 +28,14 @@ public class JdbcTemplateAdapter extends JdbcTemplate {
 		super(ds);
 	}
 
+	/**
+	 * ���Ӳ��һ�ȡ����
+	 * @param sql
+	 *            sql���
+	 * @param params
+	 *            �����б�
+	 * @return ����
+	 */
 	public int insertAndGetKey(final String sql, final Object... params) {
 		logger.debug("Executing SQL update and returning generated keys");
 		final KeyHolder key = new GeneratedKeyHolder();

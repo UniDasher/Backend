@@ -55,6 +55,8 @@ public class Shop implements Serializable {
 		this.serviceTimes = serviceTimes;
 	}
 
+
+
 	public int getId() {
 		return id;
 	}
@@ -206,6 +208,5 @@ public class Shop implements Serializable {
 	public void setServiceTimes(String serviceTimes) {
 		this.serviceTimes = serviceTimes;
 	}
-
 	
 }

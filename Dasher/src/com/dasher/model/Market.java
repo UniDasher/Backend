@@ -25,6 +25,7 @@ public class Market implements Serializable {
 	public Market() {
 		
 	}
+
 	
 	public Market(int id, String smid, String name, String address,
 			String subscribe, String email, String phone, String serviceTime,
@@ -50,6 +51,7 @@ public class Market implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
+
 
 	public int getId() {
 		return id;
@@ -147,37 +149,46 @@ public class Market implements Serializable {
 		this.badEvaluate = badEvaluate;
 	}
 
+	
 	public String getCreateBy() {
 		return createBy;
 	}
+
 
 	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
 	}
 
+
 	public String getCreateDate() {
 		return createDate;
 	}
+
 
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
+
 	public String getUpdateBy() {
 		return updateBy;
 	}
+
 
 	public void setUpdateBy(String updateBy) {
 		this.updateBy = updateBy;
 	}
 
+
 	public String getUpdateDate() {
 		return updateDate;
 	}
 
+
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
+
 
 	public int getStatus() {
 		return status;
@@ -186,5 +197,6 @@ public class Market implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	
 	
 }

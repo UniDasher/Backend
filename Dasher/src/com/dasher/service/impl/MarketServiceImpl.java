@@ -73,4 +73,6 @@ public class MarketServiceImpl implements MarketService {
 		List<Market> list=marketMapper.getNearlist(minlon, maxlon, minlat, maxlat);
 		return list;
 	}
+
+
 }

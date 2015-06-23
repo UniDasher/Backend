@@ -153,6 +153,8 @@ public class UserSettleServiceImpl implements UserSettleService {
 		return userSettleMapper.list(searchStr,startDate,endDate, startRow, pageSize);
 	}
 	
+	
+
 	public boolean add(UserSettle us) {
 		// TODO Auto-generated method stub
 		return userSettleMapper.add(us)>0? true:false;

@@ -46,6 +46,7 @@ public class MenuEvaluate implements Serializable {
 		this.waiterName = waiterName;
 	}
 
+
 	public int getId() {
 		return id;
 	}
@@ -109,38 +110,31 @@ public class MenuEvaluate implements Serializable {
 	public void setEvalContent(String evalContent) {
 		this.evalContent = evalContent;
 	}
-
 	public String getCreateBy() {
 		return createBy;
 	}
-
 	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
 	}
-
 	public String getCreateDate() {
 		return createDate;
 	}
-
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-
 	public String getUpdateBy() {
 		return updateBy;
 	}
-
 	public void setUpdateBy(String updateBy) {
 		this.updateBy = updateBy;
 	}
-
 	public String getUpdateDate() {
 		return updateDate;
 	}
-
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
+
 
 	public String getShopName() {
 		return shopName;
@@ -157,13 +151,10 @@ public class MenuEvaluate implements Serializable {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
 	public String getWaiterName() {
 		return waiterName;
 	}
-
 	public void setWaiterName(String waiterName) {
 		this.waiterName = waiterName;
 	}
-
 }

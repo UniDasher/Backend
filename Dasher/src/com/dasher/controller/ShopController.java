@@ -223,6 +223,7 @@ public class ShopController extends MyController {
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
+		String serviceTimes=getString(request, "serviceTimes");
 		
 		if(name=="")
 		{
@@ -293,6 +294,7 @@ public class ShopController extends MyController {
 					s.setLatitude(latitude);
 					s.setCreateBy(Integer.parseInt(myloginId));
 					s.setCreateDate(DateUtil.getCurrentDateStr());
+                    s.setServiceTimes(serviceTimes);
 
 					result=shopService.add(s);
 					if(result==true)
@@ -354,6 +356,7 @@ public class ShopController extends MyController {
 		String address=getString(request, "address");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
+		String serviceTimes=getString(request, "serviceTimes");
 		if(sid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -416,6 +419,7 @@ public class ShopController extends MyController {
 				s.setLatitude(latitude);
 				s.setUpdateBy(Integer.parseInt(myloginId));
 				s.setUpdateDate(DateUtil.getCurrentDateStr());
+				s.setServiceTimes(serviceTimes);
 				if(shop==null)
 				{
 					result=shopService.update(s);

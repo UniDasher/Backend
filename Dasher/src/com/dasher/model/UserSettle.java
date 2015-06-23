@@ -14,6 +14,7 @@ public class UserSettle implements Serializable {
 	private String settleNumberType;
 	private String settleNumber;
 	private String settleDesc;
+	
 	private String createBy;
 	private String createDate;
 	private String updateBy;

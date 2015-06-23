@@ -23,6 +23,7 @@ public class ShopDish implements Serializable {
 		
 	}
 
+	
 	public ShopDish(int id, String sid, String did, String name, float price,
 			int typeId, String typeName, String chilies, String description,
 			int createBy, String createDate, int updateBy, String updateDate,
@@ -43,6 +44,7 @@ public class ShopDish implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
+
 
 	public int getCreateBy() {
 		return createBy;
