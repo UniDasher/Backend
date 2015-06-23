@@ -21,6 +21,7 @@
   		<typeAlias type="com.dasher.model.ShopDish" alias="ShopDish" />
   		<typeAlias type="com.dasher.model.ShopDishType" alias="ShopDishType" />
   		<typeAlias type="com.dasher.model.ShopType" alias="ShopType" />
+  		<typeAlias type="com.dasher.model.Time" alias="Time" />
   	</typeAliases>
  	<mappers>
 	    <mapper resource="com/dasher/mapper/UserMapper.xml" />
@@ -42,6 +43,7 @@
 	    <mapper resource="com/dasher/mapper/ShopDishMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ShopDishTypeMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ShopTypeMapper.xml" />
+	    <mapper resource="com/dasher/mapper/TimeMapper.xml" />
 	</mappers>	
 	
 </configuration>

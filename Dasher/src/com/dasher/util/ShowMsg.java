@@ -143,4 +143,8 @@ public class ShowMsg {
 	public static final String LonLatErr = "经纬度格式错误";
 	public static final String distanceErr="附近距离格式错误";
 	public static final float distance=1000;
+	public static final String weekNull="日期为空";
+	public static final String weekErr="日期格式错误";
+	public static final String flagNull="flag 为空";
+	public static final String flagErr="flag格式错误";
 }

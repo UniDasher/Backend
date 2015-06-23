@@ -19,20 +19,14 @@ public class Complain implements Serializable {
 	private String createDate;
 	private String updateBy;
 	private String updateDate;
-	
-
 	private String userName;//投诉用户的名字
 	private String userPhone;//投诉用户的电话
-	
 	private String waiterName;//送餐者的名字
 	private String waiterPhone;//送餐者的电话
-	
 	private int status;//投诉的状态
 	private int menuStatus;//订单的状态
-	
 	private float dishsMoney;//订单金额
 	private float carriageMoney;//运费
-	
 	
 	public float getCarriageMoney() {
 		return carriageMoney;

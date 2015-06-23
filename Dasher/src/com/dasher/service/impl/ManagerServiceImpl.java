@@ -10,7 +10,6 @@ public class ManagerServiceImpl implements ManagerService {
 
 	private ManagerMapper managerMapper;
 	
-	
 	public ManagerMapper getManagerMapper() {
 		return managerMapper;
 	}

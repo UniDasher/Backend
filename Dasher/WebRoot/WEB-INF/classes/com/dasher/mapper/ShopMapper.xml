@@ -25,8 +25,8 @@
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="Shop">
-     insert into shop_info(sid,name,typeTab,address,subscribe,email,phone,logo,longitude,latitude,createBy,createDate,status,serviceTimes) 
-     values(#{sid},#{name},#{typeTab},#{address},#{subscribe},#{email},#{phone},#{logo},#{longitude},#{latitude},#{createBy},#{createDate},1,#{serviceTimes})
+     insert into shop_info(sid,name,typeTab,address,subscribe,email,phone,logo,longitude,latitude,createBy,createDate,status) 
+     values(#{sid},#{name},#{typeTab},#{address},#{subscribe},#{email},#{phone},#{logo},#{longitude},#{latitude},#{createBy},#{createDate},1)
    </insert>
    
    <select id="getBySid" parameterType="String" resultType="Shop">
@@ -39,7 +39,7 @@
    
    <update id="update" parameterType="Shop">
      update shop_info 
-     set name=#{name},typeTab=#{typeTab},address=#{address},subscribe=#{subscribe},email=#{email},phone=#{phone},longitude=#{longitude},latitude=#{latitude},updateBy=#{updateBy},updateDate=#{updateDate},serviceTimes=#{serviceTimes}
+     set name=#{name},typeTab=#{typeTab},address=#{address},subscribe=#{subscribe},email=#{email},phone=#{phone},longitude=#{longitude},latitude=#{latitude},updateBy=#{updateBy},updateDate=#{updateDate}
      where sid=#{sid} and status>0
    </update>
    
