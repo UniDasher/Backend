@@ -1,0 +1,8 @@
+127.0.0.1 -  -  [02/六月/2015:11:45:03 +0800] "GET /market/menu/commodity/add?mid=20150529161657329&name=%E6%A9%99%E6%B1%81&price=10&unit=%E6%9D%AF&count=3&authCode=5b159476fd70401fb173d729a5d962f2 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [02/六月/2015:11:45:03 +0800] "GET /favicon.ico HTTP/1.1" 404 1376 
+127.0.0.1 -  -  [02/六月/2015:11:45:03 +0800] "GET /favicon.ico HTTP/1.1" 404 1376 
+127.0.0.1 -  -  [02/六月/2015:11:45:23 +0800] "GET /market/menu/commodity/add?mid=20150529161657329&name=%E5%B8%83%E4%B8%81%E5%A5%B6%E8%8C%B6&price=15&unit=%E6%9D%AF&count=3&authCode=5b159476fd70401fb173d729a5d962f2 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [02/六月/2015:11:45:42 +0800] "GET /market/menu/commodity/add?mid=20150529161657329&name=%E5%8F%AF%E4%B9%90&price=7&unit=%E6%9D%AF&count=3&authCode=5b159476fd70401fb173d729a5d962f2 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [02/六月/2015:11:46:04 +0800] "GET /market/menu/commodity/add?mid=20150529161657329&name=%E5%8F%AF%E4%B9%90&price=7.g&unit=%E6%9D%AF&count=3&authCode=5b159476fd70401fb173d729a5d962f2 HTTP/1.1" 200 108 
+127.0.0.1 -  -  [02/六月/2015:11:46:09 +0800] "GET /market/menu/commodity/add?mid=20150529161657329&name=%E5%8F%AF%E4%B9%90&price=7.56&unit=%E6%9D%AF&count=3&authCode=5b159476fd70401fb173d729a5d962f2 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [02/六月/2015:11:46:35 +0800] "GET /market/menu/commodity/list?mid=20150529161657329&authCode=5b159476fd70401fb173d729a5d962f2 HTTP/1.1" 200 775 

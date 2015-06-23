@@ -1,0 +1,11 @@
+127.0.0.1 -  -  [01/六月/2015:15:46:52 +0800] "GET /market/menu/list?smid=20150525145921720&curPage=1&countPage=6&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 500 18288 
+127.0.0.1 -  -  [01/六月/2015:15:46:53 +0800] "GET /favicon.ico HTTP/1.1" 404 1376 
+127.0.0.1 -  -  [01/六月/2015:15:46:53 +0800] "GET /favicon.ico HTTP/1.1" 404 1376 
+127.0.0.1 -  -  [01/六月/2015:15:55:45 +0800] "GET /market/menu/list?smid=20150525145921720&curPage=1&countPage=6&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 1214 
+127.0.0.1 -  -  [01/六月/2015:16:03:06 +0800] "GET /market/menu/list?searchStr=%E4%BA%AC&curPage=1&countPage=6&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 624 
+127.0.0.1 -  -  [01/六月/2015:16:09:33 +0800] "GET /market/menu/info?mid=20150529161905008&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 618 
+127.0.0.1 -  -  [01/六月/2015:16:09:49 +0800] "GET /market/menu/info?mid=&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 96 
+127.0.0.1 -  -  [01/六月/2015:16:22:03 +0800] "GET /market/menu/user/list?uid=20150429152537&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 102 
+127.0.0.1 -  -  [01/六月/2015:16:22:48 +0800] "GET /market/menu/user/list?uid=20150429152537&type=1&curPage=1&countPage=6&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 500 17853 
+127.0.0.1 -  -  [01/六月/2015:16:25:31 +0800] "GET /market/menu/user/list?uid=20150429152537&type=1&curPage=1&countPage=6&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [01/六月/2015:16:25:38 +0800] "GET /market/menu/user/list?uid=20150429152537&type=0&curPage=1&countPage=6&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 1208 

@@ -1,0 +1,8 @@
+127.0.0.1 -  -  [04/六月/2015:17:40:56 +0800] "GET /settle/user/add?wid=20150428145032&settleType=1&settlePrice=30&settleNumberType=%E5%86%9C%E8%A1%8C%E5%8D%A1&settleNumber=321344234&settleDesc=%E9%80%81%E9%A4%90%E6%9C%8D%E5%8A%A1%E8%B4%B9&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [04/六月/2015:17:40:56 +0800] "GET /favicon.ico HTTP/1.1" 404 1376 
+127.0.0.1 -  -  [04/六月/2015:17:40:56 +0800] "GET /favicon.ico HTTP/1.1" 404 1376 
+127.0.0.1 -  -  [04/六月/2015:17:41:49 +0800] "GET /settle/user/add?wid=20150428145032&settleType=1&settlePrice=30&settleNumberType=%E5%86%9C%E8%A1%8C%E5%8D%A1&settleNumber=321344234&settleDesc=%E6%9C%8D%E5%8A%A1%E8%B4%B9&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [04/六月/2015:17:41:51 +0800] "GET /settle/user/add?wid=20150428145032&settleType=1&settlePrice=30&settleNumberType=%E5%86%9C%E8%A1%8C%E5%8D%A1&settleNumber=321344234&settleDesc=%E6%9C%8D%E5%8A%A1%E8%B4%B9&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [04/六月/2015:17:41:52 +0800] "GET /settle/user/add?wid=20150428145032&settleType=1&settlePrice=30&settleNumberType=%E5%86%9C%E8%A1%8C%E5%8D%A1&settleNumber=321344234&settleDesc=%E6%9C%8D%E5%8A%A1%E8%B4%B9&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 93 
+127.0.0.1 -  -  [04/六月/2015:17:51:41 +0800] "GET /settle/user/list?curPage=1&countPage=6&searchStr=&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 1319 
+127.0.0.1 -  -  [04/六月/2015:17:52:38 +0800] "GET /settle/user/info/list?wid=20150428145032&authCode=2531524dd4ca4e6984e135878e737bd0 HTTP/1.1" 200 1008 
