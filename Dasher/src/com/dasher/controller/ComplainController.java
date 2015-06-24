@@ -54,7 +54,7 @@ public class ComplainController extends MyController {
 	    String content="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			mid=jsonObject.getString("mid");
 			uid=jsonObject.getString("uid");
 			wid=jsonObject.getString("wid");
@@ -146,7 +146,7 @@ public class ComplainController extends MyController {
 	    String status="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			uid=jsonObject.getString("uid");
 			status=jsonObject.getString("status");
 		} catch (JSONException e1) {
@@ -207,7 +207,7 @@ public class ComplainController extends MyController {
 	    String type="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			comId=jsonObject.getString("comId");
 			type=jsonObject.getString("type");
 		} catch (JSONException e1) {

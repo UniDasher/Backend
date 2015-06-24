@@ -13,7 +13,7 @@ public interface ShopService {
 	public boolean updateLogo(Shop s);
 	public Shop getBySid(String sid);
 	public Shop getByName(String name);
-	public List<Shop> getListByLati(int longitude,int latitude,int startRow,int pageSize);
+	public List<Shop> getListByLati(double longitude,double latitude,float distance);
 	public List<Shop> list(String searchStr, int startRow,int pageSize);
 	public List<Shop> menuList();
 }
