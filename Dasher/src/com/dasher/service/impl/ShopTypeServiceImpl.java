@@ -15,9 +15,6 @@ public class ShopTypeServiceImpl implements ShopTypeService {
 	public void setShopTypeMapper(ShopTypeMapper shopTypeMapper) {
 		this.shopTypeMapper = shopTypeMapper;
 	}
-
-
-
 	public boolean add(ShopType st) {
 		// TODO Auto-generated method stub
 		return shopTypeMapper.add(st)>0? true:false;

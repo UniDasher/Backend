@@ -60,9 +60,4 @@ public class Login implements Serializable {
 		this.authCode = authCode;
 		this.loginTime = loginTime;
 	}
-	
-	
-	
-	
-	
 }

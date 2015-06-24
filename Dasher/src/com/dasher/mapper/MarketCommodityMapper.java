@@ -18,5 +18,4 @@ public interface MarketCommodityMapper {
 	public List<MarketCommodity> list(@Param(value="smid")String smid,@Param(value="typeId") String typeId,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<MarketCommodity> listBySmid(String smid);
 	
-
 }

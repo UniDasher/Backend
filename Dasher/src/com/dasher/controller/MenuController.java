@@ -289,9 +289,8 @@ public class MenuController extends MyController {
 			model.put("resultDesc", resultDesc);
 			return model;
 		}
-	}	
-
-
+	}
+	
 	@RequestMapping("phone/menu/receive")
 	@ResponseBody
 	protected Object receive(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -411,8 +410,7 @@ public class MenuController extends MyController {
 			resultCode=2;
 		}
 		else
-		{
-			
+		{ 
 			Menu m=new Menu();
 			m.setMid(mid);
 			m.setUpdateBy(myloginId);

@@ -30,7 +30,6 @@ public class MenuDish implements Serializable {
 		this.createDate = createDate;
 	}
 
-
 	public int getId() {
 		return id;
 	}
@@ -94,4 +93,5 @@ public class MenuDish implements Serializable {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
+
 }

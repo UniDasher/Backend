@@ -16,7 +16,6 @@ public class ServerSettle implements Serializable {
 	private String settleDesc;
 	private String createBy;
 	private String createDate;
-	
 	private String userName;
 	private String mobilePhone;
 	

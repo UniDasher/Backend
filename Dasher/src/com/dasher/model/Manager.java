@@ -21,7 +21,6 @@ public class Manager implements Serializable {
 	public Manager() {
 		
 	}
-
 	
 	public Manager(int id, String account, String password, String salt,
 			String firstName, String lastName, String email, int type,
@@ -42,7 +41,6 @@ public class Manager implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 	}
-
 
 	public int getId() {
 		return id;
@@ -66,6 +64,14 @@ public class Manager implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 	public String getFirstName() {
@@ -100,59 +106,41 @@ public class Manager implements Serializable {
 		this.type = type;
 	}
 
-	public int getStatus() {
-		return status;
-	}
-
-	public String getSalt() {
-		return salt;
-	}
-
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-
-
 	public int getCreateBy() {
 		return createBy;
 	}
-
 
 	public void setCreateBy(int createBy) {
 		this.createBy = createBy;
 	}
 
-
 	public String getCreateDate() {
 		return createDate;
 	}
-
 
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-
 	public int getUpdateBy() {
 		return updateBy;
 	}
-
 
 	public void setUpdateBy(int updateBy) {
 		this.updateBy = updateBy;
 	}
 
-
 	public String getUpdateDate() {
 		return updateDate;
 	}
-
 
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 
+	public int getStatus() {
+		return status;
+	}
 
 	public void setStatus(int status) {
 		this.status = status;

@@ -8,7 +8,6 @@ public class ComplainDealServiceImpl implements ComplainDealService {
 
 	private ComplainDealMapper complainDealMapper;
 	
-	
 	public ComplainDealMapper getComplainDealMapper() {
 		return complainDealMapper;
 	}

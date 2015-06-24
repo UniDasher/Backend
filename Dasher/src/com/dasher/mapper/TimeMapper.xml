@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dasher.mapper.TimeMapper">
+   <resultMap type="Time" id="timeMap">
+     <result property="id" column="id"/>
+     <result property="sid" column="sid"/>
+     <result property="weeks" column="weeks"/>
+     <result property="flag" column="flag"/>
+     <result property="subscribe" column="subscribe"/>
+     <result property="time1" column="time1"/>
+     <result property="time2" column="time2"/>
+     <result property="time3" column="time3"/>
+     <result property="time4" column="time4"/>
+     <result property="time5" column="time5"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="status" column="status"/>
+   </resultMap>
+   
+   <insert id="add" parameterType="Time" keyProperty="id" useGeneratedKeys="true">
+      insert into time_info(sid,weeks,flag,subscribe,time1,time2,time3,time4,time5,createBy,createDate,updateBy,updateDate,status)
+      values(#{sid},#{weeks},#{flag},#{subscribe},#{time1},#{time2},#{time3},#{time4},#{time5},#{createBy},#{createDate},#{updateBy},#{updateDate},1)
+   </insert>
+   
+   <update id="update" parameterType="Time">
+      update time_info
+      set weeks=#{weeks},flag=#{flag},subscribe=#{subscribe},time1=#{time1},time2=#{time2},time3=#{time3},time4=#{time4},time5=#{time5},updateBy=#{updateBy},updateDate=#{updateDate}
+      where id=#{id}
+   </update>
+   
+   <select id="getById" parameterType="String" resultType="Time">
+      select * from time_info where id=#{id}
+   </select>
+   
+   <select id="getBySid" parameterType="String" resultType="Time">
+      select * from time_info where sid=#{sid} and status>0
+   </select>
+   
+   <update id="delete" parameterType="Time">
+      update time_info
+      set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
+      where id=#{id}
+   </update>
+   
+   <select id="list" parameterType="String" resultType="Time">
+      select * from time_info where sid=#{sid} and status>0
+   </select>
+   
+  
+</mapper>

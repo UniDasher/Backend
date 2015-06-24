@@ -1,6 +1,4 @@
 package com.dasher.mapper;
-
-
 import java.util.List;
 
 import com.dasher.model.Manager;
