@@ -234,11 +234,11 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.typeTabNull;
 			resultCode=2;
 		}
-		else if(email=="")
-		{
-			resultDesc=ShowMsg.EmailNull;
-			resultCode=2;
-		}
+//		else if(email=="")
+//		{
+//			resultDesc=ShowMsg.EmailNull;
+//			resultCode=2;
+//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -253,16 +253,17 @@ public class ShopController extends MyController {
 		
 		else
 		{
-			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
-			Matcher matcher=pattern.matcher(email);
+//			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+//			Matcher matcher=pattern.matcher(email);
 			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
 			Matcher matcher2=pattern2.matcher(phone);
-			if(matcher.matches()==false)
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.emailErr;
-			}
-			else if(matcher2.matches()==false)
+//			if(matcher.matches()==false)
+//			{
+//				resultCode=2;
+//				resultDesc=ShowMsg.emailErr;
+//			}
+//			else 
+			if(matcher2.matches()==false)
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;
