@@ -1,8 +1,6 @@
 package com.dasher.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.dasher.model.Login;
 import com.dasher.model.Manager;
-import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.ManagerService;
@@ -453,7 +450,6 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
 	@RequestMapping("/admin/apply")
 	@ResponseBody
 	protected Object apply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -535,6 +531,4 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
-
 }

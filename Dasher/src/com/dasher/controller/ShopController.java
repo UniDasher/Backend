@@ -47,6 +47,29 @@ public class ShopController extends MyController {
 	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
+		
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String myloginId=loginService.getByAuthCode(authCode);
+		Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		else if(l.getType()!=1)
+		{
+			resultDesc=ShowMsg.NoPermiss;
+			resultCode=4;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
+		/*
 		//获取参数
 		String JSONStr=getJsonString(request);
 	    JSONObject jsonObject=null;
@@ -55,7 +78,7 @@ public class ShopController extends MyController {
 	    String latitude="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			longitude=jsonObject.getString("longitude");
 			latitude=jsonObject.getString("latitude");
 		} catch (JSONException e1) {
@@ -76,7 +99,7 @@ public class ShopController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
-		
+		*/
 		//业务逻辑
 		if(longitude==""||latitude=="")
 		{
@@ -85,16 +108,22 @@ public class ShopController extends MyController {
 		}
 		else
 		{
-			String mycurPage=getString(request, "curPage");  
-			String mypageSize=getString(request, "countPage");//每页的数据数
-			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
-			{
-				int curPage=Integer.parseInt(mycurPage);
-				int pageSize=Integer.parseInt(mypageSize);
-				int startRow=(curPage-1)*pageSize;
-				List<Shop> shopList=shopService.getListByLati(Integer.parseInt(longitude), Integer.parseInt(latitude), startRow, pageSize);
-				model.put("list", shopList);
-			}
+//			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+//			Matcher matcher=pattern.matcher(longitude);
+//			Matcher matcher2=pattern.matcher(latitude);
+//			if(matcher.matches()==false||matcher2.matches()==false)
+//			{
+//				resultDesc=ShowMsg.LonLatErr;
+//				resultCode=2;
+//				model.put("resultCode", resultCode);	
+//				model.put("resultDesc", resultDesc);
+//				return model;
+//			}
+			
+			List<Shop> shopList=shopService.getListByLati(Double.parseDouble(longitude) ,Double.parseDouble(latitude),1000000l);
+			model.put("list", shopList);
+			resultDesc=ShowMsg.findSuc;
+			resultCode=0;
 		}
 
 		model.put("resultCode", resultCode);	
@@ -114,7 +143,7 @@ public class ShopController extends MyController {
 	    String sid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			sid=jsonObject.getString("sid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -205,11 +234,11 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.typeTabNull;
 			resultCode=2;
 		}
-		else if(email=="")
-		{
-			resultDesc=ShowMsg.EmailNull;
-			resultCode=2;
-		}
+//		else if(email=="")
+//		{
+//			resultDesc=ShowMsg.EmailNull;
+//			resultCode=2;
+//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -224,16 +253,17 @@ public class ShopController extends MyController {
 		
 		else
 		{
-			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
-			Matcher matcher=pattern.matcher(email);
+//			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+//			Matcher matcher=pattern.matcher(email);
 			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
 			Matcher matcher2=pattern2.matcher(phone);
-			if(matcher.matches()==false)
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.emailErr;
-			}
-			else if(matcher2.matches()==false)
+//			if(matcher.matches()==false)
+//			{
+//				resultCode=2;
+//				resultDesc=ShowMsg.emailErr;
+//			}
+//			else 
+			if(matcher2.matches()==false)
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;
@@ -340,11 +370,11 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.typeTabNull;
 			resultCode=2;
 		}
-		else if(email=="")
-		{
-			resultDesc=ShowMsg.EmailNull;
-			resultCode=2;
-		}
+//		else if(email=="")
+//		{
+//			resultDesc=ShowMsg.EmailNull;
+//			resultCode=2;
+//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -357,16 +387,17 @@ public class ShopController extends MyController {
 		}
 		else
 		{
-			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
-			Matcher matcher=pattern.matcher(email);
+//			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+//			Matcher matcher=pattern.matcher(email);
 			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
 			Matcher matcher2=pattern2.matcher(phone);
-			if(matcher.matches()==false)
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.emailErr;
-			}
-			else if(matcher2.matches()==false)
+//			if(matcher.matches()==false)
+//			{
+//				resultCode=2;
+//				resultDesc=ShowMsg.emailErr;
+//			}
+//			else 
+			if(matcher2.matches()==false)
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;

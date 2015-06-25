@@ -43,7 +43,7 @@ public class MarketController extends MyController {
 	    String smid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			smid=jsonObject.getString("smid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -112,7 +112,7 @@ public class MarketController extends MyController {
 	    String latitude="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			longitude=jsonObject.getString("longitude");
 			latitude=jsonObject.getString("latitude");
 		} catch (JSONException e1) {
@@ -156,29 +156,29 @@ public class MarketController extends MyController {
 		}
 		else
 		{
-			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
-			Matcher matcher=pattern.matcher(longitude);
-			Matcher matcher2=pattern.matcher(latitude);
-			Matcher matcher3=pattern.matcher(distance);
-			if(matcher.matches()==false||matcher2.matches()==false)
-			{
-				resultDesc=ShowMsg.LonLatErr;
-				resultCode=2;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
-			
-			if(matcher3.matches()==false)
-			{
-				resultDesc=ShowMsg.distanceErr;
-				resultCode=2;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
+//			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
+//			Matcher matcher=pattern.matcher(longitude);
+//			Matcher matcher2=pattern.matcher(latitude);
+//			Matcher matcher3=pattern.matcher(distance);
+//			if(matcher.matches()==false||matcher2.matches()==false)
+//			{
+//				resultDesc=ShowMsg.LonLatErr;
+//				resultCode=2;
+//				model.put("resultCode", resultCode);	
+//				model.put("resultDesc", resultDesc);
+//				return model;
+//			}
+//			
+//			if(matcher3.matches()==false)
+//			{
+//				resultDesc=ShowMsg.distanceErr;
+//				resultCode=2;
+//				model.put("resultCode", resultCode);	
+//				model.put("resultDesc", resultDesc);
+//				return model;
+//			}
 			//送餐人获取附近订单
-			List<Market> list=marketService.getNearList(Float.parseFloat(longitude), Float.parseFloat(latitude), Float.parseFloat(distance));
+			List<Market> list=marketService.getNearList(Double.parseDouble(longitude) ,Double.parseDouble(latitude),1000000l);
 			if(list.size()>0)
 			{
 
@@ -274,7 +274,7 @@ public class MarketController extends MyController {
 //				resultDesc=ShowMsg.emailErr;
 //			}
 //			else 
-		    if(matcher2.matches()==false)
+			if(matcher2.matches()==false)
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;
@@ -378,11 +378,11 @@ public class MarketController extends MyController {
 			resultDesc=ShowMsg.AddressNull;
 			resultCode=2;
 		}
-		else if(email=="")
-		{
-			resultDesc=ShowMsg.EmailNull;
-			resultCode=2;
-		}
+//		else if(email=="")
+//		{
+//			resultDesc=ShowMsg.EmailNull;
+//			resultCode=2;
+//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -396,16 +396,17 @@ public class MarketController extends MyController {
 		}
 		else
 		{
-			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
-			Matcher matcher=pattern.matcher(email);
+//			Pattern pattern=Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+//			Matcher matcher=pattern.matcher(email);
 			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
 			Matcher matcher2=pattern2.matcher(phone);
-			if(matcher.matches()==false)
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.emailErr;
-			}
-			else if(matcher2.matches()==false)
+//			if(matcher.matches()==false)
+//			{
+//				resultCode=2;
+//				resultDesc=ShowMsg.emailErr;
+//			}
+//			else 
+			if(matcher2.matches()==false)
 			{
 				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;

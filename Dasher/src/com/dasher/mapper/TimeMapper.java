@@ -6,8 +6,5 @@ import com.dasher.model.Time;
 public interface TimeMapper {
 	public int add(Time t);
 	public int update(Time t);
-	public int delete(Time t);
-	public Time getById(String id);
-	public Time getBySid(String sid);
-	public List<Time> list(String sid);
+	public List<Time> getBySid(String sid);
 }

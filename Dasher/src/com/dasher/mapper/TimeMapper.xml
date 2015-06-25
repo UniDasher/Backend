@@ -27,25 +27,11 @@
    
    <update id="update" parameterType="Time">
       update time_info
-      set weeks=#{weeks},flag=#{flag},subscribe=#{subscribe},time1=#{time1},time2=#{time2},time3=#{time3},time4=#{time4},time5=#{time5},updateBy=#{updateBy},updateDate=#{updateDate}
-      where id=#{id}
+      set flag=#{flag},subscribe=#{subscribe},time1=#{time1},time2=#{time2},time3=#{time3},time4=#{time4},time5=#{time5},updateBy=#{updateBy},updateDate=#{updateDate}
+      where sid=#{sid} and weeks=#{weeks}
    </update>
-   
-   <select id="getById" parameterType="String" resultType="Time">
-      select * from time_info where id=#{id}
-   </select>
    
    <select id="getBySid" parameterType="String" resultType="Time">
-      select * from time_info where sid=#{sid} and status>0
-   </select>
-   
-   <update id="delete" parameterType="Time">
-      update time_info
-      set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
-      where id=#{id}
-   </update>
-   
-   <select id="list" parameterType="String" resultType="Time">
       select * from time_info where sid=#{sid} and status>0
    </select>
    

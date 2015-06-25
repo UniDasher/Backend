@@ -51,7 +51,7 @@ public class MenuDishController extends MyController {
 	    String count="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			mid=jsonObject.getString("mid");
 			did=jsonObject.getString("did");
 			name=jsonObject.getString("name");
@@ -151,7 +151,7 @@ public class MenuDishController extends MyController {
 	    String mid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
+			authCode = getHeadersInfo(request,"X-Auth-Token");
 			mid=jsonObject.getString("mid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";

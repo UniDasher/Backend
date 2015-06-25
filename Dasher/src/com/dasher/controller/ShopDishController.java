@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Login;
 import com.dasher.model.ShopDish;
+import com.dasher.model.ShopDishType;
 import com.dasher.service.LoginService;
 import com.dasher.service.ShopDishService;
+import com.dasher.service.ShopDishTypeService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.FileUploadUtil;
 import com.dasher.util.ShowMsg;
@@ -31,6 +33,8 @@ public class ShopDishController extends MyController {
 
 	@Autowired
 	private ShopDishService shopDishService;
+	@Autowired
+	private ShopDishTypeService shopDishTypeService;
 	@Autowired
 	private LoginService loginService;
 	private boolean result=false;
@@ -44,23 +48,7 @@ public class ShopDishController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String did="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			did=jsonObject.getString("did");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -71,7 +59,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()!=1)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -79,7 +67,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", authCode);
+		String did=getString(request, "did");
 		
 		if(did=="")
 		{
@@ -111,24 +99,7 @@ public class ShopDishController extends MyController {
 	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String sid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = jsonObject.getString("authCode");
-			sid=jsonObject.getString("sid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -139,7 +110,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
+		else if(l.getType()!=1)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -147,7 +118,7 @@ public class ShopDishController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", authCode);
+		String sid=getString(request, "sid");
 		
 		if(sid=="")
 		{
@@ -157,18 +128,19 @@ public class ShopDishController extends MyController {
 		else
 		{
 			//获取指定商家的菜品列表
+			List<ShopDishType> typeList=shopDishTypeService.listBySid(sid);
 			List<ShopDish> list=shopDishService.listBySid(sid);
-			if(list.size()>0)
+			if(typeList.size()>0&&list.size()>0)
 			{
-				model.put("count", list.size());
 				model.put("list", list);
+				model.put("typelist", typeList);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 			else
 			{
-				model.put("count", 0);
 				model.put("list", null);
+				model.put("typelist", null);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
@@ -289,7 +261,7 @@ public class ShopDishController extends MyController {
 	protected Object uploadFile(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		model=new ModelMap();
 		
-		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/shop/dish");
+		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/upload/shop/dish");
 		if(dataMap==null){
 			resultCode=1;
 			resultDesc=ShowMsg.imageUploadFail;
@@ -335,11 +307,11 @@ public class ShopDishController extends MyController {
 			{
 				if(fileName.toUpperCase().indexOf(".xls")>0)
 				{
-					list=FileUploadUtil.readXls(request, "/WEB-INF/upload/shop/dish/"+fileName);
+					list=FileUploadUtil.readXls(request, "/upload/shop/dish/"+fileName);
 				}
 				else
 				{
-					list=FileUploadUtil.readXlsx(request, "/WEB-INF/upload/shop/dish/"+fileName);
+					list=FileUploadUtil.readXlsx(request, "/upload/shop/dish/"+fileName);
 				}
 				
 				int count=shopDishService.getCountBySid(sid);

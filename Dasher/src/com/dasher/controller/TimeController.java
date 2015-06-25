@@ -65,74 +65,67 @@ public class TimeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
 		model.put("authCode", authCode);
+		
 		String sid=getString(request, "sid");
-		String weeks=getString(request, "weeks");
-		String flag=getString(request, "flag");
-		String time=getString(request, "time");
-		String time1="";
-		String time2="";
-		String time3="";
-		String time4="";
-		String time5="";
-		String subscribe=getString(request, "subscribe");
+		String week_1=getString(request, "week_1");
+		String flag_1=getString(request, "flag_1");
+		String times_1=getString(request, "times_1");
+		
+		String week_2=getString(request, "week_2");
+		String flag_2=getString(request, "flag_2");
+		String times_2=getString(request, "times_2");
+		
+		String week_3=getString(request, "week_3");
+		String flag_3=getString(request, "flag_3");
+		String times_3=getString(request, "times_3");
+		
+		String week_4=getString(request, "week_4");
+		String flag_4=getString(request, "flag_4");
+		String times_4=getString(request, "times_4");
+		
+		String week_5=getString(request, "week_5");
+		String flag_5=getString(request, "flag_5");
+		String times_5=getString(request, "times_5");
+		
+		String week_6=getString(request, "week_6");
+		String flag_6=getString(request, "flag_6");
+		String times_6=getString(request, "times_6");
+		
+		String week_7=getString(request, "week_7");
+		String flag_7=getString(request, "flag_7");
+		String times_7=getString(request, "times_7");
+		
 		if(sid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
-		else if(weeks=="")
+		else if(week_1=="")
 		{
 			resultDesc=ShowMsg.weekNull;
 			resultCode=2;
 		}
-		else if(!weeks.matches("^[0-9]*$"))
+		else if(!week_1.matches("^[0-9]*$"))
 		{
 			resultDesc=ShowMsg.typeErr;
 			resultCode=2;
 		}
-		else if(flag=="")
+		else if(flag_1=="")
 		{
 			resultDesc=ShowMsg.flagNull;
 			resultCode=2;
 		}
-		else if(!flag.matches("^[0-9]*$"))
+		else if(!flag_1.matches("^[0-9]*$"))
 		{
 			resultDesc=ShowMsg.flagErr;
 			resultCode=2;
 		}
 		else
 		{
-			String strs[]=time.split(",");
-			for(int i=0;i<strs.length;i++)
-			{
-				time1=strs[0];
-				time2=strs[1];
-				time3=strs[2];
-				time4=strs[3];
-				time5=strs[4];
-			}
-			Time t=new Time();
-			if(flag.equals("0"))
-			{
-				t.setWeeks(Integer.parseInt(weeks));
-				t.setFlag(0);
-			}
-			else
-			{
-				t.setFlag(1);
-				t.setTime1(time1);
-				t.setTime2(time2);
-				t.setTime3(time3);
-				t.setTime4(time4);
-				t.setTime5(time5);
-			}
-			t.setSid(sid);
-			t.setSubscribe(subscribe);
-			t.setCreateBy(myloginId);
-			t.setCreateDate(DateUtil.getCurrentDateStr());
-			result=timeService.add(t);
+			result=timeService.add(sid,myloginId,week_1,flag_1,times_1,week_2,flag_2,times_2,week_3,flag_3,times_3,
+					week_4,flag_4,times_4,week_5,flag_5,times_5,week_6,flag_6,times_6,week_7,flag_7,times_7);
+			
 			if(result==true)
 			{
 				resultCode=0;
@@ -149,105 +142,6 @@ public class TimeController extends MyController {
 		return model;
 	}	
 	
-	@RequestMapping("time/update")
-	@ResponseBody
-	protected Object update(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-		String id=getString(request, "id");
-		String weeks=getString(request, "weeks");
-		String flag=getString(request, "flag");
-		String time=getString(request, "time");
-		String time1="";
-		String time2="";
-		String time3="";
-		String time4="";
-		String time5="";
-		String subscribe=getString(request, "subscribe");
-		if(id==""||!id.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else if(weeks=="")
-		{
-			resultDesc=ShowMsg.weekNull;
-			resultCode=2;
-		}
-		else if(!weeks.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.typeErr;
-			resultCode=2;
-		}
-		else if(flag=="")
-		{
-			resultDesc=ShowMsg.flagNull;
-			resultCode=2;
-		}
-		else if(!flag.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.flagErr;
-			resultCode=2;
-		}
-		else
-		{
-			String strs[]=time.split(",");
-			for(int i=0;i<strs.length;i++)
-			{
-				time1=strs[0];
-				time2=strs[1];
-				time3=strs[2];
-				time4=strs[3];
-				time5=strs[4];
-			}
-			Time t=new Time();
-			if(flag.equals("0"))
-			{
-				t.setWeeks(Integer.parseInt(weeks));
-				t.setFlag(0);
-			}
-			else
-			{
-				t.setFlag(1);
-				t.setTime1(time1);
-				t.setTime2(time2);
-				t.setTime3(time3);
-				t.setTime4(time4);
-				t.setTime5(time5);
-			}
-			t.setId(Integer.parseInt(id));
-			t.setSubscribe(subscribe);
-			t.setUpdateBy(myloginId);
-			t.setUpdateDate(DateUtil.getCurrentDateStr());
-			result=timeService.update(t);
-			if(result==true)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.updateSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.updateFail;
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}	
-
 	@RequestMapping("time/info")
 	@ResponseBody
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -263,98 +157,9 @@ public class TimeController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-		String id=getString(request, "id");
-		
-		if(id=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			Time t=timeService.getById(id);
-			if(t!=null)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.findSuc;
-				model.put("data", t);
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.findFail;
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}
-	
-	@RequestMapping("time/delete")
-	@ResponseBody
-	protected Object delete(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-//		model.put("authCode", loginService.userHandleLogin(myloginId));
-		model.put("authCode", authCode);
-		String id=getString(request, "id");
-		if(id==""||!id.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			Time t=new Time();
-			t.setId(Integer.parseInt(id));
-			t.setUpdateBy(myloginId);
-			t.setUpdateDate(DateUtil.getCurrentDateStr());
-			result=timeService.delete(t);
-			if(result==true)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.delSuc;
-			}
-			else
-			{
-				resultCode=1;
-				resultDesc=ShowMsg.delFail;
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);	
-		return model;
-	}	
-
-	@RequestMapping("time/list")
-	@ResponseBody
-	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
 		model.put("authCode", authCode);
 		String sid=getString(request, "sid");
+		
 		if(sid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -362,26 +167,22 @@ public class TimeController extends MyController {
 		}
 		else
 		{
-			List<Time> list=timeService.list(sid);
-			if(list.size()>0)
+			List<Time> t=timeService.getBySId(sid);
+			if(t!=null)
 			{
-				model.put("list", list);
-				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+				model.put("list", t);
 			}
 			else
 			{
-				model.put("count", 0);
-				model.put("list", null);
-				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+				model.put("list", null);
 			}
 		}
-		
 		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
+		model.put("resultDesc", resultDesc);	
 		return model;
-	}	
-
-	
+	}
 }

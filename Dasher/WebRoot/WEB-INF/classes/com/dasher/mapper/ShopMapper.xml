@@ -51,8 +51,9 @@
    
    <select id="getListByLati" resultType="Shop">
      select * from shop_info
-     where longitude>#{longitude} and latitude>#{latitude}
-     limit #{startRow},#{pageSize}
+     where (longitude between #{minlon} and #{maxlon}) 
+	   and (latitude between #{minlat} and #{maxlat}) 
+	   and status>0
    </select>
    
    <select id="getShopCount" resultType="Integer" parameterType="String">
