@@ -21,6 +21,8 @@ public interface UserMapper {
 	public int updateBalance(@Param(value="uid") String uid,@Param(value="curUserBalance") float curUserBalance);
 	public int forgetPwd(User u);
 	public int balanceListCount(@Param(value="searchStr") String searchStr);
+	public int serveApply(User u);
+	public int cheakUser(User u);
 	public User getByUId(String uid);
 	public User getUserByTel(String mobilePhone);
 	public List<User> searchUser(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);

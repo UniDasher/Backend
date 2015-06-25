@@ -3,10 +3,6 @@ package com.dasher.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.dasher.util.DateUtil;
@@ -52,17 +48,4 @@ public class MyController {
 		}
 		return sb.toString();
 	}
-	public String getHeadersInfo(HttpServletRequest request,String keyStr) {
-
-	    Map<String, String> map = new HashMap<String, String>();
-
-	    Enumeration headerNames = request.getHeaderNames();
-	    while (headerNames.hasMoreElements()) {
-	        String key = (String) headerNames.nextElement();
-	        String value = request.getHeader(key);
-	        map.put(key, value);
-	    }
-
-	    return map.get(keyStr);
-	  }
 }

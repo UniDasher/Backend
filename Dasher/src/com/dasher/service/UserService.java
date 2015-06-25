@@ -21,6 +21,8 @@ public interface UserService {
 	public boolean updateEmail(User u);
 	public boolean updateBalance(String uid, float curUserBalance);
 	public boolean forgetPwd(User u);
+	public boolean serveApply(User u);
+	public boolean cheakUser(User u);
 	public User getByUId(String uid);
 	public User getUserByTel(String mobilePhone);
 	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);

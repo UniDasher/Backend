@@ -53,7 +53,7 @@ public class MarketMenuRecordController extends MyController {
 	    String subscribe="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			mid=jsonObject.getString("mid");
 			mcid=jsonObject.getString("mcid");
 			name=jsonObject.getString("name");
@@ -164,7 +164,7 @@ public class MarketMenuRecordController extends MyController {
 	    String mid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			mid=jsonObject.getString("mid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";

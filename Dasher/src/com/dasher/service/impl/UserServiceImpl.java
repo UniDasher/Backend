@@ -152,4 +152,14 @@ public class UserServiceImpl implements UserService {
 	public List<User> settleList(String searchStr) {
 		return userMapper.settleList(searchStr);
 	}
+
+	public boolean serveApply(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.serveApply(u)>0? true:false;
+	}
+
+	public boolean cheakUser(User u) {
+		// TODO Auto-generated method stub
+		return userMapper.cheakUser(u)>0? true:false;
+	}
 }

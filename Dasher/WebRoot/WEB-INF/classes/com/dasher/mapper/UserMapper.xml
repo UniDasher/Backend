@@ -24,6 +24,9 @@
 	 <result property="status" column="status" />
 	 <result property="bankType" column="bankType" />
 	 <result property="bankAccount" column="bankAccount" />
+	 <result property="authTime" column="authTime" />
+	 <result property="applyTime" column="applyTime" />
+	 <result property="handlePerson" column="handlePerson" />
    </resultMap>
    
    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="User">
@@ -136,7 +139,7 @@
 	 </if>
    </select>
    
-    <select id="settleList" resultType="User">
+   <select id="settleList" resultType="User">
      select * 
      from user_info
      where balance>0 
@@ -144,5 +147,17 @@
 	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
    </select>
+   
+   <update id="serveApply" parameterType="User">
+     update user_info 
+     set applyTime=#{applyTime},status=#{status}
+     where uid=#{uid}
+   </update>
+   
+   <update id="cheakUser" parameterType="User">
+     update user_info 
+     set authTime=#{authTime},handlePerson=#{handlePerson},status=#{status}
+     where uid=#{uid}
+   </update>
    
 </mapper>

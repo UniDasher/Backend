@@ -58,7 +58,7 @@ public class MarketServiceImpl implements MarketService {
 		return marketMapper.menuList();
 	}
 
-	public List<Market> getNearList(double longitude, double latitude,
+	public List<Market> getNearList(float longitude, float latitude,
 			float distance) {
 		// TODO Auto-generated method stub
 		double r = 6371;

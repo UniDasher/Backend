@@ -15,8 +15,7 @@ public interface ShopMapper {
 	public int updateLogo(Shop s);
 	public Shop getBySid(String sid);
 	public Shop getByName(String name);
+	public List<Shop> getListByLati(@Param(value="longitude")int longitude,@Param(value="latitude") int latitude,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<Shop> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<Shop> menuList();
-	public List<Shop> getListByLati(@Param(value="minlon") double minlon,@Param(value="maxlon") double maxlon,
-			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat);
 }

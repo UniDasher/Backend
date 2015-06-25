@@ -57,7 +57,7 @@ public class MenuController extends MyController {
 			String JSONStr=getJsonString(request);
 		    JSONObject jsonObject=null;
 		    jsonObject = new JSONObject(JSONStr);
-		    String authCode = getHeadersInfo(request,"X-Auth-Token");
+		    String authCode = jsonObject.getString("authCode");
 		    //判断是否已登录
 			String myloginId=loginService.getByAuthCode(authCode);
 			if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -303,7 +303,7 @@ public class MenuController extends MyController {
 	    String mid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			mid=jsonObject.getString("mid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -377,7 +377,7 @@ public class MenuController extends MyController {
 	    String status="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			mid=jsonObject.getString("mid");
 			status=jsonObject.getString("status");
 		} catch (JSONException e1) {
@@ -446,7 +446,7 @@ public class MenuController extends MyController {
 	    String distance=ShowMsg.distance+"";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			longitude=jsonObject.getString("longitude");
 			latitude=jsonObject.getString("latitude");
 		} catch (JSONException e1) {
@@ -538,7 +538,7 @@ public class MenuController extends MyController {
 	    String type="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			type=jsonObject.getString("type");
 		} catch (JSONException e1) {
@@ -614,7 +614,7 @@ public class MenuController extends MyController {
 	    String mealEndDate="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			mid=jsonObject.getString("uid");
 			mealStartDate=jsonObject.getString("mealStartDate");
 			mealEndDate=jsonObject.getString("mealEndDate");
@@ -689,7 +689,7 @@ public class MenuController extends MyController {
 	    String mid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			mid=jsonObject.getString("uid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败"; 

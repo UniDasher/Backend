@@ -148,4 +148,8 @@ public class ShowMsg {
 	public static final String flagNull="flag 为空";
 	public static final String flagErr="flag格式错误";
 	public static final String addrepeat="该店铺营业时间已添加，不可重复！";
+	public static final String checkIng="提交认证成功！";
+	public static final String checkFail="提交认证失败！";
+	public static final String checkEnd="认证通过";
+	public static final String chkFail="认证失败！";
 }

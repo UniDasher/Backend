@@ -51,7 +51,7 @@ public class MenuEvaluateController extends MyController {
 	    String evalContent="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			sid=jsonObject.getString("sid");
 			uid=jsonObject.getString("uid");
 			mid=jsonObject.getString("mid");
@@ -139,7 +139,7 @@ public class MenuEvaluateController extends MyController {
 	    String mid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			mid=jsonObject.getString("mid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -199,7 +199,7 @@ public class MenuEvaluateController extends MyController {
 	    String mypageSize="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			wid=jsonObject.getString("wid");
 			mycurPage=jsonObject.getString("curPage");
 			mypageSize=jsonObject.getString("countPage");
@@ -271,7 +271,7 @@ public class MenuEvaluateController extends MyController {
 	    String mypageSize="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			sid=jsonObject.getString("sid");
 			mycurPage=jsonObject.getString("curPage");
 			mypageSize=jsonObject.getString("countPage");

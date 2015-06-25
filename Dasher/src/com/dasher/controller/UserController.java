@@ -76,17 +76,17 @@ public class UserController extends MyController {
 		if(mobilePhone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
-			resultCode=1;
+			resultCode=2;
 		}
 		else if(password.length()<6||password.length()>30)
 		{
 			resultDesc=ShowMsg.pwdLength;
-			resultCode=1;
+			resultCode=2;
 		}
 		else if(firstName=="")
 		{
 			resultDesc=ShowMsg.FirstNameNull;
-			resultCode=1;
+			resultCode=2;
 		}
 		else
 		{
@@ -96,21 +96,21 @@ public class UserController extends MyController {
 			
 			if(matcher2.matches()==false)
 			{
-				resultCode=1;
+				resultCode=2;
 				resultDesc=ShowMsg.mobilePhoneErr;
 			}
 			else
 			{
 				//判断验证码是否正确
-//				ComplainDeal cd=complainDealService.getByTel(mobilePhone);
-//				if(!cd.getPhoneCode().equals(phoneCode))
-//				{
-//					resultCode=2;
-//					resultDesc=ShowMsg.phoneCodeErr;
-//					model.put("resultCode", resultCode);	
-//					model.put("resultDesc", resultDesc);
-//					return model;
-//				}
+				ComplainDeal cd=complainDealService.getByTel(mobilePhone);
+				if(!cd.getPhoneCode().equals(phoneCode))
+				{
+					resultCode=2;
+					resultDesc=ShowMsg.phoneCodeErr;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);
+					return model;
+				}
 			
 				User user=userService.getUserByTel(mobilePhone);
 				if(user==null)
@@ -226,8 +226,6 @@ public class UserController extends MyController {
 				resultCode=0;
 				User us=userService.getUserByTel(mobilePhone);
 				model.put("uid", us.getUid());
-				model.put("cid", "环信的编号");
-				model.put("name", us.getFirstName()+us.getLastName());
 				model.put("authCode", loginService.userHandleLogin(us.getUid()+""));
 
 			}
@@ -260,7 +258,7 @@ public class UserController extends MyController {
 	    String uid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -319,7 +317,7 @@ public class UserController extends MyController {
 	    String firstName="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			firstName=jsonObject.getString("firstName");
 		} catch (JSONException e1) {
@@ -390,7 +388,7 @@ public class UserController extends MyController {
 	    String phoneCode="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			mobilePhone=jsonObject.getString("mobilePhone");
 			phoneCode=jsonObject.getString("phoneCode");
@@ -491,7 +489,7 @@ public class UserController extends MyController {
 	    String email="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			email=jsonObject.getString("email");
 		} catch (JSONException e1) {
@@ -569,7 +567,7 @@ public class UserController extends MyController {
 	    String bankType="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			bankAccount=jsonObject.getString("bankAccount");
 			bankType=jsonObject.getString("bankType");
@@ -643,7 +641,7 @@ public class UserController extends MyController {
 	    String uid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -716,7 +714,7 @@ public class UserController extends MyController {
 	    String newPassword="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			oldPassword=jsonObject.getString("oldPassword");
 			newPassword=jsonObject.getString("newPassword");
@@ -867,7 +865,7 @@ public class UserController extends MyController {
 	    String myStatus="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			myStatus=jsonObject.getString("status");
 		} catch (JSONException e1) {
@@ -900,19 +898,39 @@ public class UserController extends MyController {
 			if(myStatus.matches("^[0-9]*$"))
 			{
 				int status=Integer.parseInt(myStatus);
-				User u=new User();
-				u.setUid(uid);
-				u.setStatus(status);
-				result=userService.userApply(u);
-				if(u!=null)
+				if(status==1)
 				{
-					resultCode=0;
-					resultDesc=ShowMsg.updateSuc;
+					User u=new User();
+					u.setApplyTime(DateUtil.getCurrentDateStr());
+					u.setStatus(1);
+					result=userService.serveApply(u);
+					if(result==true)
+					{
+						resultCode=0;
+						resultDesc=ShowMsg.checkIng;
+					}
+					else
+					{
+						resultCode=1;
+						resultDesc=ShowMsg.checkFail;
+					}
 				}
 				else
 				{
-					resultCode=1;
-					resultDesc=ShowMsg.updateFail;
+					User u=new User();
+					u.setUid(uid);
+					u.setStatus(status);
+					result=userService.userApply(u);
+					if(result==true)
+					{
+						resultCode=0;
+						resultDesc=ShowMsg.updateSuc;
+					}
+					else
+					{
+						resultCode=1;
+						resultDesc=ShowMsg.updateFail;
+					}
 				}
 			}
 			else
@@ -1091,7 +1109,7 @@ public class UserController extends MyController {
 	    String cid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = jsonObject.getString("authCode");
 			uid=jsonObject.getString("uid");
 			cid=jsonObject.getString("cid");
 		} catch (JSONException e1) {

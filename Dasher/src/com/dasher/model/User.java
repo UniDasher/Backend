@@ -25,18 +25,22 @@ public class User implements Serializable {
 	private String bankAccount;
 	private String bankType;
 	private int status;
+	private String authTime;
+	private String applyTime;
+	private String handlePerson;
 	
 	public User()
 	{
 		
 	}
-
+	
 	public User(int id, String uid, String firstName, String lastName,
 			String account, String password, String salt, String equmentNumber,
 			String logo, float balance, String mobilePhone, String email,
 			String address, String longitude, String latitude,
 			int goodEvaluate, int badEvaluate, String createDate,
-			String bankAccount, String bankType, int status) {
+			String bankAccount, String bankType, int status, String authTime,
+			String applyTime, String handlePerson) {
 		super();
 		this.id = id;
 		this.uid = uid;
@@ -59,7 +63,11 @@ public class User implements Serializable {
 		this.bankAccount = bankAccount;
 		this.bankType = bankType;
 		this.status = status;
+		this.authTime = authTime;
+		this.applyTime = applyTime;
+		this.handlePerson = handlePerson;
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -227,8 +235,31 @@ public class User implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	
+
+	public String getAuthTime() {
+		return authTime;
+	}
+
+	public void setAuthTime(String authTime) {
+		this.authTime = authTime;
+	}
+
+	public String getApplyTime() {
+		return applyTime;
+	}
+
+	public void setApplyTime(String applyTime) {
+		this.applyTime = applyTime;
+	}
+
+	public String getHandlePerson() {
+		return handlePerson;
+	}
+
+	public void setHandlePerson(String handlePerson) {
+		this.handlePerson = handlePerson;
+	}
+
 	
 	
 }
