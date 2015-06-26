@@ -152,4 +152,5 @@ public class ShowMsg {
 	public static final String checkFail="提交认证失败！";
 	public static final String checkEnd="认证通过";
 	public static final String chkFail="认证失败！";
+	public static final String chkBank="您尚未填写银行账户。";
 }

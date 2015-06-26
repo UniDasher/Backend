@@ -900,9 +900,21 @@ public class UserController extends MyController {
 			if(myStatus.matches("^[0-9]*$"))
 			{
 				int status=Integer.parseInt(myStatus);
+				//用户申请为送餐人
 				if(status==1)
 				{
+					//获取用户的信息
+					User uInfo=userService.getByUId(uid);
+					if("".equals(uInfo.getBankType())||"".equals(uInfo.getBankAccount())){
+						resultCode=1;
+						resultDesc=ShowMsg.chkBank;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);	
+						return model;
+					}
+					
 					User u=new User();
+					u.setUid(uid);
 					u.setApplyTime(DateUtil.getCurrentDateStr());
 					u.setStatus(1);
 					result=userService.serveApply(u);
@@ -945,7 +957,67 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+	@RequestMapping("phone/user/push")
+	@ResponseBody
+	protected Object push(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String uid="";
+	    String cid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = getHeadersInfo(request,"X-Auth-Token");
+			uid=jsonObject.getString("uid");
+			cid=jsonObject.getString("cid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if("".equals(uid)||"".equals(cid))
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			Login l=new Login();
+			l.setCid(cid);
+			l.setLoginId(uid);
+			result=loginService.updateCID(l);
+			if(result)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
 	@RequestMapping("/user/info")
 	@ResponseBody
 	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1097,31 +1169,12 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
-	@RequestMapping("phone/user/push")
+	@RequestMapping("/user/list/apply")
 	@ResponseBody
-	protected Object push(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object listApply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String cid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			uid=jsonObject.getString("uid");
-			cid=jsonObject.getString("cid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -1133,17 +1186,90 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		if("".equals(uid)||"".equals(cid))
+		List<User> userList=userService.applyList();
+		model.put("list", userList);
+		resultCode=0;
+		resultDesc=ShowMsg.findSuc;
+		
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	@RequestMapping("/user/status")
+	@ResponseBody
+	protected Object status(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		String uid=getString(request, "uid");
+		String status=getString(request, "status");
+		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
 		else
 		{
-			Login l=new Login();
-			l.setCid(cid);
-			l.setLoginId(uid);
-			result=loginService.updateCID(l);
+			User u=new User();
+			u.setUid(uid);
+			u.setStatus(Integer.parseInt(status));
+			result=userService.updateStatus(u);
+			if(result)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	@RequestMapping("/user/update/apply")
+	@ResponseBody
+	protected Object statusApply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getString(request, "authCode");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		String uid=getString(request, "uid");
+		String status=getString(request, "status");
+		if(uid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			User u=new User();
+			u.setUid(uid);
+			u.setStatus(Integer.parseInt(status));
+			u.setAuthTime(DateUtil.getCurrentDateStr());
+			u.setHandlePerson(myloginId);
+			result=userService.cheakUser(u);
 			if(result)
 			{
 				resultCode=0;
@@ -1160,5 +1286,4 @@ public class UserController extends MyController {
 		return model;
 	}
 	
-
 }

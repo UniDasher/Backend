@@ -159,7 +159,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public boolean cheakUser(User u) {
-		// TODO Auto-generated method stub
 		return userMapper.cheakUser(u)>0? true:false;
+	}
+
+	public List<User> applyList() {
+		return userMapper.applyList();
+	}
+
+	public boolean updateStatus(User u) {
+		return userMapper.updateStatus(u);
 	}
 }

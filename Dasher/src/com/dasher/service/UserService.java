@@ -28,4 +28,6 @@ public interface UserService {
 	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
 	public List<User> balanceList(String searchStr,int startRow,int pageSize);
 	public List<User> settleList(String searchStr);
+	public List<User> applyList();
+	public boolean updateStatus(User u);
 }
