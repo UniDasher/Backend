@@ -18,6 +18,7 @@ import com.dasher.service.MenuService;
 import com.dasher.service.ShopDishService;
 import com.dasher.service.ShopService;
 import com.dasher.util.BaiDuMapUtil;
+import com.dasher.util.DateUtil;
 
 public class MenuServiceImpl implements MenuService {
 
@@ -92,13 +93,18 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	public boolean updateStatus(Menu m) {
-		// TODO Auto-generated method stub
+		if(m.getStatus()==3){
+			m.setEndDate(DateUtil.getCurrentDateStr());
+		}else if(m.getStatus()==4){
+			m.setCancleDate(DateUtil.getCurrentDateStr());
+		}else if(m.getStatus()==5){
+			m.setComplainDate(DateUtil.getCurrentDateStr());
+		}
 		return menuMapper.updateStatus(m)>0? true:false;
 	}
 
 	public List<Menu> list(String status, String sid, String searchStr,
 			String startDate, String endDate, int curPage, int countPage) {
-		// TODO Auto-generated method stub
 		return menuMapper.list(status, sid, searchStr, startDate, endDate, curPage, countPage);
 	}
 
@@ -144,7 +150,7 @@ public class MenuServiceImpl implements MenuService {
 		return menuMapper.getListByStr(type, uid);
 	}
 
-	public List<Menu> getNearList(float longitude, float latitude,float distance) {
+	public List<Menu> getNearList(double longitude, double latitude,float distance) {
 		// TODO Auto-generated method stub
 		double r = 6371;
 		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));

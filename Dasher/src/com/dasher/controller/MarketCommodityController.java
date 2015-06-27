@@ -109,25 +109,9 @@ public class MarketCommodityController extends MyController {
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String mcid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			mcid=jsonObject.getString("mcid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
-		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
@@ -136,16 +120,9 @@ public class MarketCommodityController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
-		{
-			resultDesc=ShowMsg.NoPermiss;
-			resultCode=4;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
 		model.put("authCode", authCode);
-
+		
+		String mcid=getString(request, "mcid");
 		if(mcid=="")
 		{
 			resultDesc=ShowMsg.ParFail;

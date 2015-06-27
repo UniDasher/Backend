@@ -254,21 +254,7 @@ public class UserController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			uid=jsonObject.getString("uid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
+	    String authCode=getHeadersInfo(request,"X-Auth-Token");
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -281,6 +267,7 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
+		String uid=getString(request,"uid");
 		if(uid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -294,6 +281,50 @@ public class UserController extends MyController {
 				resultCode=0;
 				resultDesc=ShowMsg.findSuc;
 				model.put("data", u);
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.findFail;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	@RequestMapping("phone/user/info/balance")
+	@ResponseBody
+	protected Object userBalance(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+	    String authCode=getHeadersInfo(request,"X-Auth-Token");
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String uid=getString(request,"uid");
+		if(uid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		else
+		{
+			User u=userService.getByUId(uid);
+			if(u!=null)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.findSuc;
+				model.put("balance", u.getBadEvaluate());
 			}
 			else
 			{

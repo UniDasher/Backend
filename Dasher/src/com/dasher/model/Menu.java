@@ -35,6 +35,59 @@ public class Menu implements Serializable {
 	private String serverName;
 	private int status;
 	
+	private String cancleDate;
+	private String overTimeDate;
+	private String complainDate;
+
+	public Menu() {
+		super();
+	}
+
+	public Menu(int id, String mid, String sid, String uid, String wid,
+			float dishsMoney, float carriageMoney, float taxesMoney,
+			float serviceMoney, float tipMoney, int menuCount, int payType,
+			String mealStartDate, String mealEndDate, String address,
+			String longitude, String latitude, String distance,
+			String direction, String createBy, String createDate,
+			String updateBy, String updateDate, String startDate,
+			String endDate, String shopName, String userName,
+			String serverName, int status, String cancleDate,
+			String overTimeDate, String complainDate) {
+		super();
+		this.id = id;
+		this.mid = mid;
+		this.sid = sid;
+		this.uid = uid;
+		this.wid = wid;
+		this.dishsMoney = dishsMoney;
+		this.carriageMoney = carriageMoney;
+		this.taxesMoney = taxesMoney;
+		this.serviceMoney = serviceMoney;
+		this.tipMoney = tipMoney;
+		this.menuCount = menuCount;
+		this.payType = payType;
+		this.mealStartDate = mealStartDate;
+		this.mealEndDate = mealEndDate;
+		this.address = address;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.distance = distance;
+		this.direction = direction;
+		this.createBy = createBy;
+		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.shopName = shopName;
+		this.userName = userName;
+		this.serverName = serverName;
+		this.status = status;
+		this.cancleDate = cancleDate;
+		this.overTimeDate = overTimeDate;
+		this.complainDate = complainDate;
+	}
+
 	private List<MenuDish> dishs;
 	
 	public List<MenuDish> getDishs() {
@@ -43,6 +96,30 @@ public class Menu implements Serializable {
 
 	public void setDishs(List<MenuDish> dishs) {
 		this.dishs = dishs;
+	}
+
+	public String getCancleDate() {
+		return cancleDate;
+	}
+
+	public void setCancleDate(String cancleDate) {
+		this.cancleDate = cancleDate;
+	}
+
+	public String getOverTimeDate() {
+		return overTimeDate;
+	}
+
+	public void setOverTimeDate(String overTimeDate) {
+		this.overTimeDate = overTimeDate;
+	}
+
+	public String getComplainDate() {
+		return complainDate;
+	}
+
+	public void setComplainDate(String complainDate) {
+		this.complainDate = complainDate;
 	}
 
 	public String getDistance() {
@@ -59,10 +136,6 @@ public class Menu implements Serializable {
 
 	public void setDirection(String direction) {
 		this.direction = direction;
-	}
-
-	public Menu() {
-		super();
 	}
 
 	public int getId() {
@@ -277,47 +350,6 @@ public class Menu implements Serializable {
 	}
 
 	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public Menu(int id, String mid, String sid, String uid, String wid,
-			float dishsMoney, float carriageMoney, float taxesMoney,
-			float serviceMoney, float tipMoney, int menuCount, int payType,
-			String mealStartDate, String mealEndDate, String address,
-			String longitude, String latitude, String distance,
-			String direction, String createBy, String createDate,
-			String updateBy, String updateDate, String startDate,
-			String endDate, String shopName, String userName,
-			String serverName, int status) {
-		super();
-		this.id = id;
-		this.mid = mid;
-		this.sid = sid;
-		this.uid = uid;
-		this.wid = wid;
-		this.dishsMoney = dishsMoney;
-		this.carriageMoney = carriageMoney;
-		this.taxesMoney = taxesMoney;
-		this.serviceMoney = serviceMoney;
-		this.tipMoney = tipMoney;
-		this.menuCount = menuCount;
-		this.payType = payType;
-		this.mealStartDate = mealStartDate;
-		this.mealEndDate = mealEndDate;
-		this.address = address;
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.distance = distance;
-		this.direction = direction;
-		this.createBy = createBy;
-		this.createDate = createDate;
-		this.updateBy = updateBy;
-		this.updateDate = updateDate;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.shopName = shopName;
-		this.userName = userName;
-		this.serverName = serverName;
 		this.status = status;
 	}
 

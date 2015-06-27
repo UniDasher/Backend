@@ -34,20 +34,17 @@ public class MarketMenu implements Serializable {
 	private String updateBy;
 	private String updateDate;
 	private int status;
+	
+	private String cancleDate;
+	private String overTimeDate;
+	private String complainDate;
+	
 	private List<MarketMenuRecord> dishs;
 	
 	public MarketMenu() {
 
 	}
 	
-	public List<MarketMenuRecord> getDishs() {
-		return dishs;
-	}
-
-	public void setDishs(List<MarketMenuRecord> dishs) {
-		this.dishs = dishs;
-	}
-
 	public MarketMenu(int id, String mid, String smid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
 			float serviceMoney, float tipMoney, int menuCount, int payType,
@@ -56,7 +53,8 @@ public class MarketMenu implements Serializable {
 			String userName, String serverName, String mealStartDate,
 			String mealEndDate, String startDate, String endDate,
 			String createBy, String createDate, String updateBy,
-			String updateDate, int status) {
+			String updateDate, int status, String cancleDate,
+			String overTimeDate, String complainDate) {
 		super();
 		this.id = id;
 		this.mid = mid;
@@ -87,8 +85,18 @@ public class MarketMenu implements Serializable {
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
 		this.status = status;
+		this.cancleDate = cancleDate;
+		this.overTimeDate = overTimeDate;
+		this.complainDate = complainDate;
 	}
 
+	public List<MarketMenuRecord> getDishs() {
+		return dishs;
+	}
+
+	public void setDishs(List<MarketMenuRecord> dishs) {
+		this.dishs = dishs;
+	}
 
 	public int getId() {
 		return id;
@@ -322,6 +330,28 @@ public class MarketMenu implements Serializable {
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
-	
-	
+
+	public String getCancleDate() {
+		return cancleDate;
+	}
+
+	public void setCancleDate(String cancleDate) {
+		this.cancleDate = cancleDate;
+	}
+
+	public String getOverTimeDate() {
+		return overTimeDate;
+	}
+
+	public void setOverTimeDate(String overTimeDate) {
+		this.overTimeDate = overTimeDate;
+	}
+
+	public String getComplainDate() {
+		return complainDate;
+	}
+
+	public void setComplainDate(String complainDate) {
+		this.complainDate = complainDate;
+	}
 }

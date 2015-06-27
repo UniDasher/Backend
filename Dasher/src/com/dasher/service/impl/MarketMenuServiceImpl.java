@@ -18,6 +18,7 @@ import com.dasher.service.MarketMenuRecordService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MarketService;
 import com.dasher.util.BaiDuMapUtil;
+import com.dasher.util.DateUtil;
 
 public class MarketMenuServiceImpl implements MarketMenuService {
 
@@ -91,9 +92,15 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return marketMenuMapper.receive(mm)>0? true:false;
 	}
 
-	public boolean updateStatus(MarketMenu mm) {
-		// TODO Auto-generated method stub
-		return marketMenuMapper.updateStatus(mm)>0? true:false;
+	public boolean updateStatus(MarketMenu m) {
+		if(m.getStatus()==3){
+			m.setEndDate(DateUtil.getCurrentDateStr());
+		}else if(m.getStatus()==4){
+			m.setCancleDate(DateUtil.getCurrentDateStr());
+		}else if(m.getStatus()==5){
+			m.setComplainDate(DateUtil.getCurrentDateStr());
+		}
+		return marketMenuMapper.updateStatus(m)>0? true:false;
 	}
 
 	public int getCount(String status, String smid, String searchStr,String startDate,String endDate) {
@@ -133,7 +140,7 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return marketMenuMapper.updateDate(mm)>0? true:false;
 	}
 
-	public List<MarketMenu> getNearList(float longitude, float latitude,
+	public List<MarketMenu> getNearList(double longitude, double latitude,
 			float distance) {
 		// TODO Auto-generated method stub
 		double r = 6371;

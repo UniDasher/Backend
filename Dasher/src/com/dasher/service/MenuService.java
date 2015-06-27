@@ -17,6 +17,6 @@ public interface MenuService {
 	public List<Menu> list(String status, String sid, String searchStr, String startDate, String endDate,int curPage, int countPage);
 	public List<Menu> getListByUid(int type,String searchStr,int curPage, int countPage);
     public List<Menu> listByStatus(String uid,String status, int curPage, int countPage);
-    public List<Menu> getNearList(float longitude,float latitude,float distance);
+    public List<Menu> getNearList(double longitude,double latitude,float distance);
 	public List<Menu> getListByStr(int type,String uid);
 }

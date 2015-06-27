@@ -13,7 +13,7 @@ public interface MarketMenuService {
 	public boolean updateStatus(MarketMenu mm);
 	public boolean updateDate(MarketMenu mm);
 	public MarketMenu getByMid(String mid);
-	public List<MarketMenu> getNearList(float longitude,float latitude,float distance);
+	public List<MarketMenu> getNearList(double longitude,double latitude,float distance);
 	public List<MarketMenu> list(String status,String smid,String searchStr,String startDate,String endDate,int startRow,int pageSize);
 	public List<MarketMenu> getListByUid(int type,String searchStr,int curPage,int countPage);
     public List<MarketMenu> ListByUid(String type,String searchStr);

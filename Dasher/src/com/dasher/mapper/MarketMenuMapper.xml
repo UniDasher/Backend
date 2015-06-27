@@ -29,6 +29,9 @@
      <result property="updateBy" column="updateBy"/>
      <result property="updateDate" column="updateDate"/>
      <result property="status" column="status"/>
+     <result property="cancleDate" column="cancleDate" />
+	 <result property="overTimeDate" column="overTimeDate" />
+	 <result property="complainDate" column="complainDate" />
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MarketMenu">
@@ -43,9 +46,21 @@
    </update>
    
    <update id="updateStatus" parameterType="MarketMenu">
-	 update market_menu 
-	 set status=#{status},updateBy=#{updateBy},updateDate=#{updateDate}
-	 where mid=#{mid}
+   		<if test="status==3">
+   			update market_menu set
+			status=#{status},endDate=#{endDate}
+			where mid=#{mid}
+   		</if>
+   		<if test="status==4">
+   			update market_menu set
+			status=#{status},cancleDate=#{cancleDate}
+			where mid=#{mid}
+   		</if>
+   		<if test="status==5">
+   			update market_menu set
+			status=#{status},complainDate=#{complainDate}
+			where mid=#{mid}
+   		</if>
    </update>
    
    <select id="getCount" resultType="Integer">
@@ -162,11 +177,15 @@
    </update>
    
    <select id="getNearlist" resultType="MarketMenu">
-	 select *
-     from market_info
+	 select *,s.name as shopName,concat(u.firstName,u.lastName) as userName
+     from market_menu m
+     join market_info s
+		on m.smid=s.smid
+		join user_info u
+		on m.uid=u.uid
      where (longitude between #{minlon} and #{maxlon}) 
      and (latitude between #{minlat} and #{maxlat}) 
-     and status>0
+     and status=1
 	</select>
    
   

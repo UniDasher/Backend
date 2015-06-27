@@ -157,23 +157,7 @@ public class MarketMenuRecordController extends MyController {
 	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String mid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			mid=jsonObject.getString("mid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -184,12 +168,13 @@ public class MarketMenuRecordController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
+		String mid=getString(request, "mid");
+		
 		if(mid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
-		
 		else
 		{
 			List<MarketMenuRecord> list=marketMenuRecordService.list(mid);
