@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dasher.mapper.EarningMapper">
+   <resultMap type="Earning" id="earningMap">
+     <result property="id" column="id"/>
+     <result property="eid" column="eid"/>
+     <result property="wid" column="wid"/>
+     <result property="mid" column="mid"/>
+     <result property="carriageMoney" column="carriageMoney"/>
+     <result property="totalMoney" column="totalMoney"/>
+     <result property="type" column="type"/>
+     <result property="createBy" column="createBy"/>
+     <result property="createDate" column="createDate"/>
+     <result property="updateBy" column="updateBy"/>
+     <result property="updateDate" column="updateDate"/>
+     <result property="status" column="status"/>
+   </resultMap>
+   
+   <insert id="add" parameterType="Earning" keyProperty="id" useGeneratedKeys="true">
+    insert into earn_info(eid,wid,mid,carriageMoney,totalMoney,type,createBy,createDate,status)
+    values(#{eid},#{wid},#{mid},#{carriageMoney},#{totalMoney},#{type},#{createBy},#{createDate},1)
+   </insert>
+   
+   <update id="delete" parameterType="Earning">
+    update earn_info set status=0,updateBy=#{updateBy},updateDate=#{updateDate}
+    where eid=#{eid}
+   </update>
+   
+   <select id="getByWid" parameterType="String" resultType="Earning">
+     select * from earn_info where wid=#{wid}
+   </select>
+   
+   <select id="getByEid" parameterType="String" resultType="Earning">
+     select * from earn_info where eid=#{eid}
+   </select>
+   
+</mapper>

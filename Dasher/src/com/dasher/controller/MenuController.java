@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
 import com.dasher.model.User;
+import com.dasher.service.EarningService;
 import com.dasher.service.LoginService;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
@@ -40,6 +41,8 @@ public class MenuController extends MyController {
 	private UserService userService;
 	@Autowired
 	private MenuDishService menuDishService;
+	@Autowired
+	private EarningService earningService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -581,15 +584,12 @@ public class MenuController extends MyController {
 					resultDesc=ShowMsg.findSuc;
 					resultCode=0;
 				}
-			
 			}
 			else
 			{
 				resultDesc=ShowMsg.inputErr;
 				resultCode=2;
 			}
-			
-			
 		}
 		else
 		{

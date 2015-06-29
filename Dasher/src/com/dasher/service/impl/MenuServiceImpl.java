@@ -1,5 +1,7 @@
 package com.dasher.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,18 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.MenuMapper;
+import com.dasher.model.Earning;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
 import com.dasher.model.Shop;
+import com.dasher.model.ShopDish;
+import com.dasher.service.EarningService;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
 import com.dasher.service.ShopDishService;
 import com.dasher.service.ShopService;
 import com.dasher.util.BaiDuMapUtil;
+import com.dasher.util.DateUtil;
 
 public class MenuServiceImpl implements MenuService {
 
@@ -28,6 +34,8 @@ public class MenuServiceImpl implements MenuService {
 	private ShopService shopService;
 	@Autowired
 	private ShopDishService shopDishService;
+	@Autowired
+	private EarningService earningService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -93,7 +101,49 @@ public class MenuServiceImpl implements MenuService {
 
 	public boolean updateStatus(Menu m) {
 		// TODO Auto-generated method stub
-		return menuMapper.updateStatus(m)>0? true:false;
+        boolean flag=false;
+		if(m.getStatus()==3)
+		{
+			//添加事务处理
+			DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+	        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+	        TransactionStatus ts = transactionManager.getTransaction(dtd);
+	        
+	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+			Date date=new Date();
+			String strs[]=sdf.format(date).split("-");
+			String eid="";
+			for(int i=0;i<strs.length;i++)
+			{
+				eid=eid+strs[i];
+			}
+			
+			float totalMoney=m.getMenuCount()*m.getDishsMoney()+m.getCarriageMoney()+m.getTaxesMoney()+m.getServiceMoney()+m.getTipMoney();
+			Earning e=new Earning();
+			e.setEid(eid);
+			e.setWid(m.getWid());
+			e.setMid(m.getMid());
+			e.setCarriageMoney(m.getCarriageMoney());
+			e.setTotalMoney(totalMoney);
+			e.setType(1);
+			e.setCreateBy(m.getUpdateBy());
+			e.setCreateDate(DateUtil.getCurrentDateStr());
+			flag=earningService.add(e);
+			if(flag==true)
+			{
+				transactionManager.commit(ts);
+			}
+			else
+			{
+				transactionManager.rollback(ts);  
+			}
+		}
+		else
+		{
+			flag=menuMapper.updateStatus(m)>0? true:false;
+		}
+		
+		return flag;
 	}
 
 	public List<Menu> list(String status, String sid, String searchStr,

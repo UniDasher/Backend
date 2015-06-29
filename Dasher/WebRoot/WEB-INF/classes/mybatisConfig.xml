@@ -8,6 +8,7 @@
   		<typeAlias type="com.dasher.model.Complain" alias="Complain" />
   		<typeAlias type="com.dasher.model.ComplainDeal" alias="ComplainDeal" />
   		<typeAlias type="com.dasher.model.Login" alias="Login" />
+  		<typeAlias type="com.dasher.model.Earning" alias="Earning" />
   	    <typeAlias type="com.dasher.model.Manager" alias="Manager" />
   	    <typeAlias type="com.dasher.model.Market" alias="Market" />
   	    <typeAlias type="com.dasher.model.MarketCommodity" alias="MarketCommodity" />
@@ -29,6 +30,7 @@
 	    <mapper resource="com/dasher/mapper/UserSettleMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ComplainMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ComplainDealMapper.xml" />
+	    <mapper resource="com/dasher/mapper/EarningMapper.xml" />
 	    <mapper resource="com/dasher/mapper/LoginMapper.xml" />
 	    <mapper resource="com/dasher/mapper/ManagerMapper.xml" />
 	    <mapper resource="com/dasher/mapper/MarketMapper.xml" />
