@@ -3,7 +3,6 @@ package com.dasher.service.impl;
 import java.util.List;
 
 import com.dasher.mapper.ShopMapper;
-import com.dasher.model.Market;
 import com.dasher.model.Shop;
 import com.dasher.service.ShopService;
 

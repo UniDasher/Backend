@@ -16,7 +16,6 @@ import com.dasher.model.Earning;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
 import com.dasher.model.Shop;
-import com.dasher.model.ShopDish;
 import com.dasher.service.EarningService;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
