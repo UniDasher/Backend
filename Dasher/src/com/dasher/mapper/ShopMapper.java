@@ -19,4 +19,6 @@ public interface ShopMapper {
 	public List<Shop> menuList();
 	public List<Shop> getListByLati(@Param(value="minlon") double minlon,@Param(value="maxlon") double maxlon,
 			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat);
+	public List<Shop> getListByMenu(@Param(value="minlon") double minlon,@Param(value="maxlon") double maxlon,
+			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat);
 }

@@ -383,6 +383,7 @@ public class ComplainController extends MyController {
 		model.put("authCode", authCode);
 		
 		String comId=getString(request, "comId");
+		String comType=getString(request, "comType");
 		String type=getString(request, "type");
 		String comResult=getString(request, "comResult");
 		String comContent=getString(request, "comContent");
@@ -434,6 +435,7 @@ public class ComplainController extends MyController {
 		    
 		    Complain c=new Complain();
 		    c.setComId(comId);
+		    c.setComType(Integer.parseInt(comType));
 		    c.setType(Integer.parseInt(type));
 		    c.setComResult(Integer.parseInt(comResult));
 		    c.setComContent(comContent);

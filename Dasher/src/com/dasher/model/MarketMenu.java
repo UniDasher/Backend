@@ -34,20 +34,24 @@ public class MarketMenu implements Serializable {
 	private String updateBy;
 	private String updateDate;
 	private int status;
+	
+	private String cancleDate;
+	private String overTimeDate;
+	private String complainDate;
+	
+	private String shopAddress;
+	private String shopLongitude;
+	private String shopLatitude;
+	private String userPhone;
+	private String userLogo;
+	private String serverPhone;
+	private String serverLogo;
 	private List<MarketMenuRecord> dishs;
 	
 	public MarketMenu() {
 
 	}
 	
-	public List<MarketMenuRecord> getDishs() {
-		return dishs;
-	}
-
-	public void setDishs(List<MarketMenuRecord> dishs) {
-		this.dishs = dishs;
-	}
-
 	public MarketMenu(int id, String mid, String smid, String uid, String wid,
 			float dishsMoney, float carriageMoney, float taxesMoney,
 			float serviceMoney, float tipMoney, int menuCount, int payType,
@@ -56,7 +60,10 @@ public class MarketMenu implements Serializable {
 			String userName, String serverName, String mealStartDate,
 			String mealEndDate, String startDate, String endDate,
 			String createBy, String createDate, String updateBy,
-			String updateDate, int status) {
+			String updateDate, int status, String cancleDate,
+			String overTimeDate, String complainDate, String shopAddress,
+			String shopLongitude, String shopLatitude, String userPhone,
+			String userLogo, String serverPhone, String serverLogo) {
 		super();
 		this.id = id;
 		this.mid = mid;
@@ -87,8 +94,25 @@ public class MarketMenu implements Serializable {
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
 		this.status = status;
+		this.cancleDate = cancleDate;
+		this.overTimeDate = overTimeDate;
+		this.complainDate = complainDate;
+		this.shopAddress = shopAddress;
+		this.shopLongitude = shopLongitude;
+		this.shopLatitude = shopLatitude;
+		this.userPhone = userPhone;
+		this.userLogo = userLogo;
+		this.serverPhone = serverPhone;
+		this.serverLogo = serverLogo;
 	}
 
+	public List<MarketMenuRecord> getDishs() {
+		return dishs;
+	}
+
+	public void setDishs(List<MarketMenuRecord> dishs) {
+		this.dishs = dishs;
+	}
 
 	public int getId() {
 		return id;
@@ -322,6 +346,84 @@ public class MarketMenu implements Serializable {
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
-	
-	
+
+	public String getCancleDate() {
+		return cancleDate;
+	}
+
+	public void setCancleDate(String cancleDate) {
+		this.cancleDate = cancleDate;
+	}
+
+	public String getOverTimeDate() {
+		return overTimeDate;
+	}
+
+	public void setOverTimeDate(String overTimeDate) {
+		this.overTimeDate = overTimeDate;
+	}
+
+	public String getComplainDate() {
+		return complainDate;
+	}
+
+	public void setComplainDate(String complainDate) {
+		this.complainDate = complainDate;
+	}
+
+	public String getShopAddress() {
+		return shopAddress;
+	}
+
+	public void setShopAddress(String shopAddress) {
+		this.shopAddress = shopAddress;
+	}
+
+	public String getShopLongitude() {
+		return shopLongitude;
+	}
+
+	public void setShopLongitude(String shopLongitude) {
+		this.shopLongitude = shopLongitude;
+	}
+
+	public String getShopLatitude() {
+		return shopLatitude;
+	}
+
+	public void setShopLatitude(String shopLatitude) {
+		this.shopLatitude = shopLatitude;
+	}
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+
+	public String getUserLogo() {
+		return userLogo;
+	}
+
+	public void setUserLogo(String userLogo) {
+		this.userLogo = userLogo;
+	}
+
+	public String getServerPhone() {
+		return serverPhone;
+	}
+
+	public void setServerPhone(String serverPhone) {
+		this.serverPhone = serverPhone;
+	}
+
+	public String getServerLogo() {
+		return serverLogo;
+	}
+
+	public void setServerLogo(String serverLogo) {
+		this.serverLogo = serverLogo;
+	}
 }

@@ -17,6 +17,8 @@
      <result property="updateBy" column="updateBy"/>
      <result property="updateDate" column="updateDate"/>
      <result property="status" column="status"/>
+     <result property="type" column="type"/>
+     <result property="typeDesc" column="typeDesc"/>
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="UserSettle">
@@ -52,6 +54,9 @@
      </if>
      limit #{startRow},#{pageSize} 
    </select>
+   
+   
+   
    
    <select id="getListByWid" resultType="UserSettle" parameterType="String">
      select us.*,concat(u.firstName,u.lastName) as userName

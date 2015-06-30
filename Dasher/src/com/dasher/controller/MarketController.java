@@ -36,25 +36,8 @@ public class MarketController extends MyController {
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String smid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			smid=jsonObject.getString("smid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
-		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
@@ -63,15 +46,9 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
-		{
-			resultDesc=ShowMsg.NoPermiss;
-			resultCode=4;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
 		model.put("authCode", authCode);
+		
+		String smid=getString(request, "smid");
 		
 		if(smid=="")
 		{
@@ -104,28 +81,8 @@ public class MarketController extends MyController {
 	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String longitude="";
-	    String latitude="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			longitude=jsonObject.getString("longitude");
-			latitude=jsonObject.getString("latitude");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
-		Login l=loginService.getByLogId(myloginId);
-		String distance=ShowMsg.distance+"";
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
@@ -134,51 +91,20 @@ public class MarketController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		else if(l.getType()>0)
-		{
-			resultDesc=ShowMsg.NoPermiss;
-			resultCode=4;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
 		model.put("authCode", authCode);
+		
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
 		
 		if(longitude==""||latitude=="")
 		{
 			resultDesc=ShowMsg.NoLocatInfo;
 			resultCode=2;
 		}
-		else if(distance=="")
-		{
-			resultDesc=ShowMsg.distanceNull;
-			resultCode=2;
-		}
 		else
 		{
-//			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
-//			Matcher matcher=pattern.matcher(longitude);
-//			Matcher matcher2=pattern.matcher(latitude);
-//			Matcher matcher3=pattern.matcher(distance);
-//			if(matcher.matches()==false||matcher2.matches()==false)
-//			{
-//				resultDesc=ShowMsg.LonLatErr;
-//				resultCode=2;
-//				model.put("resultCode", resultCode);	
-//				model.put("resultDesc", resultDesc);
-//				return model;
-//			}
-//			
-//			if(matcher3.matches()==false)
-//			{
-//				resultDesc=ShowMsg.distanceErr;
-//				resultCode=2;
-//				model.put("resultCode", resultCode);	
-//				model.put("resultDesc", resultDesc);
-//				return model;
-//			}
 			//送餐人获取附近订单
-			List<Market> list=marketService.getNearList(Double.parseDouble(longitude) ,Double.parseDouble(latitude),1000000l);
+			List<Market> list=marketService.getNearList(Double.parseDouble(longitude) ,Double.parseDouble(latitude),ShowMsg.distance);
 			if(list.size()>0)
 			{
 

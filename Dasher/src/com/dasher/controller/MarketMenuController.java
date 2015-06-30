@@ -21,11 +21,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
+import com.dasher.service.MarketService;
+import com.dasher.service.ShopService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
@@ -39,6 +42,8 @@ public class MarketMenuController extends MyController {
 	private LoginService loginService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private MarketService marketService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -334,31 +339,32 @@ public class MarketMenuController extends MyController {
 				mm.setStartDate(DateUtil.getCurrentDateStr());
 				mm.setUpdateBy(myloginId);
 				mm.setUpdateDate(DateUtil.getCurrentDateStr());
-				result=marketMenuService.receive(mm);
-				if(result==true)
+				int res=marketMenuService.receive(mm);
+				if(res==1)
 				{
 					resultCode=0;
 					resultDesc=ShowMsg.receiveSuc;
 				}
-				else
+				else if(res==0)
 				{
 					resultCode=1;
 					resultDesc=ShowMsg.receiveFail;
+				}else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.receiveFail_2;
 				}
-
 			}
 			else
 			{
 				resultDesc=ShowMsg.NoPermiss2;
 				resultCode=4;
 			}
-
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
 
 	@RequestMapping("phone/market/menu/status")
 	@ResponseBody
@@ -430,31 +436,13 @@ public class MarketMenuController extends MyController {
 		return model;
 	}	
 	
-	@RequestMapping("phone/market/menu/list/near")
+	@RequestMapping("phone/menu/list/near/market")
 	@ResponseBody
-	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object listNearMarket(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String longitude="";
-	    String latitude="";
-	    String distance=ShowMsg.distance+"";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			longitude=jsonObject.getString("longitude");
-			latitude=jsonObject.getString("latitude");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败"; 
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -466,58 +454,123 @@ public class MarketMenuController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
+		
 		if(longitude==""||latitude=="")
 		{
 			resultDesc=ShowMsg.NoLocatInfo;
 			resultCode=2;
 		}
-		else if(distance=="")
-		{
-			resultDesc=ShowMsg.distanceNull;
-			resultCode=2;
-		}
 		else
 		{
-			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
-			Matcher matcher=pattern.matcher(longitude);
-			Matcher matcher2=pattern.matcher(latitude);
-			Matcher matcher3=pattern.matcher(distance);
-			if(matcher.matches()==false||matcher2.matches()==false)
-			{
-				resultDesc=ShowMsg.LonLatErr;
-				resultCode=2;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
-			
-			if(matcher3.matches()==false)
-			{
-				resultDesc=ShowMsg.distanceErr;
-				resultCode=2;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
-			List<MarketMenu> list=marketMenuService.getNearList(Float.parseFloat(longitude), Float.parseFloat(latitude), Float.parseFloat(distance));
+			List<Market> list=marketService.getNearListMenu(Double.parseDouble(longitude), Double.parseDouble(latitude), ShowMsg.distance);
 			if(list.size()>0)
 			{
-				model.put("count", list.size());
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 			else
 			{
-				model.put("count", 0);
 				model.put("list", null);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
-
-			
 		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	
+	@RequestMapping("phone/menu/list/near/smid")
+	@ResponseBody
+	protected Object listNearSmid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
 		
+		String smid=getString(request, "smid");
+		
+		if(smid=="")
+		{
+			resultDesc=ShowMsg.NoLocatInfo;
+			resultCode=2;
+		}
+		else
+		{
+			List<MarketMenu> list=marketMenuService.getNearListSmid(smid);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	
+	@RequestMapping("phone/market/menu/list/near")
+	@ResponseBody
+	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
+		
+		if(longitude==""||latitude=="")
+		{
+			resultDesc=ShowMsg.NoLocatInfo;
+			resultCode=2;
+		}
+		else
+		{
+			List<MarketMenu> list=marketMenuService.getNearList(Double.parseDouble(longitude), Double.parseDouble(latitude), ShowMsg.distance);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -528,25 +581,7 @@ public class MarketMenuController extends MyController {
 	protected Object userListStatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String type="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			uid=jsonObject.getString("uid");
-			type=jsonObject.getString("type");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败"; 
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -558,6 +593,9 @@ public class MarketMenuController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
+		String uid=getString(request, "uid");
+		String type=getString(request, "type");
+		String userType=getString(request, "userType");
 		if(uid.equals("")||type.equals(""))
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -570,7 +608,7 @@ public class MarketMenuController extends MyController {
 		}
 		else
 		{
-			List<MarketMenu> list=marketMenuService.ListByUid(type, uid);
+			List<MarketMenu> list=marketMenuService.ListByUid(Integer.parseInt(type), uid,Integer.parseInt(userType));
 			if(list.size()>0)
 			{
 				model.put("list", list);
@@ -672,23 +710,7 @@ public class MarketMenuController extends MyController {
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String mid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			mid=jsonObject.getString("mid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败"; 
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -699,6 +721,8 @@ public class MarketMenuController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
+		String mid=getString(request, "mid");
+		
 		if(mid=="")
 		{
 			resultDesc=ShowMsg.ParFail;

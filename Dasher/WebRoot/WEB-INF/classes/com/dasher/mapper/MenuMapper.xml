@@ -8,7 +8,6 @@
 		<result property="sid" column="sid" />
 		<result property="uid" column="uid" />
 		<result property="wid" column="wid" />
-		<result property="did" column="did" />
 		<result property="dishsMoney" column="dishsMoney" />
 		<result property="carriageMoney" column="carriageMoney" />
 		<result property="taxesMoney" column="taxesMoney" />
@@ -30,13 +29,16 @@
 		<result property="startDate" column="startDate" />
 		<result property="endDate" column="endDate" />
 		<result property="status" column="status" />
+		<result property="cancleDate" column="cancleDate" />
+		<result property="overTimeDate" column="overTimeDate" />
+		<result property="complainDate" column="complainDate" />
 	</resultMap>
 
 	<insert id="add" parameterType="Menu" keyProperty="id"
 		useGeneratedKeys="true">
 		insert into
-		menu(mid,sid,uid,did,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,mealStartDate,mealEndDate,address,longitude,latitude,distance,direction,createBy,createDate,status)
-		values(#{mid},#{sid},#{uid},#{did},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{distance},#{direction},#{createBy},#{createDate},1)
+		menu(mid,sid,uid,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,mealStartDate,mealEndDate,address,longitude,latitude,distance,direction,createBy,createDate,status)
+		values(#{mid},#{sid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{distance},#{direction},#{createBy},#{createDate},1)
 	</insert>
 
 	<update id="receive" parameterType="Menu">
@@ -46,9 +48,22 @@
    </update>
 
    <update id="updateStatus" parameterType="Menu">
-		update menu set
-		status=#{status},updateBy=#{updateBy},updateDate=#{updateDate}
-		where mid=#{mid}
+   		<if test="status==3 or status==7 or status==8 or status==9">
+   			update menu set
+			status=#{status},endDate=#{endDate}
+			where mid=#{mid}
+   		</if>
+   		<if test="status==4">
+   			update menu set
+			status=#{status},cancleDate=#{cancleDate}
+			where mid=#{mid}
+   		</if>
+   		<if test="status==5">
+   			update menu set
+			status=#{status},complainDate=#{complainDate}
+			where mid=#{mid}
+   		</if>
+   		
    </update>
 
    <select id="getCount" resultType="Integer">
@@ -127,13 +142,16 @@
 	</select>
 
 	<select id="getByMid" resultType="Menu" parameterType="String">
-		<!--select * from menu where mid=#{mid} and status>0-->
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		select m.*,s.name as shopName,s.address as shopAddress,s.longitude as shopLongitude,s.latitude as shopLatitude,
+			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
 		join user_info u
 		on m.uid=u.uid
+		left join user_info u2
+		on m.wid=u2.uid
 		where m.mid=#{mid} and m.status>0
 	</select>
 	
@@ -167,7 +185,9 @@
     </update>
     
     <select id="getListByStr" resultType="Menu">
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+		select m.*,s.name as shopName,s.address as shopAddress,s.longitude as shopLongitude,s.latitude as shopLatitude,
+			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -175,22 +195,60 @@
 		on m.uid=u.uid
         left join user_info u2
 		on m.wid=u2.uid
-		where m.uid=#{uid} and m.status=#{status} and m.status>0
+		where 
+		<if test="userType==1">
+			m.uid=#{uid}
+		</if>
+		<if test="userType==2">
+			m.wid=#{uid}
+		</if>
+		<if test="type==1">
+			and (m.status=1 or m.status=2)
+		</if>
+		<if test="type==2">
+			and m.status=3
+		</if>
+		<if test="type==3">
+			and m.status not in (1,2,3)
+		</if>
+		order by m.createDate 	
 	</select>
     
     <select id="getNearlist" resultType="Menu">
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
 		join user_info u
 		on m.uid=u.uid
-        left join user_info u2
-		on m.wid=u2.uid
 		where (m.longitude between #{minlon} and #{maxlon}) 
 		and (m.latitude between #{minlat} and #{maxlat}) 
-		and m.status>0
+		and m.status=1
 	</select>
-
+	
+	<select id="getListOverTime" resultType="Menu">
+		select *
+		from menu 
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</select>
+	
+	<update id="updateOverTime" parameterType="String">
+		update menu set status=6,overTimeDate=#{updateDate}
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</update>
+	
+	
+	<select id="getNearListBySid" resultType="Menu">
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		from menu m
+		join shop_info s
+		on m.sid=s.sid
+		join user_info u
+		on m.uid=u.uid
+		where m.sid=#{sid} and m.status=1
+	</select>
+	
 	
 </mapper>

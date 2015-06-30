@@ -11,11 +11,14 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.dasher.mapper.ComplainMapper;
 import com.dasher.mapper.MarketMenuMapper;
+import com.dasher.model.Complain;
 import com.dasher.model.Earning;
 import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
+import com.dasher.model.Menu;
 import com.dasher.service.EarningService;
 import com.dasher.service.MarketCommodityService;
 import com.dasher.service.MarketMenuRecordService;
@@ -30,7 +33,7 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 	@Autowired
 	private MarketMenuRecordService marketMenuRecordService;
 	@Autowired
-	private MarketCommodityService marketCommodityService;
+	private ComplainMapper complainMapper;
 	@Autowired
 	private MarketService marketService;
 	@Autowired
@@ -63,7 +66,8 @@ public class MarketMenuServiceImpl implements MarketMenuService {
         double distance =BaiDuMapUtil.GetShortDistance(Double.parseDouble(market.getLongitude()),
         		Double.parseDouble(market.getLatitude()),Double.parseDouble(mm.getLongitude()),
         		Double.parseDouble(mm.getLatitude()));
-        mm.setDistance(String.valueOf(distance));
+        
+        mm.setDistance(String.valueOf((int)distance));
         mm.setDirection(direction);
         //保存订单信息
 		result=marketMenuMapper.add(mm);
@@ -93,59 +97,103 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return flag;
 	}
 
-	public boolean receive(MarketMenu mm) {
-		// TODO Auto-generated method stub
-		return marketMenuMapper.receive(mm)>0? true:false;
+	public int receive(MarketMenu mm) {
+		synchronized(this){
+			//判断订单是否已被接单
+			MarketMenu m_1=marketMenuMapper.getByMid(mm.getMid());
+			if(m_1.getStatus()!=1){
+				return 2;
+			}else{
+				return marketMenuMapper.receive(mm)>0? 1:0;
+			}
+		} 
 	}
 
-	public boolean updateStatus(MarketMenu mm) {
-		// TODO Auto-generated method stub
-		 boolean flag=false;
-			if(mm.getStatus()==3)
+	public boolean updateStatus(MarketMenu m) {
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        int result=-1;
+        boolean flag=false;
+        
+		if(m.getStatus()==3){
+			m.setEndDate(DateUtil.getCurrentDateStr());
+			
+			MarketMenu m_1=marketMenuMapper.getByMid(m.getMid());
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+			Date date=new Date();
+			String strs[]=sdf.format(date).split("-");
+			String eid="";
+			for(int i=0;i<strs.length;i++)
 			{
-				//添加事务处理
-				DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
-		        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-		        TransactionStatus ts = transactionManager.getTransaction(dtd);
-		        
-		        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
-				Date date=new Date();
-				String strs[]=sdf.format(date).split("-");
-				String eid="";
-				for(int i=0;i<strs.length;i++)
-				{
-					eid=eid+strs[i];
-				}
-				
-				float totalMoney=mm.getMenuCount()*mm.getDishsMoney()+mm.getCarriageMoney()+mm.getTaxesMoney()+mm.getServiceMoney()+mm.getTipMoney();
-				Earning e=new Earning();
-				e.setEid(eid);
-				e.setWid(mm.getWid());
-				e.setMid(mm.getMid());
-				e.setCarriageMoney(mm.getCarriageMoney());
-				e.setTotalMoney(totalMoney);
-				e.setType(0);
-				e.setCreateBy(mm.getUpdateBy());
-				e.setCreateDate(DateUtil.getCurrentDateStr());
-				flag=earningService.add(e);
-				if(flag==true)
-				{
-					transactionManager.commit(ts);
-				}
-				else
-				{
-					transactionManager.rollback(ts);  
-				}
+				eid=eid+strs[i];
+			}
+			
+			float totalMoney=m_1.getMenuCount()*m_1.getDishsMoney()+m_1.getCarriageMoney()+m_1.getTaxesMoney()+
+				m_1.getServiceMoney()+m_1.getTipMoney();
+			Earning e=new Earning();
+			e.setEid(eid);
+			e.setWid(m_1.getWid());
+			e.setMid(m_1.getMid());
+			e.setCarriageMoney(m_1.getCarriageMoney());
+			e.setTotalMoney(totalMoney);
+			e.setType(2);
+			e.setCreateBy(m.getUpdateBy());
+			e.setCreateDate(DateUtil.getCurrentDateStr());
+			result=earningService.add(e)==true?1:-1;
+		}else if(m.getStatus()==4){
+			m.setCancleDate(DateUtil.getCurrentDateStr());
+			//新增订单取消退款记录
+			MarketMenu m_1=marketMenuMapper.getByMid(m.getMid());
+			if(m_1.getStatus()!=1){
+				transactionManager.rollback(ts);  
+				return false;
+			}
+			Complain c=new Complain();
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+			Date date=new Date();
+			String strs[]=sdf.format(date).split("-");
+			String comId="";
+			for(int i=0;i<strs.length;i++)
+			{
+				comId=comId+strs[i];
+			}
+			c.setComId(comId);
+			c.setMid(m.getMid());
+			c.setComType(2);
+			c.setUid(m_1.getUid());
+			c.setWid("");
+			c.setType(2);
+			c.setContent("用户取消订单");
+			c.setCreateBy(m.getUpdateBy());
+			c.setCreateDate(DateUtil.getCurrentDateStr());
+			result=complainMapper.add(c);
+		}else if(m.getStatus()==5){
+			m.setComplainDate(DateUtil.getCurrentDateStr());
+			result=1;
+		}
+		if(result>0)
+		{
+			flag=marketMenuMapper.updateStatus(m)>0? true:false;
+			if(flag==true)
+			{
+				transactionManager.commit(ts);
 			}
 			else
 			{
-				flag=marketMenuMapper.updateStatus(mm)>0? true:false;
+				transactionManager.rollback(ts);  
 			}
-			
-			return flag;
-
+		}
+		else
+		{
+			transactionManager.rollback(ts);  
+		}
+		return flag;
 	}
 
+	public boolean updateStatus_2(MarketMenu menu) {
+		return marketMenuMapper.updateStatus(menu)>0? true:false;
+	}
 	public int getCount(String status, String smid, String searchStr,String startDate,String endDate) {
 		// TODO Auto-generated method stub
 		return marketMenuMapper.getCount(status, smid, searchStr,startDate,endDate);
@@ -173,17 +221,15 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return marketMenuMapper.getListByUidCount(type, searchStr);
 	}
 
-	public List<MarketMenu> ListByUid(String type, String searchStr) {
-		// TODO Auto-generated method stub
-		return marketMenuMapper.ListByUid(type, searchStr);
+	public List<MarketMenu> ListByUid(int type, String uid, int userType) {
+		return marketMenuMapper.ListByUid(type, uid,userType);
 	}
-
 	public boolean updateDate(MarketMenu mm) {
 		// TODO Auto-generated method stub
 		return marketMenuMapper.updateDate(mm)>0? true:false;
 	}
 
-	public List<MarketMenu> getNearList(float longitude, float latitude,
+	public List<MarketMenu> getNearList(double longitude, double latitude,
 			float distance) {
 		// TODO Auto-generated method stub
 		double r = 6371;
@@ -198,6 +244,66 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		List<MarketMenu> list=marketMenuMapper.getNearlist(minlon, maxlon, minlat, maxlat);
 		return list;
 
+	}
+
+	public List<MarketMenu> getNearListSmid(String smid) {
+		return marketMenuMapper.getNearListSmid(smid);
+	}
+
+	public void getListOverTime() {
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        boolean result=false;
+		//获取当前的时间
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
+		String mealEndDate =df.format(new Date());// new Date()为获取当前系统时间
+		
+		List<MarketMenu> list=marketMenuMapper.getListOverTime(mealEndDate);
+		if(list.size()>0){
+			//修改订单的状态
+			df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+			String updateDate =df.format(new Date());// new Date()为获取当前系统时间
+			result=marketMenuMapper.updateOverTime(mealEndDate,updateDate)>0?true:false;
+			if(!result)
+			{
+				transactionManager.rollback(ts);
+				return;
+			}
+			//新增延时退款操作记录
+			for (MarketMenu menu : list) {
+				Complain c=new Complain();
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+				Date date=new Date();
+				String strs[]=sdf.format(date).split("-");
+				String comId="";
+				for(int i=0;i<strs.length;i++)
+				{
+					comId=comId+strs[i];
+				}
+				c.setComId(comId);
+				c.setMid(menu.getMid());
+				c.setComType(3);
+				c.setUid(menu.getUid());
+				c.setWid("");
+				c.setType(2);
+				c.setContent("用户订单超时");
+				c.setCreateBy(menu.getUid());
+				c.setCreateDate(DateUtil.getCurrentDateStr());
+				result=complainMapper.add(c)>0?true:false;
+				if(!result){
+					break;
+				}
+			}
+		}
+		if(result==true)
+		{
+			transactionManager.commit(ts);
+		}
+		else
+		{
+			transactionManager.rollback(ts);  
+		}
 	}
 
 }

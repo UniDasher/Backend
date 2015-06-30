@@ -107,6 +107,7 @@ public class ShowMsg {
 	public static final String NoPermiss2 = "您尚未通过送餐人的审核，没有权限进行订单的配送！";//You have not yet through the room of audit, that there was no authority to order delivery!
 	public static final String receiveSuc="接单成功，请及时完成订单的配送！";//Order is successful, please finish the order delivery!
 	public static final String receiveFail="接单失败，请重试！";//Single failure, please try again!
+	public static final String receiveFail_2="订单已被接单，请尝试其他订单。";//Single failure, please try again!
 	public static final String searchFail="无效的查询条件！";//Invalid query conditions
 	public static final String nameNull = "菜品名称为空";//Name is empty
 	public static final String menuDishSuc="新增订单成功";//New orders successful
@@ -125,12 +126,12 @@ public class ShowMsg {
 	public static final String typeNull="商品类型为空！";
 	public static final String proNameNull="商品名为空！";
 	public static final String contentNull="投诉内容为空，请重新输入！";
-	public static final String handleSuc="投诉处理成功！";
-	public static final String comResultNull="投诉结果为空！";
-	public static final String comResultErr="投诉结果格式不正确！";
+	public static final String handleSuc="退款处理成功！";
+	public static final String comResultNull="处理结果结果为空！";
+	public static final String comResultErr="处理结果格式不正确！";
 	public static final String returnMoneyErr="返还金额格式错误!";
 	public static final String deductMoneyErr="扣除金额格式错误!";
-	public static final String handleFail="投诉处理失败！";
+	public static final String handleFail="退款处理失败！";
 	public static final String settleTypeNull="用户收支类型为空！";
 	public static final String settleNumberTypeNull="账号类型为空";
 	public static final String settleNumberNull="订单号或银行账号为空";
@@ -142,7 +143,7 @@ public class ShowMsg {
 	public static final String distanceNull="附近距离为空！";
 	public static final String LonLatErr = "经纬度格式错误";
 	public static final String distanceErr="附近距离格式错误";
-	public static final float distance=1000;
+	public static final float distance=5000;
 	public static final String weekNull="日期为空";
 	public static final String weekErr="日期格式错误";
 	public static final String flagNull="flag 为空";
@@ -152,4 +153,5 @@ public class ShowMsg {
 	public static final String checkFail="提交认证失败！";
 	public static final String checkEnd="认证通过";
 	public static final String chkFail="认证失败！";
+	public static final String chkBank="您尚未填写银行账户。";
 }

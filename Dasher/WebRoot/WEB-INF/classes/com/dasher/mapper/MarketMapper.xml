@@ -72,5 +72,13 @@
 	   and (latitude between #{minlat} and #{maxlat}) 
 	   and status>0
 	</select>
-  
+  	<select id="getNearListMenu" resultType="Market">
+	   select distinct s.*,count(m.mid) as orderCount
+     	from market_info s
+     	join market_menu m
+		on m.smid=s.smid
+     where (m.longitude between #{minlon} and #{maxlon}) 
+		and (m.latitude between #{minlat} and #{maxlat}) 
+		and m.status=1 group by m.smid
+	</select>
 </mapper>

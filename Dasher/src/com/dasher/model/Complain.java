@@ -6,6 +6,7 @@ public class Complain implements Serializable {
 
 	private int id;
 	private String comId;
+	private int comType;
 	private String uid;
 	private String mid;
 	private String wid;
@@ -52,6 +53,12 @@ public class Complain implements Serializable {
 	}
 	public void setComId(String comId) {
 		this.comId = comId;
+	}
+	public int getComType() {
+		return comType;
+	}
+	public void setComType(int comType) {
+		this.comType = comType;
 	}
 	public String getUid() {
 		return uid;
@@ -176,7 +183,7 @@ public class Complain implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Complain(int id, String comId, String uid, String mid, String wid,
+	public Complain(int id, String comId,int comType, String uid, String mid, String wid,
 			int type, String content, int comResult, String comContent,
 			float returnMoney, float deductMoney, String createBy,
 			String createDate, String updateBy, String updateDate,
@@ -185,6 +192,7 @@ public class Complain implements Serializable {
 		super();
 		this.id = id;
 		this.comId = comId;
+		this.comType=comType;
 		this.uid = uid;
 		this.mid = mid;
 		this.wid = wid;

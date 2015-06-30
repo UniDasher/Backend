@@ -29,6 +29,9 @@
      <result property="updateBy" column="updateBy"/>
      <result property="updateDate" column="updateDate"/>
      <result property="status" column="status"/>
+     <result property="cancleDate" column="cancleDate" />
+	 <result property="overTimeDate" column="overTimeDate" />
+	 <result property="complainDate" column="complainDate" />
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MarketMenu">
@@ -43,9 +46,21 @@
    </update>
    
    <update id="updateStatus" parameterType="MarketMenu">
-	 update market_menu 
-	 set status=#{status},updateBy=#{updateBy},updateDate=#{updateDate}
-	 where mid=#{mid}
+   		<if test="status==3 or status==7 or status==8 or status==9">
+   			update market_menu set
+			status=#{status},endDate=#{endDate}
+			where mid=#{mid}
+   		</if>
+   		<if test="status==4">
+   			update market_menu set
+			status=#{status},cancleDate=#{cancleDate}
+			where mid=#{mid}
+   		</if>
+   		<if test="status==5">
+   			update market_menu set
+			status=#{status},complainDate=#{complainDate}
+			where mid=#{mid}
+   		</if>
    </update>
    
    <select id="getCount" resultType="Integer">
@@ -95,7 +110,9 @@
    </select>
    
    <select id="getByMid" resultType="MarketMenu" parameterType="MarketMenu">
-      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+	  select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
+			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
 	  from market_menu as mm
 	  join market_info as m
 	  on mm.smid=m.smid
@@ -119,8 +136,10 @@
    </select>
    
    <select id="getListByUid" resultType="MarketMenu">
-      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
-	  from market_menu as mm
+      select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
+			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+      from market_menu as mm
 	  join market_info as m
 	  on mm.smid=m.smid
 	  join user_info as u
@@ -138,21 +157,33 @@
    </select>
    
    <select id="ListByUid" resultType="MarketMenu">
-      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
-	  from market_menu as mm
+      select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
+			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+      from market_menu as mm
 	  join market_info as m
 	  on mm.smid=m.smid
 	  join user_info as u
 	  on mm.uid=u.uid
 	  left join user_info u2
 	  on mm.wid=u2.uid
-      where 1=1
-      <if test="searchStr!=''">
-		and mm.uid=#{searchStr}
+      where 
+      <if test="userType==1">
+      	mm.uid=#{searchStr}
       </if>
-	  <if test="type!=''">
-		and mm.status=#{type}
+       <if test="userType==2">
+      	mm.wid=#{searchStr}
       </if>
+      	<if test="type==1">
+			and (mm.status=1 or mm.status=2)
+		</if>
+		<if test="type==2">
+			and mm.status=3
+		</if>
+		<if test="type==3">
+			and mm.status not in (1,2,3)
+		</if>
+		order by createDate desc
    </select>
    
    <update id="updateDate" parameterType="MarketMenu">
@@ -162,12 +193,37 @@
    </update>
    
    <select id="getNearlist" resultType="MarketMenu">
-	 select *
-     from market_info
-     where (longitude between #{minlon} and #{maxlon}) 
-     and (latitude between #{minlat} and #{maxlat}) 
-     and status>0
+	 select *,s.name as shopName,concat(u.firstName,u.lastName) as userName
+     from market_menu m
+     join market_info s
+		on m.smid=s.smid
+		join user_info u
+		on m.uid=u.uid
+     where (m.longitude between #{minlon} and #{maxlon}) 
+     and (m.latitude between #{minlat} and #{maxlat}) 
+     and m.status=1
 	</select>
-   
+   <select id="getNearListSmid" resultType="MarketMenu">
+	 select *,s.name as shopName,concat(u.firstName,u.lastName) as userName
+     from market_menu m
+     join market_info s
+		on m.smid=s.smid
+		join user_info u
+		on m.uid=u.uid
+     where m.smid=#{smid}
+     and m.status=1
+	</select>
+	<select id="getListOverTime" resultType="MarketMenu">
+		select *
+		from market_menu 
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</select>
+	
+	<update id="updateOverTime" parameterType="String">
+		update market_menu set status=6,overTimeDate=#{updateDate}
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</update>
   
 </mapper>

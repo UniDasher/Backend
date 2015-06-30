@@ -23,6 +23,7 @@ public class Shop implements Serializable {
 	private String updateDate;
 	private int status;
 	private String serviceTimes;
+	private int orderCount;
 	
 	public Shop() {
 		
@@ -32,7 +33,7 @@ public class Shop implements Serializable {
 			String address, String subscribe, String email, String phone,
 			String logo, String longitude, String latitude, int goodEvaluate,
 			int badEvaluate, int createBy, String createDate, int updateBy,
-			String updateDate, int status, String serviceTimes) {
+			String updateDate, int status, String serviceTimes,int orderCount) {
 		super();
 		this.id = id;
 		this.sid = sid;
@@ -53,6 +54,7 @@ public class Shop implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 		this.serviceTimes = serviceTimes;
+		this.orderCount=orderCount;
 	}
 
 	public int getId() {
@@ -207,5 +209,11 @@ public class Shop implements Serializable {
 		this.serviceTimes = serviceTimes;
 	}
 
-	
+	public void setOrderCount(int orderCount) {
+		this.orderCount = orderCount;
+	}
+
+	public int getOrderCount() {
+		return orderCount;
+	}
 }

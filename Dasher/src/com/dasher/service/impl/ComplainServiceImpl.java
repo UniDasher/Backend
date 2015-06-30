@@ -11,9 +11,13 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.ComplainMapper;
 import com.dasher.model.Complain;
+import com.dasher.model.MarketMenu;
+import com.dasher.model.Menu;
 import com.dasher.model.User;
 import com.dasher.model.UserSettle;
 import com.dasher.service.ComplainService;
+import com.dasher.service.MarketMenuService;
+import com.dasher.service.MenuService;
 import com.dasher.service.UserService;
 import com.dasher.service.UserSettleService;
 import com.dasher.util.DateUtil;
@@ -25,7 +29,10 @@ public class ComplainServiceImpl implements ComplainService {
 	private UserService userService;
 	@Autowired
 	private UserSettleService userSettleService;
-	
+	@Autowired
+	private MenuService menuService;
+	@Autowired
+	private MarketMenuService marketMenuService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -39,39 +46,72 @@ public class ComplainServiceImpl implements ComplainService {
 	}
 
 	public boolean add(Complain c) {
-		// TODO Auto-generated method stub
-		return complainMapper.add(c)>0? true:false;
+		//添加事务处理
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        boolean result=false;
+        
+		//新增投诉，修改订单的状态
+        if(c.getType()==1){
+        	//订单为餐厅订单
+        	Menu menu=new Menu();
+        	menu.setMid(c.getMid());
+        	menu.setStatus(5);
+        	menu.setComplainDate(DateUtil.getCurrentDateStr());
+        	menu.setUpdateBy(c.getUpdateBy());
+        	menu.setUpdateDate(DateUtil.getCurrentDateStr());
+        	result=menuService.updateStatus_2(menu);
+        }else{
+        	//订单为超市订单
+        	MarketMenu menu=new MarketMenu();
+        	menu.setMid(c.getMid());
+        	menu.setStatus(5);
+        	menu.setComplainDate(DateUtil.getCurrentDateStr());
+        	menu.setUpdateBy(c.getUpdateBy());
+        	menu.setUpdateDate(DateUtil.getCurrentDateStr());
+        	result=marketMenuService.updateStatus_2(menu);
+        }
+        if(result){
+        	result=complainMapper.add(c)>0? true:false;
+        	if(result){
+        		transactionManager.commit(ts);
+        	}else{
+        		transactionManager.rollback(ts);
+        	}
+        }else{
+        	transactionManager.rollback(ts);
+        }
+		return result;
 	}
 
 	public Complain getByComId(String comId,int type) {
-		// TODO Auto-generated method stub
 		return complainMapper.getByComId(comId,type);
 	}
 
 	public boolean update(Complain c) {
-		// TODO Auto-generated method stub
 		return complainMapper.update(c)>0? true:false;
 	}
 
 	public List<Complain> list(String searchStr,int status, int startRow, int pageSize) {
-		// TODO Auto-generated method stub
 		return complainMapper.list(searchStr,status, startRow, pageSize);
 	}
 
 	public int getCount(int status) {
-		// TODO Auto-generated method stub
 		return complainMapper.getCount(status);
 	}
 
 	public boolean handle(Complain c) {
+		//添加事务处理
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        
+        boolean result=false;
+      //根据投诉编号获取投诉的基本信息
+		Complain com=complainMapper.getByComId(c.getComId(),c.getType());
 		//判断投诉处理是否为通过，并且返还金额大于0
-		if(c.getComResult()==1&&c.getReturnMoney()>0){
-			//添加事务处理
-			DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
-	        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-	        TransactionStatus ts = transactionManager.getTransaction(dtd);
-			//根据投诉编号获取投诉的基本信息
-			Complain com=complainMapper.getByComId(c.getComId(),c.getType());
+		if(com.getComResult()==1&&com.getReturnMoney()>0){
 			//获取投诉用户信息，和送餐者信息
 			User user=userService.getByUId(com.getUid());
 			float userBalance=user.getBalance();
@@ -90,8 +130,12 @@ public class ComplainServiceImpl implements ComplainService {
             us.setSettleDesc("投诉处理，返回餐费");
             us.setCreateBy(c.getUpdateBy());
             us.setCreateDate(DateUtil.getCurrentDateStr());
-			userSettleService.add(us);
-			
+            result=userSettleService.add(us);
+			if(!result){
+				transactionManager.rollback(ts);
+				return false;
+			}
+            
 			User waiter=null;
 			float waiterBalance=0;
 			float curWaiterBalance=0;
@@ -113,16 +157,47 @@ public class ComplainServiceImpl implements ComplainService {
 	            us.setSettleDesc("投诉处理，扣除餐费");
 	            us.setCreateBy(c.getUpdateBy());
 	            us.setCreateDate(DateUtil.getCurrentDateStr());
-				userSettleService.add(us);
+	            result=userSettleService.add(us);
 				
+				if(!result){
+					transactionManager.rollback(ts);
+					return false;
+				}
 			}
-			boolean result=complainMapper.handle(c)>0? true:false;
-			transactionManager.commit(ts);
-			return result;
-		}else{
-			//投诉拒绝
-			return complainMapper.handle(c)>0? true:false;
 		}
+		
+		//订单状态修改
+		//新增投诉，修改订单的状态
+        if(c.getType()==1){
+        	//订单为餐厅订单
+        	Menu menu=new Menu();
+        	menu.setMid(com.getMid());
+        	menu.setStatus(com.getComType()==1?8:(com.getComType()==2?7:9));
+        	menu.setEndDate(DateUtil.getCurrentDateStr());
+        	menu.setUpdateBy(c.getUpdateBy());
+        	menu.setUpdateDate(DateUtil.getCurrentDateStr());
+        	result=menuService.updateStatus_2(menu);
+        }else{
+        	//订单为超市订单
+        	MarketMenu menu=new MarketMenu();
+        	menu.setMid(com.getMid());
+        	menu.setStatus(com.getComType()==1?8:(com.getComType()==2?7:9));
+        	menu.setEndDate(DateUtil.getCurrentDateStr());
+        	menu.setUpdateBy(c.getUpdateBy());
+        	menu.setUpdateDate(DateUtil.getCurrentDateStr());
+        	result=marketMenuService.updateStatus_2(menu);
+        }
+        if(result){
+        	result=complainMapper.handle(c)>0? true:false;
+        	if(result){
+        		transactionManager.commit(ts);
+        	}else{
+        		transactionManager.rollback(ts);
+        	}
+        }else{
+        	transactionManager.rollback(ts);
+        }
+		return result;
 	}
 
 	public List<Complain> userComList(String loginId, int status) {

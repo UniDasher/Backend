@@ -28,4 +28,6 @@ public interface UserMapper {
 	public List<User> searchUser(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<User> balanceList(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<User> settleList(@Param(value="searchStr") String searchStr);
+	public List<User> applyList();
+	public boolean updateStatus(User u);
 }

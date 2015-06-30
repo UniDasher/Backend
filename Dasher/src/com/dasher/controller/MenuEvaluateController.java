@@ -132,23 +132,7 @@ public class MenuEvaluateController extends MyController {
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String mid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			mid=jsonObject.getString("mid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -159,7 +143,7 @@ public class MenuEvaluateController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
-
+		String mid=getString(request, "mid");
 		if(mid=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -190,27 +174,7 @@ public class MenuEvaluateController extends MyController {
 	protected Object evaluser(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String wid="";
-	    String mycurPage="";
-	    String mypageSize="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			wid=jsonObject.getString("wid");
-			mycurPage=jsonObject.getString("curPage");
-			mypageSize=jsonObject.getString("countPage");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -221,7 +185,11 @@ public class MenuEvaluateController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
-
+		
+		String wid=getString(request, "wid");
+		String mycurPage=getString(request, "mycurPage");
+		String mypageSize=getString(request, "mypageSize");
+		
 		if(!mycurPage.equals("")&&!mypageSize.equals("")&&!wid.equals(""))
 		{
 			if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$"))
@@ -262,27 +230,7 @@ public class MenuEvaluateController extends MyController {
 	protected Object evalshop(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String sid="";
-	    String mycurPage="";
-	    String mypageSize="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			sid=jsonObject.getString("sid");
-			mycurPage=jsonObject.getString("curPage");
-			mypageSize=jsonObject.getString("countPage");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -293,6 +241,10 @@ public class MenuEvaluateController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
+		
+		String sid=getString(request, "sid");
+		String mycurPage=getString(request, "mycurPage");
+		String mypageSize=getString(request, "mypageSize");
 
 		if(!mycurPage.equals("")&&!mypageSize.equals("")&&!sid.equals(""))
 		{

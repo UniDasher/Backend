@@ -11,7 +11,9 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.dasher.mapper.ComplainMapper;
 import com.dasher.mapper.MenuMapper;
+import com.dasher.model.Complain;
 import com.dasher.model.Earning;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
@@ -32,7 +34,7 @@ public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private ShopService shopService;
 	@Autowired
-	private ShopDishService shopDishService;
+	private ComplainMapper complainMapper;
 	@Autowired
 	private EarningService earningService;
 	@Autowired
@@ -63,7 +65,7 @@ public class MenuServiceImpl implements MenuService {
         double distance =BaiDuMapUtil.GetShortDistance(Double.parseDouble(shop.getLongitude()),
         		Double.parseDouble(shop.getLatitude()),Double.parseDouble(m.getLongitude()),
         		Double.parseDouble(m.getLatitude()));
-        m.setDistance(String.valueOf(distance));
+        m.setDistance(String.valueOf((int)distance));
         m.setDirection(direction);
         //保存订单信息
 		result=menuMapper.add(m);
@@ -93,22 +95,31 @@ public class MenuServiceImpl implements MenuService {
 		return flag;
 	}
 
-	public boolean receive(Menu m) {
-		// TODO Auto-generated method stub
-		return menuMapper.receive(m)>0? true:false;
+	public int receive(Menu m) {
+		synchronized(this){
+			//判断订单是否已被接单
+			Menu m_1=menuMapper.getByMid(m.getMid());
+			if(m_1.getStatus()!=1){
+				return 2;
+			}else{
+				return menuMapper.receive(m)>0? 1:0;
+			}
+		} 
 	}
 
 	public boolean updateStatus(Menu m) {
-		// TODO Auto-generated method stub
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        
+        int result=-1;
         boolean flag=false;
-		if(m.getStatus()==3)
-		{
-			//添加事务处理
-			DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
-	        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-	        TransactionStatus ts = transactionManager.getTransaction(dtd);
-	        
-	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+        
+		if(m.getStatus()==3){
+			//订单完成
+			m.setEndDate(DateUtil.getCurrentDateStr());
+			Menu m_1=menuMapper.getByMid(m.getMid());
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 			Date date=new Date();
 			String strs[]=sdf.format(date).split("-");
 			String eid="";
@@ -117,17 +128,55 @@ public class MenuServiceImpl implements MenuService {
 				eid=eid+strs[i];
 			}
 			
-			float totalMoney=m.getMenuCount()*m.getDishsMoney()+m.getCarriageMoney()+m.getTaxesMoney()+m.getServiceMoney()+m.getTipMoney();
+			float totalMoney=m_1.getMenuCount()*m_1.getDishsMoney()+m_1.getCarriageMoney()+
+				m_1.getTaxesMoney()+m_1.getServiceMoney()+m_1.getTipMoney();
 			Earning e=new Earning();
 			e.setEid(eid);
-			e.setWid(m.getWid());
-			e.setMid(m.getMid());
-			e.setCarriageMoney(m.getCarriageMoney());
+			e.setWid(m_1.getWid());
+			e.setMid(m_1.getMid());
+			e.setCarriageMoney(m_1.getCarriageMoney());
 			e.setTotalMoney(totalMoney);
 			e.setType(1);
 			e.setCreateBy(m.getUpdateBy());
 			e.setCreateDate(DateUtil.getCurrentDateStr());
-			flag=earningService.add(e);
+			result=earningService.add(e)==true?1:-1;
+			
+		}else if(m.getStatus()==4){
+			//订单取消
+			m.setCancleDate(DateUtil.getCurrentDateStr());
+			//新增订单取消退款记录
+			Menu m_1=menuMapper.getByMid(m.getMid());
+			if(m_1.getStatus()!=1){
+				transactionManager.rollback(ts);  
+				return false;
+			}
+			Complain c=new Complain();
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+			Date date=new Date();
+			String strs[]=sdf.format(date).split("-");
+			String comId="";
+			for(int i=0;i<strs.length;i++)
+			{
+				comId=comId+strs[i];
+			}
+			c.setComId(comId);
+			c.setMid(m.getMid());
+			c.setComType(2);
+			c.setUid(m_1.getUid());
+			c.setWid("");
+			c.setType(1);
+			c.setContent("用户取消订单");
+			c.setCreateBy(m.getUpdateBy());
+			c.setCreateDate(DateUtil.getCurrentDateStr());
+			result=complainMapper.add(c);
+		}else if(m.getStatus()==5){
+			//配送投诉
+			m.setComplainDate(DateUtil.getCurrentDateStr());
+			result=1;
+		}
+		if(result>0)
+		{
+			flag=menuMapper.updateStatus(m)>0? true:false;
 			if(flag==true)
 			{
 				transactionManager.commit(ts);
@@ -139,15 +188,16 @@ public class MenuServiceImpl implements MenuService {
 		}
 		else
 		{
-			flag=menuMapper.updateStatus(m)>0? true:false;
+			transactionManager.rollback(ts);  
 		}
-		
 		return flag;
+	}
+	public boolean updateStatus_2(Menu m) {
+		return menuMapper.updateStatus(m)>0? true:false;
 	}
 
 	public List<Menu> list(String status, String sid, String searchStr,
 			String startDate, String endDate, int curPage, int countPage) {
-		// TODO Auto-generated method stub
 		return menuMapper.list(status, sid, searchStr, startDate, endDate, curPage, countPage);
 	}
 
@@ -188,12 +238,12 @@ public class MenuServiceImpl implements MenuService {
 		return menuMapper.updateMealDate(m)>0? true:false;
 	}
 
-	public List<Menu> getListByStr(int type, String uid) {
+	public List<Menu> getListByStr(int type, String uid,int userType) {
 		// TODO Auto-generated method stub
-		return menuMapper.getListByStr(type, uid);
+		return menuMapper.getListByStr(type, uid,userType);
 	}
 
-	public List<Menu> getNearList(float longitude, float latitude,float distance) {
+	public List<Menu> getNearList(double longitude, double latitude,float distance) {
 		// TODO Auto-generated method stub
 		double r = 6371;
 		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
@@ -207,5 +257,67 @@ public class MenuServiceImpl implements MenuService {
 		List<Menu> list=menuMapper.getNearlist(minlon, maxlon, minlat, maxlat);
 		return list;
 
+	}
+
+	public void getListOverTime() {
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        boolean result=false;
+		//获取当前的时间
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
+		String mealEndDate =df.format(new Date());// new Date()为获取当前系统时间
+		
+		List<Menu> list=menuMapper.getListOverTime(mealEndDate);
+		if(list.size()>0){
+			//修改订单的状态
+			df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+			String updateDate =df.format(new Date());// new Date()为获取当前系统时间
+			result=menuMapper.updateOverTime(mealEndDate,updateDate)>0?true:false;
+			if(!result)
+			{
+				transactionManager.rollback(ts);
+				return;
+			}
+			//新增延时退款操作记录
+			for (Menu menu : list) {
+				Complain c=new Complain();
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+				Date date=new Date();
+				String strs[]=sdf.format(date).split("-");
+				String comId="";
+				for(int i=0;i<strs.length;i++)
+				{
+					comId=comId+strs[i];
+				}
+				c.setComId(comId);
+				c.setMid(menu.getMid());
+				c.setComType(3);
+				c.setUid(menu.getUid());
+				c.setWid("");
+				c.setType(1);
+				c.setContent("用户订单超时");
+				c.setCreateBy(menu.getUid());
+				c.setCreateDate(DateUtil.getCurrentDateStr());
+				result=complainMapper.add(c)>0?true:false;
+				if(!result){
+					break;
+				}
+			}
+			
+		}
+		if(result==true)
+		{
+			transactionManager.commit(ts);
+		}
+		else
+		{
+			transactionManager.rollback(ts);  
+		}
+		
+	}
+
+	public List<Menu> getNearListBySid(String sid) {
+		return menuMapper.getNearListBySid(sid);
 	}
 }

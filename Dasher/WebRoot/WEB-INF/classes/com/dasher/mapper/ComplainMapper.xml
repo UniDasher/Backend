@@ -5,6 +5,7 @@
    <resultMap type="Complain" id="complainMap">
       <result property="id" column="id"/>
       <result property="comId" column="comId"/>
+      <result property="comType" column="comType"/>
       <result property="uid" column="uid"/>
       <result property="mid" column="mid"/>
       <result property="wid" column="wid"/>
@@ -22,8 +23,8 @@
    </resultMap>
    
    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Complain">
-     insert into complain(comId,uid,mid,type,wid,content,createBy,createDate,status)
-     values(#{comId},#{uid},#{mid},#{type},#{wid},#{content},#{createBy},#{createDate},1)
+     insert into complain(comId,comType,uid,mid,type,wid,content,createBy,createDate,status)
+     values(#{comId},#{comType},#{uid},#{mid},#{type},#{wid},#{content},#{createBy},#{createDate},1)
    </insert>
    
    <select id="userComList" resultType="Complain">

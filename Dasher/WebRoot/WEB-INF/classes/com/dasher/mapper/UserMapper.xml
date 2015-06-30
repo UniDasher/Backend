@@ -31,7 +31,7 @@
    
    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="User">
      insert into user_info(uid,firstName,lastName,account,password,salt,equmentNumber,mobilePhone,logo,email,address,longitude,latitude,createDate,status,bankAccount,bankType)
-     values(#{uid},#{firstName},#{lastName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate},1,#{bankAccount},#{bankType})
+     values(#{uid},#{firstName},#{lastName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate},0,#{bankAccount},#{bankType})
    </insert>
    
    <select id="getByUId" parameterType="String" resultType="User">
@@ -54,6 +54,12 @@
      where uid=#{uid}
    </update>
    
+   <update id="updateStatus" parameterType="User">
+     update user_info 
+     set status=#{status}
+     where uid=#{uid}
+   </update>
+   
    <update id="userApply" parameterType="User">
      update user_info 
      set status=#{status}
@@ -73,7 +79,7 @@
    </select>
    
    <select id="searchUser" resultType="User">
-     select uid,account,firstName,lastName,logo,balance,mobilePhone,email,address,longitude,latitude,goodEvaluate,badEvaluate,status from user_info
+     select * from user_info
      where 1=1 
      <if test="type==1">
      	and (status=2 or status=3)
@@ -153,6 +159,12 @@
      set applyTime=#{applyTime},status=#{status}
      where uid=#{uid}
    </update>
+   
+   <select id="applyList" resultType="User">
+     select * 
+     from user_info
+     where status=1
+   </select>
    
    <update id="cheakUser" parameterType="User">
      update user_info 

@@ -35,6 +35,77 @@ public class Menu implements Serializable {
 	private String serverName;
 	private int status;
 	
+	private String cancleDate;
+	private String overTimeDate;
+	private String complainDate;
+	
+	private String shopAddress;
+	private String shopLongitude;
+	private String shopLatitude;
+	private String userPhone;
+	private String userLogo;
+	private String serverPhone;
+	private String serverLogo;
+	
+
+	public Menu() {
+		super();
+	}
+	public Menu(int id, String mid, String sid, String uid, String wid,
+			float dishsMoney, float carriageMoney, float taxesMoney,
+			float serviceMoney, float tipMoney, int menuCount, int payType,
+			String mealStartDate, String mealEndDate, String address,
+			String longitude, String latitude, String distance,
+			String direction, String createBy, String createDate,
+			String updateBy, String updateDate, String startDate,
+			String endDate, String shopName, String userName,
+			String serverName, int status, String cancleDate,
+			String overTimeDate, String complainDate, String shopAddress,
+			String shopLongitude, String shopLatitude, String userPhone,
+			String userLogo, String serverPhone, String serverLogo) {
+		super();
+		this.id = id;
+		this.mid = mid;
+		this.sid = sid;
+		this.uid = uid;
+		this.wid = wid;
+		this.dishsMoney = dishsMoney;
+		this.carriageMoney = carriageMoney;
+		this.taxesMoney = taxesMoney;
+		this.serviceMoney = serviceMoney;
+		this.tipMoney = tipMoney;
+		this.menuCount = menuCount;
+		this.payType = payType;
+		this.mealStartDate = mealStartDate;
+		this.mealEndDate = mealEndDate;
+		this.address = address;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.distance = distance;
+		this.direction = direction;
+		this.createBy = createBy;
+		this.createDate = createDate;
+		this.updateBy = updateBy;
+		this.updateDate = updateDate;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.shopName = shopName;
+		this.userName = userName;
+		this.serverName = serverName;
+		this.status = status;
+		this.cancleDate = cancleDate;
+		this.overTimeDate = overTimeDate;
+		this.complainDate = complainDate;
+		this.shopAddress = shopAddress;
+		this.shopLongitude = shopLongitude;
+		this.shopLatitude = shopLatitude;
+		this.userPhone = userPhone;
+		this.userLogo = userLogo;
+		this.serverPhone = serverPhone;
+		this.serverLogo = serverLogo;
+	}
+
+
 	private List<MenuDish> dishs;
 	
 	public List<MenuDish> getDishs() {
@@ -43,6 +114,30 @@ public class Menu implements Serializable {
 
 	public void setDishs(List<MenuDish> dishs) {
 		this.dishs = dishs;
+	}
+
+	public String getCancleDate() {
+		return cancleDate;
+	}
+
+	public void setCancleDate(String cancleDate) {
+		this.cancleDate = cancleDate;
+	}
+
+	public String getOverTimeDate() {
+		return overTimeDate;
+	}
+
+	public void setOverTimeDate(String overTimeDate) {
+		this.overTimeDate = overTimeDate;
+	}
+
+	public String getComplainDate() {
+		return complainDate;
+	}
+
+	public void setComplainDate(String complainDate) {
+		this.complainDate = complainDate;
 	}
 
 	public String getDistance() {
@@ -59,10 +154,6 @@ public class Menu implements Serializable {
 
 	public void setDirection(String direction) {
 		this.direction = direction;
-	}
-
-	public Menu() {
-		super();
 	}
 
 	public int getId() {
@@ -280,45 +371,60 @@ public class Menu implements Serializable {
 		this.status = status;
 	}
 
-	public Menu(int id, String mid, String sid, String uid, String wid,
-			float dishsMoney, float carriageMoney, float taxesMoney,
-			float serviceMoney, float tipMoney, int menuCount, int payType,
-			String mealStartDate, String mealEndDate, String address,
-			String longitude, String latitude, String distance,
-			String direction, String createBy, String createDate,
-			String updateBy, String updateDate, String startDate,
-			String endDate, String shopName, String userName,
-			String serverName, int status) {
-		super();
-		this.id = id;
-		this.mid = mid;
-		this.sid = sid;
-		this.uid = uid;
-		this.wid = wid;
-		this.dishsMoney = dishsMoney;
-		this.carriageMoney = carriageMoney;
-		this.taxesMoney = taxesMoney;
-		this.serviceMoney = serviceMoney;
-		this.tipMoney = tipMoney;
-		this.menuCount = menuCount;
-		this.payType = payType;
-		this.mealStartDate = mealStartDate;
-		this.mealEndDate = mealEndDate;
-		this.address = address;
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.distance = distance;
-		this.direction = direction;
-		this.createBy = createBy;
-		this.createDate = createDate;
-		this.updateBy = updateBy;
-		this.updateDate = updateDate;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.shopName = shopName;
-		this.userName = userName;
-		this.serverName = serverName;
-		this.status = status;
+	public String getShopAddress() {
+		return shopAddress;
+	}
+
+	public void setShopAddress(String shopAddress) {
+		this.shopAddress = shopAddress;
+	}
+
+	public String getShopLongitude() {
+		return shopLongitude;
+	}
+
+	public void setShopLongitude(String shopLongitude) {
+		this.shopLongitude = shopLongitude;
+	}
+
+	public String getShopLatitude() {
+		return shopLatitude;
+	}
+
+	public void setShopLatitude(String shopLatitude) {
+		this.shopLatitude = shopLatitude;
+	}
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+
+	public String getUserLogo() {
+		return userLogo;
+	}
+
+	public void setUserLogo(String userLogo) {
+		this.userLogo = userLogo;
+	}
+
+	public String getServerPhone() {
+		return serverPhone;
+	}
+
+	public void setServerPhone(String serverPhone) {
+		this.serverPhone = serverPhone;
+	}
+
+	public String getServerLogo() {
+		return serverLogo;
+	}
+
+	public void setServerLogo(String serverLogo) {
+		this.serverLogo = serverLogo;
 	}
 
 }
