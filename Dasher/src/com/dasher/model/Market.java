@@ -22,6 +22,8 @@ public class Market implements Serializable {
 	private String updateDate;
 	private int status;
 	
+	private int orderCount;
+	
 	public Market() {
 		
 	}
@@ -30,7 +32,7 @@ public class Market implements Serializable {
 			String subscribe, String email, String phone, String serviceTime,
 			String longitude, String latitude, int goodEvaluate,
 			int badEvaluate, String createBy, String createDate,
-			String updateBy, String updateDate, int status) {
+			String updateBy, String updateDate, int status,int orderCount) {
 		super();
 		this.id = id;
 		this.smid = smid;
@@ -49,6 +51,7 @@ public class Market implements Serializable {
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
 		this.status = status;
+		this.orderCount=orderCount;
 	}
 
 	public int getId() {
@@ -185,6 +188,14 @@ public class Market implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public int getOrderCount() {
+		return orderCount;
+	}
+
+	public void setOrderCount(int orderCount) {
+		this.orderCount = orderCount;
 	}
 	
 }

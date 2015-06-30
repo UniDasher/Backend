@@ -8,7 +8,7 @@ public class BaiDuMapUtil {
     static double DEF_RJ = 6356725;  // 极半径
     
     public static String GetDirection(double lon1, double lat1, double lon2, double lat2){
-    	String[] dirs={"正东","东北","正北","西北","正西","西南","正南","东南"};
+    	String[] dirs={"正南","东南","正东","东北","正北","西北","正西","西南"};
     	
     	double Ec=DEF_RJ + (DEF_R - DEF_RJ) * (90.0-lon1) / 90.0;
     	double Ed = Ec * Math.cos(lat1* Math.PI/180.0);

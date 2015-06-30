@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
+import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
+import com.dasher.service.ShopService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
@@ -39,7 +41,7 @@ public class MenuController extends MyController {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private MenuDishService menuDishService;
+	private ShopService shopService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -341,16 +343,20 @@ public class MenuController extends MyController {
 				m.setStartDate(DateUtil.getCurrentDateStr());
 				m.setUpdateBy(myloginId);
 				m.setUpdateDate(DateUtil.getCurrentDateStr());
-				result=menuService.receive(m);
-				if(result==true)
+				int res=menuService.receive(m);
+				if(res==1)
 				{
 					resultCode=0;
 					resultDesc=ShowMsg.receiveSuc;
 				}
-				else
+				else if(res==0)
 				{
 					resultCode=1;
 					resultDesc=ShowMsg.receiveFail;
+				}else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.receiveFail_2;
 				}
 			}
 			else
@@ -432,6 +438,101 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
+	@RequestMapping("phone/menu/list/near/shop")
+	@ResponseBody
+	protected Object listNearShop(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
+		
+		if(longitude==""||latitude=="")
+		{
+			resultDesc=ShowMsg.NoLocatInfo;
+			resultCode=2;
+		}
+		else
+		{
+			//送餐人获取附近订单
+			List<Shop> list=shopService.getListByMenu(Double.parseDouble(longitude), 
+					Double.parseDouble(latitude),ShowMsg.distance);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+		}
+		
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	@RequestMapping("phone/menu/list/near/sid")
+	@ResponseBody
+	protected Object listNearSid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String sid=getString(request, "sid");
+		
+		if(sid=="")
+		{
+			resultDesc=ShowMsg.NoLocatInfo;
+			resultCode=2;
+		}
+		else
+		{
+			//送餐人获取附近订单
+			List<Menu> list=menuService.getNearListBySid(sid);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+		}
+		
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
 	@RequestMapping("phone/menu/list/near")
 	@ResponseBody
 	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -459,25 +560,20 @@ public class MenuController extends MyController {
 		}
 		else
 		{
-			
 			//送餐人获取附近订单
 			List<Menu> list=menuService.getNearList(Double.parseDouble(longitude), Double.parseDouble(latitude),ShowMsg.distance);
 			if(list.size()>0)
 			{
-				model.put("count", list.size());
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 			else
 			{
-				model.put("count", 0);
 				model.put("list", null);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
-
-			
 		}
 		
 		model.put("resultCode", resultCode);	
@@ -501,10 +597,8 @@ public class MenuController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
-		
 		String uid=getString(request, "uid");
 		String type=getString(request, "type");
-		
 		if(!uid.equals("")&&!type.equals(""))
 		{
 			if(type.matches("^[0-9]*$"))
@@ -513,7 +607,6 @@ public class MenuController extends MyController {
 				List<Menu> list=menuService.getListByStr(Integer.parseInt(type), uid);
 				if(list.size()>0)
 				{
-
 					model.put("count", list.size());
 					model.put("list", list);
 					resultDesc=ShowMsg.findSuc;
@@ -526,15 +619,12 @@ public class MenuController extends MyController {
 					resultDesc=ShowMsg.findSuc;
 					resultCode=0;
 				}
-			
 			}
 			else
 			{
 				resultDesc=ShowMsg.inputErr;
 				resultCode=2;
 			}
-			
-			
 		}
 		else
 		{
@@ -843,6 +933,4 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
-	
 }

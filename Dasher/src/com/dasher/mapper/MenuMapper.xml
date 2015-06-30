@@ -190,7 +190,17 @@
 		on m.uid=u.uid
         left join user_info u2
 		on m.wid=u2.uid
-		where m.uid=#{uid} and m.status=#{status} and m.status>0
+		where m.uid=#{uid} 
+		<if test="type==1">
+			and (m.status=1 or m.status=2)
+		</if>
+		<if test="type==2">
+			and m.status=3
+		</if>
+		<if test="type==3">
+			and m.status not in (1,2,3)
+		</if>
+			
 	</select>
     
     <select id="getNearlist" resultType="Menu">
@@ -204,6 +214,30 @@
 		and (m.latitude between #{minlat} and #{maxlat}) 
 		and m.status=1
 	</select>
-
+	
+	<select id="getListOverTime" resultType="Menu">
+		select *
+		from menu 
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</select>
+	
+	<update id="updateOverTime" parameterType="String">
+		update menu set status=6,overTimeDate=#{updateDate}
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</update>
+	
+	
+	<select id="getNearListBySid" resultType="Menu">
+		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		from menu m
+		join shop_info s
+		on m.sid=s.sid
+		join user_info u
+		on m.uid=u.uid
+		where m.sid=#{sid} and m.status=1
+	</select>
+	
 	
 </mapper>

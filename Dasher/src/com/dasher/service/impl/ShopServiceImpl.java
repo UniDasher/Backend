@@ -56,6 +56,18 @@ public class ShopServiceImpl implements ShopService {
 		double maxlon = longitude + dlng;
 		return shopMapper.getListByLati(minlon, maxlon, minlat, maxlat);
 	}
+	public List<Shop> getListByMenu(double longitude, double latitude,float distance) {
+		double r = 6371;
+		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
+		dlng = dlng*180/Math.PI;
+		double dlat = distance/r;
+		dlat = dlat*180/Math.PI;		
+		double minlat =latitude-dlat;
+		double maxlat = latitude+dlat;
+		double minlon = longitude -dlng;
+		double maxlon = longitude + dlng;
+		return shopMapper.getListByMenu(minlon, maxlon, minlat, maxlat);
+	}
 
 	public List<Shop> list(String searchStr, int startRow, int pageSize) {
 		// TODO Auto-generated method stub
@@ -76,5 +88,4 @@ public class ShopServiceImpl implements ShopService {
 		// TODO Auto-generated method stub
 		return shopMapper.menuList();
 	}
-
 }

@@ -25,6 +25,10 @@
 	<listener>
 		<listener-class>com.dasher.common.context.MyContextLoader</listener-class>
 	</listener>
+	<listener>
+		<listener-class>com.dasher.servlet.InitListener</listener-class>
+	</listener>
+	
 
 	<!-- Character Encoding filter -->
 	<!-- 配置编码方式 -->

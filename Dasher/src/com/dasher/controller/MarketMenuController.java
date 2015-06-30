@@ -21,11 +21,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
+import com.dasher.service.MarketService;
+import com.dasher.service.ShopService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
@@ -39,6 +42,8 @@ public class MarketMenuController extends MyController {
 	private LoginService loginService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private MarketService marketService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -334,25 +339,27 @@ public class MarketMenuController extends MyController {
 				mm.setStartDate(DateUtil.getCurrentDateStr());
 				mm.setUpdateBy(myloginId);
 				mm.setUpdateDate(DateUtil.getCurrentDateStr());
-				result=marketMenuService.receive(mm);
-				if(result==true)
+				int res=marketMenuService.receive(mm);
+				if(res==1)
 				{
 					resultCode=0;
 					resultDesc=ShowMsg.receiveSuc;
 				}
-				else
+				else if(res==0)
 				{
 					resultCode=1;
 					resultDesc=ShowMsg.receiveFail;
+				}else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.receiveFail_2;
 				}
-
 			}
 			else
 			{
 				resultDesc=ShowMsg.NoPermiss2;
 				resultCode=4;
 			}
-
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
@@ -429,6 +436,99 @@ public class MarketMenuController extends MyController {
 		return model;
 	}	
 	
+	@RequestMapping("phone/menu/list/near/market")
+	@ResponseBody
+	protected Object listNearMarket(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String longitude=getString(request, "longitude");
+		String latitude=getString(request, "latitude");
+		
+		if(longitude==""||latitude=="")
+		{
+			resultDesc=ShowMsg.NoLocatInfo;
+			resultCode=2;
+		}
+		else
+		{
+			List<Market> list=marketService.getNearListMenu(Double.parseDouble(longitude), Double.parseDouble(latitude), ShowMsg.distance);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	
+	@RequestMapping("phone/menu/list/near/smid")
+	@ResponseBody
+	protected Object listNearSmid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		String smid=getString(request, "smid");
+		
+		if(smid=="")
+		{
+			resultDesc=ShowMsg.NoLocatInfo;
+			resultCode=2;
+		}
+		else
+		{
+			List<MarketMenu> list=marketMenuService.getNearListSmid(smid);
+			if(list.size()>0)
+			{
+				model.put("list", list);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+			else
+			{
+				model.put("list", null);
+				resultDesc=ShowMsg.findSuc;
+				resultCode=0;
+			}
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	
 	@RequestMapping("phone/market/menu/list/near")
 	@ResponseBody
 	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -460,22 +560,17 @@ public class MarketMenuController extends MyController {
 			List<MarketMenu> list=marketMenuService.getNearList(Double.parseDouble(longitude), Double.parseDouble(latitude), ShowMsg.distance);
 			if(list.size()>0)
 			{
-				model.put("count", list.size());
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 			else
 			{
-				model.put("count", 0);
 				model.put("list", null);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
-
-			
 		}
-		
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;

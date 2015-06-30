@@ -107,6 +107,7 @@ public class ShowMsg {
 	public static final String NoPermiss2 = "您尚未通过送餐人的审核，没有权限进行订单的配送！";//You have not yet through the room of audit, that there was no authority to order delivery!
 	public static final String receiveSuc="接单成功，请及时完成订单的配送！";//Order is successful, please finish the order delivery!
 	public static final String receiveFail="接单失败，请重试！";//Single failure, please try again!
+	public static final String receiveFail_2="订单已被接单，请尝试其他订单。";//Single failure, please try again!
 	public static final String searchFail="无效的查询条件！";//Invalid query conditions
 	public static final String nameNull = "菜品名称为空";//Name is empty
 	public static final String menuDishSuc="新增订单成功";//New orders successful

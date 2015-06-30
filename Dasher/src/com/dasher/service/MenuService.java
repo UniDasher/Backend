@@ -10,7 +10,7 @@ public interface MenuService {
 	public int getListByUidCount(int type,String searchStr);
 	public int CountByStatus(String uid,String status);
 	public boolean add(Menu m);
-	public boolean receive(Menu m);
+	public int receive(Menu m);
 	public boolean updateStatus(Menu m);	
 	public boolean updateMealDate(Menu m);
 	public Menu getByMid(String mid);
@@ -19,4 +19,7 @@ public interface MenuService {
     public List<Menu> listByStatus(String uid,String status, int curPage, int countPage);
     public List<Menu> getNearList(double longitude,double latitude,float distance);
 	public List<Menu> getListByStr(int type,String uid);
+	
+	public void getListOverTime();//获取超时的订单列表
+	public List<Menu> getNearListBySid(String sid);
 }

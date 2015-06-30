@@ -161,13 +161,16 @@
 	  on mm.uid=u.uid
 	  left join user_info u2
 	  on mm.wid=u2.uid
-      where 1=1
-      <if test="searchStr!=''">
-		and mm.uid=#{searchStr}
-      </if>
-	  <if test="type!=''">
-		and mm.status=#{type}
-      </if>
+      where and mm.uid=#{searchStr}
+      	<if test="type==1">
+			and (mm.status=1 or mm.status=2)
+		</if>
+		<if test="type==2">
+			and mm.status=3
+		</if>
+		<if test="type==3">
+			and mm.status not in (1,2,3)
+		</if>
    </select>
    
    <update id="updateDate" parameterType="MarketMenu">
@@ -183,10 +186,31 @@
 		on m.smid=s.smid
 		join user_info u
 		on m.uid=u.uid
-     where (longitude between #{minlon} and #{maxlon}) 
-     and (latitude between #{minlat} and #{maxlat}) 
-     and status=1
+     where (m.longitude between #{minlon} and #{maxlon}) 
+     and (m.latitude between #{minlat} and #{maxlat}) 
+     and m.status=1
 	</select>
-   
+   <select id="getNearListSmid" resultType="MarketMenu">
+	 select *,s.name as shopName,concat(u.firstName,u.lastName) as userName
+     from market_menu m
+     join market_info s
+		on m.smid=s.smid
+		join user_info u
+		on m.uid=u.uid
+     where m.smid=#{smid}
+     and m.status=1
+	</select>
+	<select id="getListOverTime" resultType="MarketMenu">
+		select *
+		from market_menu 
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</select>
+	
+	<update id="updateOverTime" parameterType="String">
+		update market_menu set status=6,overTimeDate=#{updateDate}
+		where mealEndDate &lt; #{mealEndDate}
+		and status=1
+	</update>
   
 </mapper>

@@ -2,6 +2,7 @@ package com.dasher.service;
 
 import java.util.List;
 
+import com.dasher.model.Market;
 import com.dasher.model.Shop;
 
 public interface ShopService {
@@ -14,6 +15,8 @@ public interface ShopService {
 	public Shop getBySid(String sid);
 	public Shop getByName(String name);
 	public List<Shop> getListByLati(double longitude,double latitude,float distance);
+	public List<Shop> getListByMenu(double longitude,double latitude,float distance);
 	public List<Shop> list(String searchStr, int startRow,int pageSize);
 	public List<Shop> menuList();
+	
 }

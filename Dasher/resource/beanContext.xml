@@ -245,4 +245,5 @@
 		class="com.dasher.service.impl.MarketMenuServiceImpl">
 		<property name="marketMenuMapper" ref="marketMenuMapper"></property>
 	</bean>
+	
 </beans>
