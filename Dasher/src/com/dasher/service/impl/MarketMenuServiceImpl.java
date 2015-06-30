@@ -1,5 +1,7 @@
 package com.dasher.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,17 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.MarketMenuMapper;
+import com.dasher.model.Earning;
 import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
+import com.dasher.service.EarningService;
 import com.dasher.service.MarketCommodityService;
 import com.dasher.service.MarketMenuRecordService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MarketService;
 import com.dasher.util.BaiDuMapUtil;
+import com.dasher.util.DateUtil;
 
 public class MarketMenuServiceImpl implements MarketMenuService {
 
@@ -28,6 +33,8 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 	private MarketCommodityService marketCommodityService;
 	@Autowired
 	private MarketService marketService;
+	@Autowired
+	private EarningService earningService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -93,7 +100,50 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 
 	public boolean updateStatus(MarketMenu mm) {
 		// TODO Auto-generated method stub
-		return marketMenuMapper.updateStatus(mm)>0? true:false;
+		 boolean flag=false;
+			if(mm.getStatus()==3)
+			{
+				//添加事务处理
+				DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+		        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		        TransactionStatus ts = transactionManager.getTransaction(dtd);
+		        
+		        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
+				Date date=new Date();
+				String strs[]=sdf.format(date).split("-");
+				String eid="";
+				for(int i=0;i<strs.length;i++)
+				{
+					eid=eid+strs[i];
+				}
+				
+				float totalMoney=mm.getMenuCount()*mm.getDishsMoney()+mm.getCarriageMoney()+mm.getTaxesMoney()+mm.getServiceMoney()+mm.getTipMoney();
+				Earning e=new Earning();
+				e.setEid(eid);
+				e.setWid(mm.getWid());
+				e.setMid(mm.getMid());
+				e.setCarriageMoney(mm.getCarriageMoney());
+				e.setTotalMoney(totalMoney);
+				e.setType(0);
+				e.setCreateBy(mm.getUpdateBy());
+				e.setCreateDate(DateUtil.getCurrentDateStr());
+				flag=earningService.add(e);
+				if(flag==true)
+				{
+					transactionManager.commit(ts);
+				}
+				else
+				{
+					transactionManager.rollback(ts);  
+				}
+			}
+			else
+			{
+				flag=marketMenuMapper.updateStatus(mm)>0? true:false;
+			}
+			
+			return flag;
+
 	}
 
 	public int getCount(String status, String smid, String searchStr,String startDate,String endDate) {

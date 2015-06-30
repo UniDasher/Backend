@@ -37,5 +37,20 @@ public class EarningServiceImpl implements EarningService {
 		// TODO Auto-generated method stub
 		return earningMapper.getByEid(eid);
 	}
+
+	public List<Earning> listWeek(String wid) {
+		// TODO Auto-generated method stub
+		return earningMapper.listWeek(wid);
+	}
+
+	public List<Earning> listDay(String wid, int str) {
+		// TODO Auto-generated method stub
+		return earningMapper.listDay(wid, str);
+	}
+
+	public List<Earning> listMonth(String wid) {
+		// TODO Auto-generated method stub
+		return earningMapper.listMonth(wid);
+	}
 	
 }

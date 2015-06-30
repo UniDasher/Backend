@@ -64,7 +64,7 @@
 	<bean id="earningMapper"
 		class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.dasher.mapper.EaringMapper" />
+			value="com.dasher.mapper.EarningMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	<bean id="complainMapper"
@@ -179,8 +179,8 @@
 		class="com.dasher.service.impl.UserAddressServiceImpl">
 		<property name="userAddressMapper" ref="userAddressMapper"></property>
 	</bean>
-	<bean id="earingService"
-		class="com.dasher.service.impl.EaringServiceImpl">
+	<bean id="earningService"
+		class="com.dasher.service.impl.EarningServiceImpl">
 		<property name="earningMapper" ref="earningMapper"></property>
 	</bean>
 	<bean id="menuService"

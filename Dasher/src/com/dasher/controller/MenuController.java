@@ -520,8 +520,6 @@ public class MenuController extends MyController {
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
-
-			
 		}
 		
 		model.put("resultCode", resultCode);	

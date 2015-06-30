@@ -35,4 +35,43 @@
      select * from earn_info where eid=#{eid}
    </select>
    
+   <select id="listWeek" parameterType="String" resultType="Earning">
+     select * 
+     from earn_info
+     where wid=#{wid}
+     <if test="updateDate=''">
+       and yearweek(date_format(createDate,'%Y-%m-%d'))=yearweek(now())
+     </if>
+     <if test="updateDate!=''">
+       and yearweek(date_format(updateDate,'%Y-%m-%d'))=yearweek(now())
+     </if>
+     and status>0
+   </select>
+   
+   <select id="listDay" resultType="Earning">
+     select * 
+     from earn_info
+     where wid=#{wid}
+     <if test="updateDate=''">
+       and to_days(now())-to_days(createDate)=#{str}
+     </if>
+     <if test="updateDate!=''">
+       and to_days(now())-to_days(updateDate)=#{str}
+     </if>
+     and status>0
+   </select>
+   
+   <select id="listMonth" resultType="Earning">
+     select * 
+     from earn_info
+     where wid=#{wid}
+     <if test="updateDate=''">
+       and date_format(createDate,'%Y-%m')=date_format(now(),'%Y-%m')
+     </if>
+     <if test="updateDate!=''">
+       and date_format(updateDate,'%Y-%m')=date_format(now(),'%Y-%m')
+     </if>
+     and status>0
+   </select>
+   
 </mapper>

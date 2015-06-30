@@ -53,9 +53,6 @@
      limit #{startRow},#{pageSize} 
    </select>
    
-   
-   
-   
    <select id="getListByWid" resultType="UserSettle" parameterType="String">
      select us.*,concat(u.firstName,u.lastName) as userName
 	 from user_settle us
