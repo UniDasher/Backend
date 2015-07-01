@@ -62,9 +62,18 @@
    </select>
    
    <select id="getCount" resultType="Integer" parameterType="Integer">
-     select count(*)
-     from complain
-	 where status=#{status}
+     select count(c.id)
+     from complain c
+	 left join user_info u 
+	 on c.uid=u.uid
+	 where c.status=#{status}
+	 <if test="status==2 and searchStr!=''">
+	 	and (u.firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or u.lastName like CONCAT(CONCAT('%', #{searchStr}),'%'))
+	 </if>
+	 <if test="status==2 and startDate!='' and endDate!=''">
+		and c.updateDate between #{startDate} and #{endDate}
+     </if>
+	 
    </select>
    
    <select id="list" resultType="Complain">
@@ -78,18 +87,24 @@
 	 <!-- left join menu m
 	 on c.mid=m.mid -->
 	 where c.status=#{status}
-	 <if test="searchStr!=''">
-		and c.comId like CONCAT(CONCAT('%',#{searchStr}),'%')
-      </if>
-	 order by c.createDate desc
+	 <if test="status==2 and searchStr!=''">
+	 	and (u.firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or u.lastName like CONCAT(CONCAT('%', #{searchStr}),'%'))
+	 </if>
+	 <if test="status==2 and startDate!='' and endDate!=''">
+		and c.updateDate between #{startDate} and #{endDate}
+     </if>
 	 <if test="status==2">
-	 	limit #{startRow},#{pageSize}
+	 	order by c.updateDate desc limit #{startRow},#{pageSize} 
+	 </if>
+	 <if test="status==1">
+	 	order by c.createDate desc
 	 </if>
    </select>
    
    <update id="handle" parameterType="Complain">
      update complain 
-     set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
+     set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},
+     	deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
      where comId=#{comId} 
    </update>
 </mapper>

@@ -1,6 +1,9 @@
 package com.dasher.service.impl;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +24,7 @@ import com.dasher.service.MenuService;
 import com.dasher.service.UserService;
 import com.dasher.service.UserSettleService;
 import com.dasher.util.DateUtil;
+import com.dasher.util.FileUploadUtil;
 
 public class ComplainServiceImpl implements ComplainService {
 
@@ -93,15 +97,15 @@ public class ComplainServiceImpl implements ComplainService {
 		return complainMapper.update(c)>0? true:false;
 	}
 
-	public List<Complain> list(String searchStr,int status, int startRow, int pageSize) {
-		return complainMapper.list(searchStr,status, startRow, pageSize);
+	public List<Complain> list(String searchStr,int status, String startDate, String endDate, int startRow, int pageSize) {
+		return complainMapper.list(searchStr,status,startDate,endDate, startRow, pageSize);
 	}
 
-	public int getCount(int status) {
-		return complainMapper.getCount(status);
+	public int getCount(String searchStr, int status, String startDate, String endDate) {
+		return complainMapper.getCount(searchStr,status,startDate,endDate);
 	}
 
-	public boolean handle(Complain c) {
+	public boolean handle(HttpServletRequest request,String fileName,Complain c) {
 		//添加事务处理
 		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
         dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -110,6 +114,7 @@ public class ComplainServiceImpl implements ComplainService {
         boolean result=false;
       //根据投诉编号获取投诉的基本信息
 		Complain com=complainMapper.getByComId(c.getComId(),c.getType());
+		/*
 		//判断投诉处理是否为通过，并且返还金额大于0
 		if(com.getComResult()==1&&com.getReturnMoney()>0){
 			//获取投诉用户信息，和送餐者信息
@@ -164,7 +169,7 @@ public class ComplainServiceImpl implements ComplainService {
 					return false;
 				}
 			}
-		}
+		}*/
 		
 		//订单状态修改
 		//新增投诉，修改订单的状态
@@ -187,7 +192,17 @@ public class ComplainServiceImpl implements ComplainService {
         	menu.setUpdateDate(DateUtil.getCurrentDateStr());
         	result=marketMenuService.updateStatus_2(menu);
         }
+        
+        
         if(result){
+        	c.setComType(com.getComType());
+        	//退款处理，导出excel文件
+            try {
+				FileUploadUtil.createRefundExcel(request,fileName,c,com);
+			} catch (IOException e) {
+				transactionManager.rollback(ts);
+				e.printStackTrace();
+			}
         	result=complainMapper.handle(c)>0? true:false;
         	if(result){
         		transactionManager.commit(ts);

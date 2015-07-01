@@ -19,11 +19,13 @@ import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
 import com.dasher.model.Menu;
+import com.dasher.model.User;
 import com.dasher.service.EarningService;
 import com.dasher.service.MarketCommodityService;
 import com.dasher.service.MarketMenuRecordService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MarketService;
+import com.dasher.service.UserService;
 import com.dasher.util.BaiDuMapUtil;
 import com.dasher.util.DateUtil;
 
@@ -38,6 +40,8 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 	private MarketService marketService;
 	@Autowired
 	private EarningService earningService;
+	@Autowired
+	private UserService userService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -120,6 +124,17 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 			m.setEndDate(DateUtil.getCurrentDateStr());
 			
 			MarketMenu m_1=marketMenuMapper.getByMid(m.getMid());
+			//修改接单人的余额
+			User user=userService.getByUId(m_1.getWid());
+			float curUserBalance=user.getBalance()+m_1.getDishsMoney()+m_1.getCarriageMoney();
+			//更新用户的余额和收支记录
+			flag=userService.updateBalance(m_1.getWid(),curUserBalance);
+			if(!flag){
+				transactionManager.rollback(ts); 
+				return flag;
+			}
+			
+			//新增送餐人结算记录
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 			Date date=new Date();
 			String strs[]=sdf.format(date).split("-");
@@ -129,7 +144,7 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 				eid=eid+strs[i];
 			}
 			
-			float totalMoney=m_1.getMenuCount()*m_1.getDishsMoney()+m_1.getCarriageMoney()+m_1.getTaxesMoney()+
+			float totalMoney=m_1.getDishsMoney()+m_1.getCarriageMoney()+m_1.getTaxesMoney()+
 				m_1.getServiceMoney()+m_1.getTipMoney();
 			Earning e=new Earning();
 			e.setEid(eid);

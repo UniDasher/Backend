@@ -138,25 +138,8 @@ public class ComplainController extends MyController {
 	protected Object phoneUserList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String status="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			uid=jsonObject.getString("uid");
-			status=jsonObject.getString("status");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -166,8 +149,7 @@ public class ComplainController extends MyController {
 			model.put("resultCode", resultCode);	
 			model.put("resultDesc", resultDesc);	
 			return model;
-		}
-		else if(l.getType()!=1)
+		}else if(l.getType()!=1)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -176,6 +158,9 @@ public class ComplainController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
+		
+		String uid=getString(request, "uid");
+		String status=getString(request, "status");
 		
 		if(uid=="")
 		{
@@ -199,25 +184,7 @@ public class ComplainController extends MyController {
 	protected Object phoneDealInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String comId="";
-	    String type="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			comId=jsonObject.getString("comId");
-			type=jsonObject.getString("type");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
+		String authCode=getHeadersInfo(request,"X-Auth-Token");
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -227,8 +194,7 @@ public class ComplainController extends MyController {
 			model.put("resultCode", resultCode);	
 			model.put("resultDesc", resultDesc);	
 			return model;
-		}
-		else if(l.getType()!=0)
+		}else if(l.getType()!=1)
 		{
 			resultDesc=ShowMsg.NoPermiss;
 			resultCode=4;
@@ -237,6 +203,9 @@ public class ComplainController extends MyController {
 			return model;
 		}
 		model.put("authCode", authCode);
+		
+		String comId=getString(request, "comId");
+		String type=getString(request, "type");
 		
 		if(comId=="")
 		{
@@ -284,22 +253,29 @@ public class ComplainController extends MyController {
 		String mypageSize=getString(request, "countPage");
 		String status=getString(request, "status");
 		String searchStr=getString(request, "searchStr");
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
+		
+		
 		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$")&&status.matches("^[0-9]*$"))
 		{
 			int curPage=Integer.parseInt(mycurPage);
 			int pageSize=Integer.parseInt(mypageSize);
 			int startRow=(curPage-1)*pageSize;
-			int count=complainService.getCount(Integer.parseInt(status));
+			int count=complainService.getCount(searchStr,Integer.parseInt(status),startDate,endDate);
 			if(count>0)
 			{
 				model.put("count", count);
-				List<Complain> list=complainService.list(searchStr,Integer.parseInt(status), startRow, pageSize);
+				List<Complain> list=complainService.list(searchStr,Integer.parseInt(status),
+						startDate,endDate, startRow, pageSize);
 				model.put("list", list);
 				resultDesc=ShowMsg.findSuc;
 				resultCode=0;
 			}
 			else
 			{
+				model.put("count", 0);
+				model.put("list", null);
 				resultDesc=ShowMsg.findFail;
 				resultCode=0;
 			}
@@ -309,7 +285,6 @@ public class ComplainController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
 	
 	@RequestMapping("/complain/info")
 	@ResponseBody
@@ -383,7 +358,7 @@ public class ComplainController extends MyController {
 		model.put("authCode", authCode);
 		
 		String comId=getString(request, "comId");
-		String comType=getString(request, "comType");
+		//String comType=getString(request, "comType");
 		String type=getString(request, "type");
 		String comResult=getString(request, "comResult");
 		String comContent=getString(request, "comContent");
@@ -435,7 +410,7 @@ public class ComplainController extends MyController {
 		    
 		    Complain c=new Complain();
 		    c.setComId(comId);
-		    c.setComType(Integer.parseInt(comType));
+		    //c.setComType(Integer.parseInt(comType));
 		    c.setType(Integer.parseInt(type));
 		    c.setComResult(Integer.parseInt(comResult));
 		    c.setComContent(comContent);
@@ -451,9 +426,15 @@ public class ComplainController extends MyController {
 		    c.setUpdateDate(DateUtil.getCurrentDateStr());
 		    c.setStatus(2);
 		    
-		    result=complainService.handle(c);
+		    SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+			Date date=new Date();
+			String fileName=sdf.format(date);
+			fileName=fileName+".xlsx";
+		    
+		    result=complainService.handle(request,fileName,c);
 			if(result==true)
 			{
+				model.put("fileName","/upload/settle/user/"+fileName);	
 				resultCode=0;
 				resultDesc=ShowMsg.handleSuc;
 			}

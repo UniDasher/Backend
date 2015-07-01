@@ -314,15 +314,15 @@ public class MenuController extends MyController {
 		}
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
+//		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+//		{
+//			resultDesc=ShowMsg.NoLogin;
+//			resultCode=3;
+//			model.put("resultCode", resultCode);	
+//			model.put("resultDesc", resultDesc);	
+//			return model;
+//		}
+//		model.put("authCode", authCode);
 
 		if(mid=="")
 		{
@@ -333,7 +333,8 @@ public class MenuController extends MyController {
 		{
 			//获取接单人的信息，获取编号
 			User u=userService.getByUId(myloginId);
-			if(u.getStatus()==2)
+			//if(u.getStatus()==2)
+			if(true)
 			{
 				Menu m=new Menu();
 				m.setWid(myloginId);
@@ -578,6 +579,7 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("phone/menu/user/list")
 	@ResponseBody
 	protected Object liststatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

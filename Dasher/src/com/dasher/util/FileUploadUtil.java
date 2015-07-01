@@ -28,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.dasher.model.Complain;
 import com.dasher.model.MarketCommodity;
 import com.dasher.model.ShopDish;
 import com.dasher.model.User;
@@ -333,5 +334,99 @@ public class FileUploadUtil {
                 e.printStackTrace();  
             }  
         } 
+	}
+
+	public static void createRefundExcel(HttpServletRequest request,
+			String fileName, Complain c, Complain com) throws IOException {
+		//将用户的列表信息保存为文件
+        String savePath = request.getSession().getServletContext().getRealPath("/upload/settle/user/"+fileName);
+		File file = new File(savePath);
+		//判断上传文件的保存目录是否存在
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		//创建一个文件输出流
+		FileOutputStream outputStream = new FileOutputStream(file);
+        // 创建一个workbook 对应一个excel应用文件  
+        XSSFWorkbook workBook = new XSSFWorkbook(); 
+        // 在workbook中添加一个sheet,对应Excel文件中的sheet  
+        XSSFSheet sheet = workBook.createSheet("用户退款记录"); 
+        ExcelCreateUtil exportUtil = new ExcelCreateUtil(workBook, sheet);  
+        XSSFCellStyle headStyle = exportUtil.getHeadStyle();  
+        XSSFCellStyle bodyStyle = exportUtil.getBodyStyle();  
+        // 构建表头  
+        XSSFRow headRow = sheet.createRow(0);
+        XSSFCell cell = null;  
+        String[] titles={"编号","用户名","手机号","订单号","订单类型","订单金额","退款类型","退款结果","退款金额","退款时间"};
+        for (int i = 0; i < titles.length; i++)  
+        {  
+            cell = headRow.createCell(i);  
+            cell.setCellStyle(headStyle);  
+            cell.setCellValue(titles[i]);  
+        }  
+     // 构建表体数据  
+        XSSFRow bodyRow = sheet.createRow(1);  
+        
+        cell = bodyRow.createCell(0);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(com.getComId());  
+
+        cell = bodyRow.createCell(1);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(com.getUserName());  
+
+        cell = bodyRow.createCell(2);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(com.getUserPhone());  
+        
+        cell = bodyRow.createCell(3);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(com.getMid()); 
+        
+        cell = bodyRow.createCell(4);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(com.getType()==1?"餐厅订单":"超市订单");
+        
+        cell = bodyRow.createCell(5);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(com.getDishsMoney()+com.getCarriageMoney());
+        
+        cell = bodyRow.createCell(6);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(com.getComType()==1?"订单投诉退款":(com.getComType()==2?"订单取消退款":"订单延时退款"));
+        
+        cell = bodyRow.createCell(7);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(c.getComResult()==1?"同意":"驳回");
+        
+        cell = bodyRow.createCell(8);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(c.getReturnMoney());
+        
+        cell = bodyRow.createCell(9);  
+        cell.setCellStyle(bodyStyle);  
+        cell.setCellValue(c.getUpdateDate());
+        try  
+        {  
+            workBook.write(outputStream);  
+            outputStream.flush();  
+            outputStream.close();  
+        }  
+        catch (IOException e)  
+        {  
+            e.printStackTrace();  
+        }  
+        finally  
+        {  
+            try  
+            {  
+                outputStream.close();  
+            }  
+            catch (IOException e)  
+            {  
+                e.printStackTrace();  
+            }  
+        } 
+		
 	}
 }

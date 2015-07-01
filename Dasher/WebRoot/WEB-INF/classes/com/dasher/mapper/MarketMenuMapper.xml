@@ -204,7 +204,8 @@
      and m.status=1
 	</select>
    <select id="getNearListSmid" resultType="MarketMenu">
-	 select *,s.name as shopName,concat(u.firstName,u.lastName) as userName
+	 select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
+			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone
      from market_menu m
      join market_info s
 		on m.smid=s.smid

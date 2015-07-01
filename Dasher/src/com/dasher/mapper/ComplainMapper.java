@@ -10,10 +10,13 @@ public interface ComplainMapper {
 
 	public int add(Complain c);
 	public int update(Complain c);
-	public int getCount(int status);
+	public int getCount(@Param(value="searchStr") String searchStr,@Param(value="status") int status,
+			@Param(value="startDate") String startDate,@Param(value="endDate") String endDate);
 	public int handle(Complain c);
 	public Complain getByComId(@Param(value="comId") String comId,@Param(value="type") int type);
-	public List<Complain> list(@Param(value="searchStr") String searchStr, @Param(value="status") int status,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public List<Complain> list(@Param(value="searchStr") String searchStr, @Param(value="status") int status,
+			@Param(value="startDate") String startDate,@Param(value="endDate") String endDate,
+			@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<Complain> userComList(@Param(value="uid") String uid, @Param(value="status") int status);
 	
 }

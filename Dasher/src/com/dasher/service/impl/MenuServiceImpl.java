@@ -18,11 +18,13 @@ import com.dasher.model.Earning;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
 import com.dasher.model.Shop;
+import com.dasher.model.User;
 import com.dasher.service.EarningService;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
 import com.dasher.service.ShopDishService;
 import com.dasher.service.ShopService;
+import com.dasher.service.UserService;
 import com.dasher.util.BaiDuMapUtil;
 import com.dasher.util.DateUtil;
 
@@ -37,6 +39,8 @@ public class MenuServiceImpl implements MenuService {
 	private ComplainMapper complainMapper;
 	@Autowired
 	private EarningService earningService;
+	@Autowired
+	private UserService userService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -116,9 +120,22 @@ public class MenuServiceImpl implements MenuService {
         boolean flag=false;
         
 		if(m.getStatus()==3){
-			//订单完成
+			//订单完成,添加完成的时间
 			m.setEndDate(DateUtil.getCurrentDateStr());
+			
 			Menu m_1=menuMapper.getByMid(m.getMid());
+			
+			//修改接单人的余额
+			User user=userService.getByUId(m_1.getWid());
+			float curUserBalance=user.getBalance()+m_1.getDishsMoney()+m_1.getCarriageMoney();
+			//更新用户的余额和收支记录
+			flag=userService.updateBalance(m_1.getWid(),curUserBalance);
+			if(!flag){
+				transactionManager.rollback(ts); 
+				return flag;
+			}
+			
+			//新增送餐人结算记录
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 			Date date=new Date();
 			String strs[]=sdf.format(date).split("-");
@@ -128,7 +145,7 @@ public class MenuServiceImpl implements MenuService {
 				eid=eid+strs[i];
 			}
 			
-			float totalMoney=m_1.getMenuCount()*m_1.getDishsMoney()+m_1.getCarriageMoney()+
+			float totalMoney=m_1.getDishsMoney()+m_1.getCarriageMoney()+
 				m_1.getTaxesMoney()+m_1.getServiceMoney()+m_1.getTipMoney();
 			Earning e=new Earning();
 			e.setEid(eid);

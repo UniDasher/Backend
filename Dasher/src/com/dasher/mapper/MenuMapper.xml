@@ -241,7 +241,8 @@
 	
 	
 	<select id="getNearListBySid" resultType="Menu">
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		select m.*,s.name as shopName,s.address as shopAddress,s.longitude as shopLongitude,s.latitude as shopLatitude,
+			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
