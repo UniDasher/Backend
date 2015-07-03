@@ -1,5 +1,6 @@
 package com.dasher.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import com.dasher.mapper.ShopMapper;
@@ -31,8 +32,14 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	public Shop getBySid(String sid) {
-		// TODO Auto-generated method stub
-		return shopMapper.getBySid(sid);
+		Calendar c = Calendar.getInstance();  
+		int dw = c.get(Calendar.DAY_OF_WEEK);
+		if(dw==1){
+			dw=7;
+		}else{
+			dw=dw-1;
+		}
+		return shopMapper.getBySid(sid,dw);
 	}
 
 	public boolean update(Shop s) {
@@ -55,7 +62,16 @@ public class ShopServiceImpl implements ShopService {
 		double maxlat = latitude+dlat;
 		double minlon = longitude -dlng;
 		double maxlon = longitude + dlng;
-		return shopMapper.getListByLati(minlon, maxlon, minlat, maxlat);
+		
+		Calendar c = Calendar.getInstance();  
+		int dw = c.get(Calendar.DAY_OF_WEEK);
+		if(dw==1){
+			dw=7;
+		}else{
+			dw=dw-1;
+		}
+		
+		return shopMapper.getListByLati(minlon, maxlon, minlat, maxlat,dw);
 	}
 	public List<Shop> getListByMenu(double longitude, double latitude,float distance) {
 		double r = BaiDuMapUtil.DEF_R;

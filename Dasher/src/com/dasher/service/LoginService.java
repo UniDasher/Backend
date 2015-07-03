@@ -12,4 +12,5 @@ public interface LoginService {
 	public String handleLogin(String id);
 	public String userHandleLogin(String id);
 	public Login getByLogId(String loginId);
+	public boolean userLogout(String myloginId);
 }

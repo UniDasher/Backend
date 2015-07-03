@@ -13,12 +13,12 @@ public interface ShopMapper {
 	public int delete(Shop s);
 	public int getShopCount(@Param(value="searchStr") String searchStr);
 	public int updateLogo(Shop s);
-	public Shop getBySid(String sid);
-	public Shop getByName(String name);
+	public Shop getBySid(@Param(value="sid") String sid,@Param(value="dw") int dw);
+	public Shop getByName(@Param(value="name") String name);
 	public List<Shop> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<Shop> menuList();
 	public List<Shop> getListByLati(@Param(value="minlon") double minlon,@Param(value="maxlon") double maxlon,
-			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat);
+			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat,@Param(value="dw") int dw);
 	public List<Shop> getListByMenu(@Param(value="minlon") double minlon,@Param(value="maxlon") double maxlon,
 			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat);
 	public int updateEvaluate(Shop shop);

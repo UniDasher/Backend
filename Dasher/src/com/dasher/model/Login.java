@@ -6,14 +6,28 @@ public class Login implements Serializable {
 
 	private int id;
 	private int type;
-	private String cid;
 	private String loginId;
 	private String authCode;
+	private String igtClientId;
+	private String pushClientId;
 	private String loginTime;
 	
 	public Login() {
 		super();
 	}
+	
+	public Login(int id, int type, String loginId, String authCode,
+			String igtClientId, String pushClientId, String loginTime) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.loginId = loginId;
+		this.authCode = authCode;
+		this.igtClientId = igtClientId;
+		this.pushClientId = pushClientId;
+		this.loginTime = loginTime;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -26,12 +40,7 @@ public class Login implements Serializable {
 	public void setType(int type) {
 		this.type = type;
 	}
-	public String getCid() {
-		return cid;
-	}
-	public void setCid(String cid) {
-		this.cid = cid;
-	}
+	
 	public String getLoginId() {
 		return loginId;
 	}
@@ -50,14 +59,17 @@ public class Login implements Serializable {
 	public void setLoginTime(String loginTime) {
 		this.loginTime = loginTime;
 	}
-	public Login(int id, int type, String cid, String loginId, String authCode,
-			String loginTime) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.cid = cid;
-		this.loginId = loginId;
-		this.authCode = authCode;
-		this.loginTime = loginTime;
+	public String getIgtClientId() {
+		return igtClientId;
 	}
+	public void setIgtClientId(String igtClientId) {
+		this.igtClientId = igtClientId;
+	}
+	public String getPushClientId() {
+		return pushClientId;
+	}
+	public void setPushClientId(String pushClientId) {
+		this.pushClientId = pushClientId;
+	}
+	
 }

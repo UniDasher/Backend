@@ -12,12 +12,17 @@ public interface MarketMapper {
 	public int update(Market m);
 	public int delete(Market m);
 	public int getListCount(@Param(value="searchStr") String searchStr);
-	public Market getBySmid(String smid);
-	public Market getByMarketName(String name);
-	public List<Market> list(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public Market getBySmid(@Param(value="smid") String smid,@Param(value="dw") int dw);
+	public Market getByMarketName(@Param(value="name") String name);
+	public List<Market> list(@Param(value="searchStr") String searchStr,
+			@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<Market> menuList();
-	public List<Market> getNearlist(@Param(value="minlon")double minlon,@Param(value="maxlon")double maxlon,@Param(value="minlat")double minlat,@Param(value="maxlat")double maxlat);
-	public List<Market> getNearListMenu(@Param(value="minlon")double minlon,@Param(value="maxlon")double maxlon,@Param(value="minlat")double minlat,@Param(value="maxlat")double maxlat);
+	public List<Market> getNearlist(@Param(value="minlon")double minlon,
+			@Param(value="maxlon") double maxlon,@Param(value="minlat") double minlat,
+			@Param(value="maxlat")double maxlat,@Param(value="dw") int dw);
+	public List<Market> getNearListMenu(@Param(value="minlon") double minlon,
+			@Param(value="maxlon") double maxlon,@Param(value="minlat") double minlat,
+			@Param(value="maxlat") double maxlat);
 	public int updateEvaluate(Market market);
    
 }

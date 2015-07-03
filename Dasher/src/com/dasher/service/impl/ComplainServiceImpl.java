@@ -14,17 +14,22 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.ComplainMapper;
 import com.dasher.model.Complain;
+import com.dasher.model.Login;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.Menu;
 import com.dasher.model.User;
 import com.dasher.model.UserSettle;
 import com.dasher.service.ComplainService;
+import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MenuService;
 import com.dasher.service.UserService;
 import com.dasher.service.UserSettleService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.FileUploadUtil;
+import com.dasher.util.IGtPushUtil;
+import com.dasher.util.ShowMsg;
+import com.gexin.rp.sdk.base.IPushResult;
 
 public class ComplainServiceImpl implements ComplainService {
 
@@ -37,6 +42,8 @@ public class ComplainServiceImpl implements ComplainService {
 	private MenuService menuService;
 	@Autowired
 	private MarketMenuService marketMenuService;
+	@Autowired
+	private LoginService loginService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -182,6 +189,17 @@ public class ComplainServiceImpl implements ComplainService {
         	menu.setUpdateBy(c.getUpdateBy());
         	menu.setUpdateDate(DateUtil.getCurrentDateStr());
         	result=menuService.updateStatus_2(menu);
+        	
+        	//通知用户，订单退款处理
+			//向用户推送信息（个推）
+			String uid=menu.getUid();//用户的编号
+			//判断用户是否登录
+			Login log=loginService.getByLogId(uid);
+			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+				IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
+						com.getComType()==1?ShowMsg.menuComplainDealTitle:(com.getComType()==2?ShowMsg.menuCancleDealTitle:ShowMsg.menuOverTimeDealTitle), 
+						com.getComType()==1?ShowMsg.menuComplainDealContent:(com.getComType()==2?ShowMsg.menuCancleDealContent:ShowMsg.menuOverTimeDealContent));
+			}
         }else{
         	//订单为超市订单
         	MarketMenu menu=new MarketMenu();
@@ -191,6 +209,17 @@ public class ComplainServiceImpl implements ComplainService {
         	menu.setUpdateBy(c.getUpdateBy());
         	menu.setUpdateDate(DateUtil.getCurrentDateStr());
         	result=marketMenuService.updateStatus_2(menu);
+        	
+        	//通知用户，订单退款处理
+			//向用户推送信息（个推）
+			String uid=menu.getUid();//用户的编号
+			//判断用户是否登录
+			Login log=loginService.getByLogId(uid);
+			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+				IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
+						com.getComType()==1?ShowMsg.menuComplainDealTitle:(com.getComType()==2?ShowMsg.menuCancleDealTitle:ShowMsg.menuOverTimeDealTitle), 
+						com.getComType()==1?ShowMsg.menuComplainDealContent:(com.getComType()==2?ShowMsg.menuCancleDealContent:ShowMsg.menuOverTimeDealContent));
+			}
         }
         
         

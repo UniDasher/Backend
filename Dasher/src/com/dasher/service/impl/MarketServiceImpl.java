@@ -1,5 +1,6 @@
 package com.dasher.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import com.dasher.mapper.MarketMapper;
@@ -29,8 +30,14 @@ public class MarketServiceImpl implements MarketService {
 	}
 
 	public Market getBySmid(String smid) {
-		// TODO Auto-generated method stub
-		return marketMapper.getBySmid(smid);
+		Calendar c = Calendar.getInstance();  
+		int dw = c.get(Calendar.DAY_OF_WEEK);
+		if(dw==1){
+			dw=7;
+		}else{
+			dw=dw-1;
+		}
+		return marketMapper.getBySmid(smid,dw);
 	}
 
 	public boolean update(Market m) {
@@ -70,7 +77,16 @@ public class MarketServiceImpl implements MarketService {
 		double maxlat = latitude+dlat;
 		double minlon = longitude -dlng;
 		double maxlon = longitude + dlng;
-		List<Market> list=marketMapper.getNearlist(minlon, maxlon, minlat, maxlat);
+		
+		Calendar c = Calendar.getInstance();  
+		int dw = c.get(Calendar.DAY_OF_WEEK);
+		if(dw==1){
+			dw=7;
+		}else{
+			dw=dw-1;
+		}
+		
+		List<Market> list=marketMapper.getNearlist(minlon, maxlon, minlat, maxlat,dw);
 		return list;
 	}
 

@@ -110,6 +110,7 @@ public class ComplainController extends MyController {
 			}
 			Complain c=new Complain();
 			c.setComId(comId);
+			c.setComType(1);
 			c.setUid(myloginId);
 			c.setMid(mid);
 			c.setType(Integer.parseInt(type));

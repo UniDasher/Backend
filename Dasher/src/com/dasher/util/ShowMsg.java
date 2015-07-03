@@ -70,6 +70,8 @@ public class ShowMsg {
 	public static final String statusErr = "status的格式不正确！"; //The status of the format is not correct
 	public static final String emailErr="邮箱格式不正确！";//Email address format is not correct
 	public static final String NoLogin = "用户没有登录！";//The user is not login, please login again
+	public static final String LogoutSuccess = "用户登出完成！";
+	public static final String LogoutFail = "用户登出失败！";
 	public static final String mobilePhoneErr="手机号码格式不正确！";//Mobile phone number format is not correct, please enter again
 	public static final String inputErr="你输入的格式不正确！";//You input format is not correct
 	public static final String LogoNull = "店铺logo为空！";//The store logo is empty
@@ -154,4 +156,19 @@ public class ShowMsg {
 	public static final String checkEnd="认证通过";
 	public static final String chkFail="认证失败！";
 	public static final String chkBank="您尚未填写银行账户。";
+	
+	//用户推送信息（个推）
+	public static final String menuReceiveTitle="订单结单";
+	public static final String menuReceiveContent="您的订单已被接收，配送人员正在为您送餐，请耐心等待。";
+	
+	public static final String menuOverTimeTitle="订单超时";
+	public static final String menuOverTimeContent="您的订单已超时，系统正在对超时订单进行处理，请耐心等待。";
+	
+	public static final String menuCancleDealTitle="订单取消退款";
+	public static final String menuCancleDealContent="您取消订单已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
+	public static final String menuOverTimeDealTitle="订单超时退款";
+	public static final String menuOverTimeDealContent="您超时订单已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
+	public static final String menuComplainDealTitle="订单投诉退款";
+	public static final String menuComplainDealContent="您投诉订单已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
+	
 }

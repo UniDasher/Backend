@@ -69,7 +69,6 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	public String userHandleLogin(String id) {
-		// TODO Auto-generated method stub
 		UUID uuid=UUID.randomUUID();
 		String str[]=uuid.toString().split("-");
 		String authCode="";
@@ -101,5 +100,9 @@ public class LoginServiceImpl implements LoginService {
 	public boolean updateByLoid(Login l) {
 		// TODO Auto-generated method stub
 		return loginMapper.updateByLoid(l)>0? true:false;
+	}
+
+	public boolean userLogout(String loginId) {
+		return loginMapper.userLogout(loginId)>0? true:false;
 	}
 }

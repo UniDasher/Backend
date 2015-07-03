@@ -11,7 +11,6 @@ public class Market implements Serializable {
 	private String subscribe;
 	private String email;
 	private String phone;
-	private String serviceTime;
 	private String longitude;
 	private String latitude;
 	private int goodEvaluate;
@@ -24,15 +23,18 @@ public class Market implements Serializable {
 	
 	private int orderCount;
 	
+	private String serviceTimes;
+	private int openService;
+	
 	public Market() {
 		
 	}
 	
 	public Market(int id, String smid, String name, String address,
-			String subscribe, String email, String phone, String serviceTime,
+			String subscribe, String email, String phone, String serviceTimes,
 			String longitude, String latitude, int goodEvaluate,
 			int badEvaluate, String createBy, String createDate,
-			String updateBy, String updateDate, int status,int orderCount) {
+			String updateBy, String updateDate, int status,int orderCount,int openService) {
 		super();
 		this.id = id;
 		this.smid = smid;
@@ -41,7 +43,7 @@ public class Market implements Serializable {
 		this.subscribe = subscribe;
 		this.email = email;
 		this.phone = phone;
-		this.serviceTime = serviceTime;
+		this.serviceTimes = serviceTimes;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.goodEvaluate = goodEvaluate;
@@ -52,6 +54,7 @@ public class Market implements Serializable {
 		this.updateDate = updateDate;
 		this.status = status;
 		this.orderCount=orderCount;
+		this.openService=openService;
 	}
 
 	public int getId() {
@@ -108,14 +111,6 @@ public class Market implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-
-	public String getServiceTime() {
-		return serviceTime;
-	}
-
-	public void setServiceTime(String serviceTime) {
-		this.serviceTime = serviceTime;
 	}
 
 	public String getLongitude() {
@@ -196,6 +191,30 @@ public class Market implements Serializable {
 
 	public void setOrderCount(int orderCount) {
 		this.orderCount = orderCount;
+	}
+
+	public String getServiceTimes() {
+		if(serviceTimes!=""&&serviceTimes!=null){
+			String[] st=serviceTimes.split(",");
+			serviceTimes="";
+			for(int i=0;i<st.length;i++){
+				serviceTimes+=st[i]+',';
+			}
+			serviceTimes=serviceTimes.substring(0,serviceTimes.lastIndexOf(','));
+		}
+		return serviceTimes;
+	}
+
+	public void setServiceTimes(String serviceTimes) {
+		this.serviceTimes = serviceTimes;
+	}
+
+	public int getOpenService() {
+		return openService;
+	}
+
+	public void setOpenService(int openService) {
+		this.openService = openService;
 	}
 	
 }

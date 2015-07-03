@@ -5,9 +5,10 @@
    <resultMap type="Login" id="loginMap">
      <result property="id" column="id"/>
      <result property="loginId" column="loginId"/>
-     <result property="cid" column="cid"/>
      <result property="authCode" column="authCode"/>
      <result property="type" column="type"/>
+     <result property="igtClientId" column="igtClientId"/>
+     <result property="pushClientId" column="pushClientId"/>
      <result property="loginTime" column="loginTime"/>
    </resultMap>
    
@@ -30,7 +31,12 @@
    </select>
    
    <update id="updateCID" parameterType="Login">
-    update login set cid=#{cid}
+    update login set igtClientId=#{igtClientId}
+    where loginId=#{loginId}
+   </update>
+   
+   <update id="userLogout" parameterType="String">
+    update login set igtClientId='',authCode=''
     where loginId=#{loginId}
    </update>
    

@@ -988,29 +988,14 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	@RequestMapping("phone/user/push")
+	
+	@RequestMapping("phone/user/logout")
 	@ResponseBody
-	protected Object push(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object logout(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-	    String cid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
-			uid=jsonObject.getString("uid");
-			cid=jsonObject.getString("cid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
+	    String authCode=getHeadersInfo(request,"X-Auth-Token");
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -1021,9 +1006,43 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", authCode);
 		
-		if("".equals(uid)||"".equals(cid))
+		boolean result=loginService.userLogout(myloginId);
+		if(result){
+			resultCode=0;
+			resultDesc=ShowMsg.LogoutSuccess;
+		}else{
+			resultCode=1;
+			resultDesc=ShowMsg.LogoutFail;
+		}
+		
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+
+	}
+	
+	@RequestMapping("phone/user/push")
+	@ResponseBody
+	protected Object push(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+	    String authCode=getHeadersInfo(request,"X-Auth-Token");
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		
+		String cid=getHeadersInfo(request,"cid");
+		
+		if("".equals(cid))
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
@@ -1031,8 +1050,8 @@ public class UserController extends MyController {
 		else
 		{
 			Login l=new Login();
-			l.setCid(cid);
-			l.setLoginId(uid);
+			l.setIgtClientId(cid);
+			l.setLoginId(myloginId);
 			result=loginService.updateCID(l);
 			if(result)
 			{

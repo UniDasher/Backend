@@ -25,6 +25,8 @@ public class Shop implements Serializable {
 	private String serviceTimes;
 	private int orderCount;
 	
+	private int openService;
+	
 	public Shop() {
 		
 	}
@@ -33,7 +35,7 @@ public class Shop implements Serializable {
 			String address, String subscribe, String email, String phone,
 			String logo, String longitude, String latitude, int goodEvaluate,
 			int badEvaluate, int createBy, String createDate, int updateBy,
-			String updateDate, int status, String serviceTimes,int orderCount) {
+			String updateDate, int status, String serviceTimes,int orderCount,int openService) {
 		super();
 		this.id = id;
 		this.sid = sid;
@@ -55,6 +57,7 @@ public class Shop implements Serializable {
 		this.status = status;
 		this.serviceTimes = serviceTimes;
 		this.orderCount=orderCount;
+		this.openService=openService;
 	}
 
 	public int getId() {
@@ -202,6 +205,14 @@ public class Shop implements Serializable {
 	}
 
 	public String getServiceTimes() {
+		if(serviceTimes!=""&&serviceTimes!=null){
+			String[] st=serviceTimes.split(",");
+			serviceTimes="";
+			for(int i=0;i<st.length;i++){
+				serviceTimes+=st[i]+',';
+			}
+			serviceTimes=serviceTimes.substring(0,serviceTimes.lastIndexOf(','));
+		}
 		return serviceTimes;
 	}
 
@@ -215,5 +226,13 @@ public class Shop implements Serializable {
 
 	public int getOrderCount() {
 		return orderCount;
+	}
+
+	public int getOpenService() {
+		return openService;
+	}
+
+	public void setOpenService(int openService) {
+		this.openService = openService;
 	}
 }

@@ -11,11 +11,11 @@ import com.gexin.rp.sdk.template.LinkTemplate;
 import com.gexin.rp.sdk.template.NotificationTemplate;
 
 public class IGtPushUtil {
-	private static String appId = "请输入appId";
-	private static String appkey = "请输入appkey";
-	private static String master = "请输入master";
-	//static String CID = "请输入CID";
-	//static String Alias = "请输入Alias";
+	private static String appId = "4dxBQRR2psAs0rZu4umjF3";
+	private static String appkey = "USasTkD4W86GTaZ8L886K2";
+	private static String master = "NaQBVsNDXp85qr77AiDvU5";
+	static String CID = "请输入CID";
+	static String Alias = "请输入Alias";
 	static String host = "http://sdk.open.api.igexin.com/apiex.htm";
 	
 	private static IGtPush push =null;

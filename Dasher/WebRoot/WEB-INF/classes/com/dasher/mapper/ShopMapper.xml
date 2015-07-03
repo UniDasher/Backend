@@ -21,7 +21,6 @@
      <result property="updateBy" column="updateBy"/>
      <result property="updateDate" column="updateDate"/>
      <result property="status" column="status"/>
-     <result property="serviceTimes" column="serviceTimes"/>
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="Shop">
@@ -30,7 +29,13 @@
    </insert>
    
    <select id="getBySid" parameterType="String" resultType="Shop">
-     select * from shop_info where sid=#{sid} and status>0
+     select s.* ,t.flag as openService,CONCAT(t.time1,',',t.time2,',',t.time3,',',t.time4,',',t.time5) as serviceTimes
+     from shop_info s 
+     left join time_info t
+	 on s.sid=t.sid
+     where s.sid=#{sid} 
+     and t.weeks=#{dw}
+     and s.status>0
    </select>
    
    <select id="getByName" parameterType="String" resultType="Shop">
@@ -56,10 +61,14 @@
    </update>
    
    <select id="getListByLati" resultType="Shop">
-     select * from shop_info
-     where (longitude between #{minlon} and #{maxlon}) 
-	   and (latitude between #{minlat} and #{maxlat}) 
-	   and status>0
+     select s.*,t.flag as openService,CONCAT(t.time1,',',t.time2,',',t.time3,',',t.time4,',',t.time5) as serviceTimes
+     from shop_info s
+     left join time_info t
+	 on s.sid=t.sid
+     where (s.longitude between #{minlon} and #{maxlon}) 
+	   and (s.latitude between #{minlat} and #{maxlat}) 
+	   and t.weeks=#{dw}
+	   and s.status>0
    </select>
    <select id="getListByMenu" resultType="Shop">
      select distinct s.*,count(m.mid) as orderCount

@@ -12,14 +12,17 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.ComplainMapper;
+import com.dasher.mapper.LoginMapper;
 import com.dasher.mapper.MenuMapper;
 import com.dasher.model.Complain;
 import com.dasher.model.Earning;
+import com.dasher.model.Login;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
 import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.EarningService;
+import com.dasher.service.LoginService;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
 import com.dasher.service.ShopDishService;
@@ -27,6 +30,9 @@ import com.dasher.service.ShopService;
 import com.dasher.service.UserService;
 import com.dasher.util.BaiDuMapUtil;
 import com.dasher.util.DateUtil;
+import com.dasher.util.IGtPushUtil;
+import com.dasher.util.ShowMsg;
+import com.gexin.rp.sdk.base.IPushResult;
 
 public class MenuServiceImpl implements MenuService {
 
@@ -41,6 +47,8 @@ public class MenuServiceImpl implements MenuService {
 	private EarningService earningService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private LoginService loginService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -106,7 +114,18 @@ public class MenuServiceImpl implements MenuService {
 			if(m_1.getStatus()!=1){
 				return 2;
 			}else{
-				return menuMapper.receive(m)>0? 1:0;
+				//用户结单
+				int result= menuMapper.receive(m)>0? 1:0;
+				//向用户推送信息（个推）
+				String uid=m_1.getUid();//用户的编号
+				//判断用户是否登录
+				Login log=loginService.getByLogId(uid);
+				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+					IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
+							ShowMsg.menuReceiveTitle, ShowMsg.menuReceiveContent);
+				}
+				
+				return result;
 			}
 		} 
 	}
@@ -379,11 +398,21 @@ public class MenuServiceImpl implements MenuService {
 				c.setCreateBy(menu.getUid());
 				c.setCreateDate(DateUtil.getCurrentDateStr());
 				result=complainMapper.add(c)>0?true:false;
+				
+				//通知用户，订单超时
+				//向用户推送信息（个推）
+				String uid=menu.getUid();//用户的编号
+				//判断用户是否登录
+				Login log=loginService.getByLogId(uid);
+				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+					IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
+							ShowMsg.menuOverTimeTitle, ShowMsg.menuOverTimeContent);
+				}
+				
 				if(!result){
 					break;
 				}
 			}
-			
 		}
 		if(result==true)
 		{

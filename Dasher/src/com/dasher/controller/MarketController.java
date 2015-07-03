@@ -159,7 +159,7 @@ public class MarketController extends MyController {
 		String subscribe=getString(request, "subscribe");
 		String email=getString(request, "email");
 		String phone=getString(request, "phone");
-		String serviceTime=getString(request, "serviceTime");
+		//String serviceTime=getString(request, "serviceTime");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
 		if(name=="")
@@ -226,7 +226,7 @@ public class MarketController extends MyController {
 					m.setSubscribe(subscribe);
 					m.setEmail(email);
 					m.setPhone(phone);
-					m.setServiceTime(serviceTime);
+					//m.setServiceTime(serviceTime);
 					m.setLatitude(latitude);
 					m.setLongitude(longitude);
 					m.setCreateBy(myloginId);
@@ -290,7 +290,7 @@ public class MarketController extends MyController {
 		String subscribe=getString(request, "subscribe");
 		String email=getString(request, "email");
 		String phone=getString(request, "phone");
-		String serviceTime=getString(request, "serviceTime");
+		//String serviceTime=getString(request, "serviceTime");
 		String longitude=getString(request, "longitude");
 		String latitude=getString(request, "latitude");
 	
@@ -346,7 +346,7 @@ public class MarketController extends MyController {
 				m.setSubscribe(subscribe);
 				m.setEmail(email);
 				m.setPhone(phone);
-				m.setServiceTime(serviceTime);
+				//m.setServiceTime(serviceTime);
 				m.setLatitude(latitude);
 				m.setLongitude(longitude);
 				m.setUpdateBy(myloginId);
