@@ -33,6 +33,12 @@
       where smid=#{smid}
    </update>
    
+   <update id="updateEvaluate" parameterType="Market">
+      update market_info
+      set badEvaluate=#{badEvaluate},goodEvaluate=#{goodEvaluate}
+      where smid=#{smid}
+   </update>
+   
    <update id="delete" parameterType="Market">
       update market_info
       set status=0,updateBy=#{updateBy},updateDate=#{updateDate}

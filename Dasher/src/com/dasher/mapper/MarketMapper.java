@@ -18,5 +18,6 @@ public interface MarketMapper {
 	public List<Market> menuList();
 	public List<Market> getNearlist(@Param(value="minlon")double minlon,@Param(value="maxlon")double maxlon,@Param(value="minlat")double minlat,@Param(value="maxlat")double maxlat);
 	public List<Market> getNearListMenu(@Param(value="minlon")double minlon,@Param(value="maxlon")double maxlon,@Param(value="minlat")double minlat,@Param(value="maxlat")double maxlat);
+	public int updateEvaluate(Market market);
    
 }

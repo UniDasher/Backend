@@ -20,6 +20,8 @@ public interface MarketMenuService {
 	public List<MarketMenu> getNearListSmid(String smid);
 	public void getListOverTime();
 	public boolean updateStatus_2(MarketMenu menu);
+	public boolean menuComplete(String mid, int evalShop, int evalServer,
+			String myloginId);
 	
     
 }

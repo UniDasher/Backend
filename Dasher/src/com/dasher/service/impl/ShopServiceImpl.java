@@ -6,6 +6,7 @@ import com.dasher.mapper.ShopMapper;
 import com.dasher.model.Market;
 import com.dasher.model.Shop;
 import com.dasher.service.ShopService;
+import com.dasher.util.BaiDuMapUtil;
 
 public class ShopServiceImpl implements ShopService {
 
@@ -45,7 +46,7 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	public List<Shop> getListByLati(double longitude, double latitude,float distance) {
-		double r = 6371;
+		double r = BaiDuMapUtil.DEF_R;
 		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
 		dlng = dlng*180/Math.PI;
 		double dlat = distance/r;
@@ -57,7 +58,7 @@ public class ShopServiceImpl implements ShopService {
 		return shopMapper.getListByLati(minlon, maxlon, minlat, maxlat);
 	}
 	public List<Shop> getListByMenu(double longitude, double latitude,float distance) {
-		double r = 6371;
+		double r = BaiDuMapUtil.DEF_R;
 		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
 		dlng = dlng*180/Math.PI;
 		double dlat = distance/r;
@@ -87,5 +88,10 @@ public class ShopServiceImpl implements ShopService {
 	public List<Shop> menuList() {
 		// TODO Auto-generated method stub
 		return shopMapper.menuList();
+	}
+
+	public boolean updateEvaluate(Shop shop) {
+		// TODO Auto-generated method stub
+		return shopMapper.updateEvaluate(shop)>0? true:false;
 	}
 }

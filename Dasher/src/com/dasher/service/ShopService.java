@@ -18,5 +18,6 @@ public interface ShopService {
 	public List<Shop> getListByMenu(double longitude,double latitude,float distance);
 	public List<Shop> list(String searchStr, int startRow,int pageSize);
 	public List<Shop> menuList();
+	public boolean updateEvaluate(Shop shop);
 	
 }

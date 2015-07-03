@@ -48,6 +48,12 @@
      where uid=#{uid}
    </update>
    
+   <update id="updateEvaluate" parameterType="User">
+     update user_info 
+     set goodEvaluate=#{goodEvaluate},badEvaluate=#{badEvaluate}
+     where uid=#{uid}
+   </update>
+   
    <update id="updatePwd" parameterType="User">
      update user_info 
      set password=#{password}

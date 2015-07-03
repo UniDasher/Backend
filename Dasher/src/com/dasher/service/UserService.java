@@ -30,4 +30,5 @@ public interface UserService {
 	public List<User> settleList(String searchStr);
 	public List<User> applyList();
 	public boolean updateStatus(User u);
+	public boolean updateEvaluate(User user);
 }

@@ -88,4 +88,8 @@ public class MarketServiceImpl implements MarketService {
 		List<Market> list=marketMapper.getNearListMenu(minlon, maxlon, minlat, maxlat);
 		return list;
 	}
+
+	public boolean updateEvaluate(Market market) {
+		return marketMapper.updateEvaluate(market)>0? true:false;
+	}
 }

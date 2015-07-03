@@ -78,8 +78,10 @@ public class ShopController extends MyController {
 		}
 		else
 		{
-			List<Shop> shopList=shopService.getListByLati(Double.parseDouble(longitude) ,Double.parseDouble(latitude),ShowMsg.distance);
+			List<Shop> shopList=shopService.getListByLati(Double.parseDouble(longitude) ,
+					Double.parseDouble(latitude),ShowMsg.distance);
 			model.put("list", shopList);
+			model.put("count", shopList.size());
 			resultDesc=ShowMsg.findSuc;
 			resultCode=0;
 		}

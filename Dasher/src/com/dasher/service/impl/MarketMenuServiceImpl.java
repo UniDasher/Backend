@@ -19,6 +19,7 @@ import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
 import com.dasher.model.Menu;
+import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.EarningService;
 import com.dasher.service.MarketCommodityService;
@@ -111,6 +112,68 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 				return marketMenuMapper.receive(mm)>0? 1:0;
 			}
 		} 
+	}
+
+	public boolean menuComplete(String mid, int evalShop, int evalServer,
+			String myloginId) {
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        
+		boolean flag=false;
+		MarketMenu mm=new MarketMenu();
+		mm.setMid(mid);
+		mm.setUpdateBy(myloginId);
+		mm.setUpdateDate(DateUtil.getCurrentDateStr());
+		mm.setStatus(3);
+		//修改订单的状态
+		flag=updateStatus(mm);
+		
+		if(!flag){
+			transactionManager.rollback(ts); 
+			return flag;
+		}
+		//获取订单的信息
+		MarketMenu m_1=marketMenuMapper.getByMid(mm.getMid());
+		//获取送餐人的信息
+		User user=userService.getByUId(m_1.getWid());
+		if(user!=null){
+			//修改用户的评价
+			if(evalServer==0){
+				user.setBadEvaluate(user.getBadEvaluate()+1);
+			}else{
+				user.setGoodEvaluate(user.getGoodEvaluate()+1);
+			}
+			flag=userService.updateEvaluate(user);
+		}else{
+			transactionManager.rollback(ts); 
+			return false;
+		}
+		if(!flag){
+			transactionManager.rollback(ts); 
+			return flag;
+		}
+		//获取商家的信息
+		Market market=marketService.getBySmid(m_1.getSmid());
+		if(market!=null){
+			//修改商家的评价
+			if(evalShop==0){
+				market.setBadEvaluate(market.getBadEvaluate()+1);
+			}else{
+				market.setGoodEvaluate(market.getGoodEvaluate()+1);
+			}
+			flag=marketService.updateEvaluate(market);
+		}else{
+			transactionManager.rollback(ts); 
+			return false;
+		}
+		
+		if(!flag){
+			transactionManager.rollback(ts); 
+		}else{
+			transactionManager.commit(ts);
+		}
+		return flag;
 	}
 
 	public boolean updateStatus(MarketMenu m) {
@@ -247,7 +310,7 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 	public List<MarketMenu> getNearList(double longitude, double latitude,
 			float distance) {
 		// TODO Auto-generated method stub
-		double r = 6371;
+		double r = BaiDuMapUtil.DEF_R;
 		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
 		dlng = dlng*180/Math.PI;
 		double dlat = distance/r;

@@ -1,11 +1,11 @@
 package com.dasher.util;
 
 public class BaiDuMapUtil {
-	static double DEF_PI = 3.14159265359; // PI
-    static double DEF_2PI= 6.28318530712; // 2*PI
-    static double DEF_PI180= 0.01745329252; // PI/180.0
-    static double DEF_R =6370693.5; // radius of earth
-    static double DEF_RJ = 6356725;  // 极半径
+	public static double DEF_PI = 3.14159265359; // PI
+	public static double DEF_2PI= 6.28318530712; // 2*PI
+	public static double DEF_PI180= 0.01745329252; // PI/180.0
+	public static double DEF_R =6370693.5; // radius of earth
+	public static double DEF_RJ = 6356725;  // 极半径
     
     public static String GetDirection(double lon1, double lat1, double lon2, double lat2){
     	String[] dirs={"正南","东南","正东","东北","正北","西北","正西","西南"};

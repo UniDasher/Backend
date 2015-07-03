@@ -111,6 +111,68 @@ public class MenuServiceImpl implements MenuService {
 		} 
 	}
 
+	public boolean menuComplete(String mid, int evalShop, int evalServer,
+			String myloginId) {
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        
+		boolean flag=false;
+		Menu m=new Menu();
+		m.setMid(mid);
+		m.setUpdateBy(myloginId);
+		m.setUpdateDate(DateUtil.getCurrentDateStr());
+		m.setStatus(3);
+		//修改订单的状态
+		flag=updateStatus(m);
+		
+		if(!flag){
+			transactionManager.rollback(ts); 
+			return flag;
+		}
+		//获取订单的信息
+		Menu m_1=menuMapper.getByMid(m.getMid());
+		//获取送餐人的信息
+		User user=userService.getByUId(m_1.getWid());
+		if(user!=null){
+			//修改用户的评价
+			if(evalServer==0){
+				user.setBadEvaluate(user.getBadEvaluate()+1);
+			}else{
+				user.setGoodEvaluate(user.getGoodEvaluate()+1);
+			}
+			flag=userService.updateEvaluate(user);
+		}else{
+			transactionManager.rollback(ts); 
+			return false;
+		}
+		if(!flag){
+			transactionManager.rollback(ts); 
+			return flag;
+		}
+		//获取商家的信息
+		Shop shop=shopService.getBySid(m_1.getSid());
+		if(shop!=null){
+			//修改商家的评价
+			if(evalShop==0){
+				shop.setBadEvaluate(shop.getBadEvaluate()+1);
+			}else{
+				shop.setGoodEvaluate(shop.getGoodEvaluate()+1);
+			}
+			flag=shopService.updateEvaluate(shop);
+		}else{
+			transactionManager.rollback(ts); 
+			return false;
+		}
+		
+		if(!flag){
+			transactionManager.rollback(ts); 
+		}else{
+			transactionManager.commit(ts);
+		}
+		return flag;
+	}
+	
 	public boolean updateStatus(Menu m) {
 		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
         dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -262,7 +324,7 @@ public class MenuServiceImpl implements MenuService {
 
 	public List<Menu> getNearList(double longitude, double latitude,float distance) {
 		// TODO Auto-generated method stub
-		double r = 6371;
+		double r = BaiDuMapUtil.DEF_R;
 		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
 		dlng = dlng*180/Math.PI;
 		double dlat = distance/r;
@@ -337,4 +399,5 @@ public class MenuServiceImpl implements MenuService {
 	public List<Menu> getNearListBySid(String sid) {
 		return menuMapper.getNearListBySid(sid);
 	}
+
 }

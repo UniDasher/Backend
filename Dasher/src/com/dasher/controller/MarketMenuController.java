@@ -366,6 +366,69 @@ public class MarketMenuController extends MyController {
 		return model;
 	}	
 
+	@RequestMapping("phone/market/menu/complete")
+	@ResponseBody
+	protected Object menuComplete(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String mid="";
+	    String evalShop="";
+	    String evalServer="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = getHeadersInfo(request,"X-Auth-Token");
+			mid=jsonObject.getString("mid");
+			evalShop=jsonObject.getString("evalShop");
+			evalServer=jsonObject.getString("evalServer");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		model.put("authCode", authCode);
+		
+		if(mid=="")
+		{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		
+		else
+		{
+			result=marketMenuService.menuComplete(mid,Integer.parseInt(evalShop),Integer.parseInt(evalServer),myloginId);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
+
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
+	
 	@RequestMapping("phone/market/menu/status")
 	@ResponseBody
 	protected Object updateStatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

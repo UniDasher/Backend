@@ -43,6 +43,12 @@
      where sid=#{sid} and status>0
    </update>
    
+   <update id="updateEvaluate" parameterType="Shop">
+     update shop_info 
+     set goodEvaluate=#{goodEvaluate},badEvaluate=#{badEvaluate}
+     where sid=#{sid} and status>0
+   </update>
+   
    <update id="delete" parameterType="Shop">
      update shop_info 
      set status=0,updateBy=#{updateBy},updateDate=#{updateDate}

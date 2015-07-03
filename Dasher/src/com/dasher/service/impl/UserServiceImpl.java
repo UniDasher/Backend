@@ -167,6 +167,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public boolean updateStatus(User u) {
-		return userMapper.updateStatus(u);
+		return userMapper.updateStatus(u)>0? true:false;
+	}
+
+	public boolean updateEvaluate(User user) {
+		return userMapper.updateEvaluate(user)>0? true:false;
 	}
 }

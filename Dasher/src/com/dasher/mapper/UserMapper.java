@@ -29,5 +29,6 @@ public interface UserMapper {
 	public List<User> balanceList(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<User> settleList(@Param(value="searchStr") String searchStr);
 	public List<User> applyList();
-	public boolean updateStatus(User u);
+	public int updateStatus(User u);
+	public int updateEvaluate(User user);
 }
