@@ -120,7 +120,7 @@ public class MenuServiceImpl implements MenuService {
 				String uid=m_1.getUid();//用户的编号
 				//判断用户是否登录
 				Login log=loginService.getByLogId(uid);
-				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
 					IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
 							ShowMsg.menuReceiveTitle, ShowMsg.menuReceiveContent);
 				}
@@ -404,7 +404,7 @@ public class MenuServiceImpl implements MenuService {
 				String uid=menu.getUid();//用户的编号
 				//判断用户是否登录
 				Login log=loginService.getByLogId(uid);
-				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
 					IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
 							ShowMsg.menuOverTimeTitle, ShowMsg.menuOverTimeContent);
 				}

@@ -195,7 +195,7 @@ public class ComplainServiceImpl implements ComplainService {
 			String uid=menu.getUid();//用户的编号
 			//判断用户是否登录
 			Login log=loginService.getByLogId(uid);
-			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
 				IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
 						com.getComType()==1?ShowMsg.menuComplainDealTitle:(com.getComType()==2?ShowMsg.menuCancleDealTitle:ShowMsg.menuOverTimeDealTitle), 
 						com.getComType()==1?ShowMsg.menuComplainDealContent:(com.getComType()==2?ShowMsg.menuCancleDealContent:ShowMsg.menuOverTimeDealContent));
@@ -215,7 +215,7 @@ public class ComplainServiceImpl implements ComplainService {
 			String uid=menu.getUid();//用户的编号
 			//判断用户是否登录
 			Login log=loginService.getByLogId(uid);
-			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""){
+			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
 				IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
 						com.getComType()==1?ShowMsg.menuComplainDealTitle:(com.getComType()==2?ShowMsg.menuCancleDealTitle:ShowMsg.menuOverTimeDealTitle), 
 						com.getComType()==1?ShowMsg.menuComplainDealContent:(com.getComType()==2?ShowMsg.menuCancleDealContent:ShowMsg.menuOverTimeDealContent));
