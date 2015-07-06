@@ -41,7 +41,8 @@ public class ShowMsg {
 //	public static final String sortNumNull="sortNum is null";//sortNum为空
 //	public static final String ShopDishNull = "Business name is empty";//商家菜品名称为空
 //	public static final String typeErr = "The typeId of the format is not correct"; //类型的格式不正确！
-	
+	//header值得获取
+	public static final String X_Auth_Token="x-auth-token"; 
 	
 	public static final String checkLogin="您尚未登录，请先登录！";  //You are not logged in, please login first.
 	public static final String addSuc="添加成功！";  //Information added successfully

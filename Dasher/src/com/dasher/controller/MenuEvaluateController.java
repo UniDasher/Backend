@@ -51,7 +51,7 @@ public class MenuEvaluateController extends MyController {
 	    String evalContent="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			sid=jsonObject.getString("sid");
 			uid=jsonObject.getString("uid");
 			mid=jsonObject.getString("mid");
@@ -132,7 +132,7 @@ public class MenuEvaluateController extends MyController {
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -174,7 +174,7 @@ public class MenuEvaluateController extends MyController {
 	protected Object evaluser(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -230,7 +230,7 @@ public class MenuEvaluateController extends MyController {
 	protected Object evalshop(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{

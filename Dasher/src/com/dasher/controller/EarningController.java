@@ -51,7 +51,7 @@ public class EarningController extends MyController {
 	    String wid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			wid=jsonObject.getString("wid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -118,7 +118,7 @@ public class EarningController extends MyController {
 	    String wid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			wid=jsonObject.getString("wid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -182,7 +182,7 @@ public class EarningController extends MyController {
 	    String wid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			wid=jsonObject.getString("wid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -248,7 +248,7 @@ public class EarningController extends MyController {
 	    String str="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			wid=jsonObject.getString("wid");
 			str=jsonObject.getString("str");
 		} catch (JSONException e1) {

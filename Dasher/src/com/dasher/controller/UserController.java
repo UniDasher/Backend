@@ -3,7 +3,10 @@ package com.dasher.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +23,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.chat.Constants;
+import com.dasher.chat.httpclient.apidemo.EasemobIMUsers;
 import com.dasher.model.ComplainDeal;
 import com.dasher.model.Login;
 import com.dasher.model.User;
@@ -29,6 +34,7 @@ import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
 
@@ -222,14 +228,19 @@ public class UserController extends MyController {
 			}
 			else if(flag==0)
 			{
+				User us=userService.getUserByTel(mobilePhone);
+				//获取authCode
+				model.put("authCode", loginService.handleLogin(us.getUid()));
+				Login l=loginService.getByLogId(us.getUid());
+				//环信账号登陆
+				ObjectNode imUserLoginNode = EasemobIMUsers.imUserLogin(us.getUid(),Constants.DEFAULT_PASSWORD);
+		        
 				resultDesc=ShowMsg.loginSuc;
 				resultCode=0;
-				User us=userService.getUserByTel(mobilePhone);
 				model.put("uid", us.getUid());
-				model.put("cid", "环信的编号");
+				model.put("cid", l.getPushClientId());
 				model.put("name", us.getFirstName()+us.getLastName());
-				model.put("authCode", loginService.userHandleLogin(us.getUid()+""));
-
+				
 			}
 			else
 			{
@@ -254,7 +265,8 @@ public class UserController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-	    String authCode=getHeadersInfo(request,"X-Auth-Token");
+	    String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
+
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -298,7 +310,7 @@ public class UserController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-	    String authCode=getHeadersInfo(request,"X-Auth-Token");
+	    String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -350,7 +362,7 @@ public class UserController extends MyController {
 	    String firstName="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			uid=jsonObject.getString("uid");
 			firstName=jsonObject.getString("firstName");
 		} catch (JSONException e1) {
@@ -421,7 +433,7 @@ public class UserController extends MyController {
 	    String phoneCode="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			uid=jsonObject.getString("uid");
 			mobilePhone=jsonObject.getString("mobilePhone");
 			phoneCode=jsonObject.getString("phoneCode");
@@ -522,7 +534,7 @@ public class UserController extends MyController {
 	    String email="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			uid=jsonObject.getString("uid");
 			email=jsonObject.getString("email");
 		} catch (JSONException e1) {
@@ -600,7 +612,7 @@ public class UserController extends MyController {
 	    String bankType="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			uid=jsonObject.getString("uid");
 			bankAccount=jsonObject.getString("bankAccount");
 			bankType=jsonObject.getString("bankType");
@@ -674,7 +686,7 @@ public class UserController extends MyController {
 	    String uid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			uid=jsonObject.getString("uid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -747,7 +759,7 @@ public class UserController extends MyController {
 	    String newPassword="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			uid=jsonObject.getString("uid");
 			oldPassword=jsonObject.getString("oldPassword");
 			newPassword=jsonObject.getString("newPassword");
@@ -898,7 +910,7 @@ public class UserController extends MyController {
 	    String myStatus="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			uid=jsonObject.getString("uid");
 			myStatus=jsonObject.getString("status");
 		} catch (JSONException e1) {
@@ -995,7 +1007,7 @@ public class UserController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-	    String authCode=getHeadersInfo(request,"X-Auth-Token");
+	    String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -1028,7 +1040,7 @@ public class UserController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-	    String authCode=getHeadersInfo(request,"X-Auth-Token");
+	    String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))

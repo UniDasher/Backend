@@ -57,7 +57,7 @@ public class MenuController extends MyController {
 			String JSONStr=getJsonString(request);
 		    JSONObject jsonObject=null;
 		    jsonObject = new JSONObject(JSONStr);
-		    String authCode = getHeadersInfo(request,"X-Auth-Token");
+		    String authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		    //判断是否已登录
 			String myloginId=loginService.getByAuthCode(authCode);
 			if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -303,7 +303,7 @@ public class MenuController extends MyController {
 	    String mid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -383,7 +383,7 @@ public class MenuController extends MyController {
 	    String evalServer="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 			evalShop=jsonObject.getString("evalShop");
 			evalServer=jsonObject.getString("evalServer");
@@ -444,7 +444,7 @@ public class MenuController extends MyController {
 	    String status="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 			status=jsonObject.getString("status");
 		} catch (JSONException e1) {
@@ -505,7 +505,7 @@ public class MenuController extends MyController {
 	protected Object listNearShop(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -553,7 +553,7 @@ public class MenuController extends MyController {
 	protected Object listNearSid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -599,7 +599,7 @@ public class MenuController extends MyController {
 	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -648,7 +648,7 @@ public class MenuController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -712,7 +712,7 @@ public class MenuController extends MyController {
 	    String mealEndDate="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("uid");
 			mealStartDate=jsonObject.getString("mealStartDate");
 			mealEndDate=jsonObject.getString("mealEndDate");
@@ -780,7 +780,7 @@ public class MenuController extends MyController {
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{

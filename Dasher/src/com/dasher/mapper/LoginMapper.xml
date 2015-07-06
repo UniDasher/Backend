@@ -17,6 +17,11 @@
     values(#{loginId},#{authCode},#{type},#{loginTime})
    </insert>
    
+   <insert id="updateUUID" parameterType="Login" keyProperty="id" useGeneratedKeys="true">
+    insert into login(loginId,type,loginTime,pushClientId)
+    values(#{loginId},#{type},#{loginTime},#{pushClientId})
+   </insert>
+   
    <update id="update" parameterType="Login">
     update login set authCode=#{authCode},loginTime=#{loginTime}
     where loginId=#{loginId}

@@ -51,7 +51,7 @@ public class MenuDishController extends MyController {
 	    String count="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 			did=jsonObject.getString("did");
 			name=jsonObject.getString("name");
@@ -145,7 +145,7 @@ public class MenuDishController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{

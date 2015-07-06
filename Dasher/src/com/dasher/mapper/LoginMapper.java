@@ -12,4 +12,5 @@ public interface LoginMapper {
 	public Login getByLogId(@Param(value="loginId") String loginId);
 	public String getByAuthCode(@Param(value="authCode") String authCode);
 	public int userLogout(@Param(value="loginId") String loginId);
+	public int updateUUID(Login l);
 }

@@ -8,6 +8,7 @@ public interface LoginService {
 	public boolean update(Login l);
 	public boolean updateByLoid(Login l);
 	public boolean updateCID(Login l);
+	public boolean updateUUID(Login l);
 	public String getByAuthCode(String authCode);
 	public String handleLogin(String id);
 	public String userHandleLogin(String id);

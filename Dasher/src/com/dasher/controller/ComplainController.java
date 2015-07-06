@@ -54,7 +54,7 @@ public class ComplainController extends MyController {
 	    String content="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 			uid=jsonObject.getString("uid");
 			wid=jsonObject.getString("wid");
@@ -140,7 +140,7 @@ public class ComplainController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -185,7 +185,7 @@ public class ComplainController extends MyController {
 	protected Object phoneDealInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))

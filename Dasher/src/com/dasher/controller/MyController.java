@@ -56,9 +56,9 @@ public class MyController {
 
 	    Map<String, String> map = new HashMap<String, String>();
 
-	    Enumeration headerNames = request.getHeaderNames();
+	    Enumeration<String> headerNames = request.getHeaderNames();
 	    while (headerNames.hasMoreElements()) {
-	        String key = (String) headerNames.nextElement();
+	        String key = headerNames.nextElement();
 	        String value = request.getHeader(key);
 	        map.put(key, value);
 	    }

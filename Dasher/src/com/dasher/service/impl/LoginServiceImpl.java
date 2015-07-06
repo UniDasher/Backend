@@ -105,4 +105,8 @@ public class LoginServiceImpl implements LoginService {
 	public boolean userLogout(String loginId) {
 		return loginMapper.userLogout(loginId)>0? true:false;
 	}
+
+	public boolean updateUUID(Login l) {
+		return loginMapper.updateUUID(l)>0?true:false;
+	}
 }

@@ -302,7 +302,7 @@ public class MarketMenuController extends MyController {
 	    String mid="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
@@ -380,7 +380,7 @@ public class MarketMenuController extends MyController {
 	    String evalServer="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 			evalShop=jsonObject.getString("evalShop");
 			evalServer=jsonObject.getString("evalServer");
@@ -442,7 +442,7 @@ public class MarketMenuController extends MyController {
 	    String status="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
 			status=jsonObject.getString("status");
 		} catch (JSONException e1) {
@@ -505,7 +505,7 @@ public class MarketMenuController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -552,7 +552,7 @@ public class MarketMenuController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -598,7 +598,7 @@ public class MarketMenuController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -644,7 +644,7 @@ public class MarketMenuController extends MyController {
 	protected Object userListStatus(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -703,7 +703,7 @@ public class MarketMenuController extends MyController {
 	    String mealEndDate="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,"X-Auth-Token");
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("uid");
 			mealStartDate=jsonObject.getString("mealStartDate");
 			mealEndDate=jsonObject.getString("mealEndDate");
@@ -773,7 +773,7 @@ public class MarketMenuController extends MyController {
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getHeadersInfo(request,"X-Auth-Token");
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
