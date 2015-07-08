@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 	    	transactionManager.rollback(ts);  
 	    	return result;
 	    }
-	    
+	    /*
 	    User user=getUserByTel(u.getMobilePhone());
 	    
 		//注册用户的环信账号
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 			transactionManager.rollback(ts);  
         	return false;
-		}
+		}*/
 		if(!result){
 	    	transactionManager.rollback(ts);
 	    }else{
@@ -192,8 +192,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public boolean updateUserName(User u) {
-		// TODO Auto-generated method stub
 		return userMapper.updateUserName(u)>0? true:false;
+	}
+	public boolean updateTrueName(User u) {
+		return userMapper.updateTrueName(u)>0? true:false;
 	}
 
 	public boolean updatePhone(User u) {

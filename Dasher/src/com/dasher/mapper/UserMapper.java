@@ -31,4 +31,5 @@ public interface UserMapper {
 	public List<User> applyList();
 	public int updateStatus(User u);
 	public int updateEvaluate(User user);
+	public int updateTrueName(User u);
 }

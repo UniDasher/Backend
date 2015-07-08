@@ -62,6 +62,7 @@ public class ShowMsg {
 	public static final String delSuc="删除成功！";//Information deleted successfully
 	public static final String delFail="删除失败！";//Information deleted unsuccessfully
 	public static final String ParFail="无效的参数！";//Parameter is invalid
+	public static final String NickNameNull="昵称不可为空！";//FirstName is null
 	public static final String FirstNameNull="FirstName为空！";//FirstName is null
 	public static final String LastNameNull="LastNameNull为空！";//LastNameNull is null
 	public static final String EmailNull = "邮箱地址为空！";//Email is null
@@ -157,6 +158,15 @@ public class ShowMsg {
 	public static final String checkEnd="认证通过";
 	public static final String chkFail="认证失败！";
 	public static final String chkBank="您尚未填写银行账户。";
+	public static final String chkTrueName="您尚未填写真实姓名。";
+	
+	//订单超时时间
+	public static final String mealEndDateOver="您的送达时间已过，请重新选择";
+	public static final String mealEndDateFail="您的送达时间格式出错";
+	
+	public static final String shopNotBusiness="商家暂不营业，请见谅。";
+	public static final String shopNotDish="商家对应的菜品不存在。";//The price of the format is not correct
+	public static final String DishsTotalPriceNotMenuDishPrice="菜品总额不等于订单菜品的金额。";//The price of the format is not correct
 	
 	//用户推送信息（个推）
 	public static final String menuReceiveTitle="订单结单";

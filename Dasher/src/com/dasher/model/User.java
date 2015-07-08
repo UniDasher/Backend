@@ -8,6 +8,7 @@ public class User implements Serializable {
 	private String uid;
 	private String firstName;
 	private String lastName;
+	private String nickName;
 	private String account;
 	private String password;
 	private String salt;
@@ -34,7 +35,7 @@ public class User implements Serializable {
 		
 	}
 	
-	public User(int id, String uid, String firstName, String lastName,
+	public User(int id, String uid, String firstName, String lastName,String nickName,
 			String account, String password, String salt, String equmentNumber,
 			String logo, float balance, String mobilePhone, String email,
 			String address, String longitude, String latitude,
@@ -46,6 +47,7 @@ public class User implements Serializable {
 		this.uid = uid;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.nickName=nickName;
 		this.account = account;
 		this.password = password;
 		this.salt = salt;
@@ -98,6 +100,14 @@ public class User implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getAccount() {

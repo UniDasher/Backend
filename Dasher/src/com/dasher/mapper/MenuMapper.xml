@@ -38,7 +38,7 @@
 		useGeneratedKeys="true">
 		insert into
 		menu(mid,sid,uid,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,mealStartDate,mealEndDate,address,longitude,latitude,distance,direction,createBy,createDate,status)
-		values(#{mid},#{sid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{distance},#{direction},#{createBy},#{createDate},1)
+		values(#{mid},#{sid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{distance},#{direction},#{createBy},#{createDate},0)
 	</insert>
 
 	<update id="receive" parameterType="Menu">
@@ -63,6 +63,11 @@
 			status=#{status},complainDate=#{complainDate}
 			where mid=#{mid}
    		</if>
+   		<if test="status==1">
+   			update menu set
+			status=#{status},createDate=#{createDate}
+			where mid=#{mid}
+   		</if>
    		
    </update>
 
@@ -84,8 +89,8 @@
 
 	<select id="list" resultType="Menu">
 	    <!--select * from menu where 1=1-->
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName,
-			concat(u2.firstName,u2.lastName) as serverName
+		select m.*,s.name as shopName,u.nickName as userName,
+			u2.nickName as serverName
 		from menu m
 		left join shop_info s
 		on m.sid=s.sid
@@ -125,7 +130,7 @@
 
 	<select id="getListByUid" resultType="Menu">
 		<!--select * from menu where 1=1-->
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		select m.*,s.name as shopName,u.nickName as userName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -143,8 +148,8 @@
 
 	<select id="getByMid" resultType="Menu" parameterType="String">
 		select m.*,s.name as shopName,s.address as shopAddress,s.longitude as shopLongitude,s.latitude as shopLatitude,
-			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
-			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			u2.nickName as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -156,7 +161,7 @@
 	</select>
 	
 	<select id="listByStatus" resultType="Menu">
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		select m.*,s.name as shopName,u.nickName as userName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -186,8 +191,8 @@
     
     <select id="getListByStr" resultType="Menu">
 		select m.*,s.name as shopName,s.address as shopAddress,s.longitude as shopLongitude,s.latitude as shopLatitude,
-			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
-			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			u2.nickName as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -215,7 +220,7 @@
 	</select>
     
     <select id="getNearlist" resultType="Menu">
-		select m.*,s.name as shopName,concat(u.firstName,u.lastName) as userName
+		select m.*,s.name as shopName,u.nickName as userName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
@@ -242,7 +247,7 @@
 	
 	<select id="getNearListBySid" resultType="Menu">
 		select m.*,s.name as shopName,s.address as shopAddress,s.longitude as shopLongitude,s.latitude as shopLatitude,
-			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone
+			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone
 		from menu m
 		join shop_info s
 		on m.sid=s.sid

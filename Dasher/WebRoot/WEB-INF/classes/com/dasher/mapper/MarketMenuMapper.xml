@@ -36,7 +36,7 @@
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="MarketMenu">
      insert into market_menu(mid,smid,uid,dishsMoney,distance,direction,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,address,longitude,latitude,mealStartDate,mealEndDate,createBy,createDate,status)
-     values(#{mid},#{smid},#{uid},#{dishsMoney},#{distance},#{direction},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{address},#{longitude},#{latitude},#{mealStartDate},#{mealEndDate},#{createBy},#{createDate},1)
+     values(#{mid},#{smid},#{uid},#{dishsMoney},#{distance},#{direction},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{address},#{longitude},#{latitude},#{mealStartDate},#{mealEndDate},#{createBy},#{createDate},0)
    </insert>
    
    <update id="receive" parameterType="MarketMenu">
@@ -61,6 +61,11 @@
 			status=#{status},complainDate=#{complainDate}
 			where mid=#{mid}
    		</if>
+   		<if test="status==1">
+   			update market_menu set
+			status=#{status},createDate=#{createDate}
+			where mid=#{mid}
+   		</if>
    </update>
    
    <select id="getCount" resultType="Integer">
@@ -82,7 +87,7 @@
    </select>
    
    <select id="list" resultType="MarketMenu">
-      select mm.* ,m.name as marketName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as serverName
+      select mm.* ,m.name as marketName,u.nickName as userName,u2.nickName as serverName
 	  from market_menu as mm
 	  left join market_info as m
 	  on mm.smid=m.smid
@@ -111,8 +116,8 @@
    
    <select id="getByMid" resultType="MarketMenu" parameterType="MarketMenu">
 	  select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
-			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
-			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			u2.nickName as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
 	  from market_menu as mm
 	  join market_info as m
 	  on mm.smid=m.smid
@@ -137,8 +142,8 @@
    
    <select id="getListByUid" resultType="MarketMenu">
       select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
-			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
-			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			u2.nickName as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
       from market_menu as mm
 	  join market_info as m
 	  on mm.smid=m.smid
@@ -158,8 +163,8 @@
    
    <select id="ListByUid" resultType="MarketMenu">
       select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
-			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone,
-			concat(u2.firstName,u2.lastName) as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+			u2.nickName as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
       from market_menu as mm
 	  join market_info as m
 	  on mm.smid=m.smid
@@ -193,7 +198,7 @@
    </update>
    
    <select id="getNearlist" resultType="MarketMenu">
-	 select *,s.name as shopName,concat(u.firstName,u.lastName) as userName
+	 select *,s.name as shopName,u.nickName as userName
      from market_menu m
      join market_info s
 		on m.smid=s.smid
@@ -205,7 +210,7 @@
 	</select>
    <select id="getNearListSmid" resultType="MarketMenu">
 	 select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
-			concat(u.firstName,u.lastName) as userName,u.logo as userLogo,u.mobilePhone as userPhone
+			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone
      from market_menu m
      join market_info s
 		on m.smid=s.smid

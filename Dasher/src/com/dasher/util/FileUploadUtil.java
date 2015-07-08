@@ -47,10 +47,10 @@ public class FileUploadUtil {
 			//解决上传文件名的中文乱码
 			upload.setHeaderEncoding("UTF-8"); 
 			//3、判断提交上来的数据是否是上传表单的数据
-			if(!ServletFileUpload.isMultipartContent(request)){
-				//按照传统方式获取数据
-				return null;
-			}
+//			if(!ServletFileUpload.isMultipartContent(request)){
+//				//按照传统方式获取数据
+//				return null;
+//			}
 			//4、使用ServletFileUpload解析器解析上传数据，解析结果返回的是一个List<FileItem>集合，每一个FileItem对应一个Form表单的输入项
 			List<FileItem> list = upload.parseRequest(request);
 			for(FileItem item : list){

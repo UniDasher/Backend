@@ -35,7 +35,7 @@
    </select>
    
    <select id="list" resultType="ServerSettle">
-     select us.*,concat(u.firstName,u.lastName) as userName,u.mobilePhone
+     select us.*,u.nickName as userName,u.mobilePhone
 	 from server_settle us
 	 join user_info u
 	 on us.uid=u.uid

@@ -31,4 +31,5 @@ public interface UserService {
 	public List<User> applyList();
 	public boolean updateStatus(User u);
 	public boolean updateEvaluate(User user);
+	public boolean updateTrueName(User u);
 }

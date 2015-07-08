@@ -28,8 +28,8 @@
    </insert>
    
    <select id="userComList" resultType="Complain">
-     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone,
-     CONCAT(w.firstName,w.lastName) as waiterName,w.mobilePhone as waiterPhone
+     select c.*,u.nickName as userName,u.mobilePhone as userPhone,
+     w.nickName as waiterName,w.mobilePhone as waiterPhone
 	 from complain c
 	 join user_info u
 	 on c.uid=u.uid 
@@ -42,9 +42,9 @@
    </select>
    
    <select id="getByComId" parameterType="String" resultType="Complain">
-     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone,
+     select c.*,u.nickName as userName,u.mobilePhone as userPhone,
      m.status as menuStatus,m.dishsMoney,m.carriageMoney,
-     CONCAT(w.firstName,w.lastName) as waiterName,w.mobilePhone as waiterPhone
+     w.nickName as waiterName,w.mobilePhone as waiterPhone
 	 from complain c
 	 left join user_info u
 	 on c.uid=u.uid
@@ -68,7 +68,7 @@
 	 on c.uid=u.uid
 	 where c.status=#{status}
 	 <if test="status==2 and searchStr!=''">
-	 	and (u.firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or u.lastName like CONCAT(CONCAT('%', #{searchStr}),'%'))
+	 	and u.nickName like CONCAT(CONCAT('%', #{searchStr}),'%')
 	 </if>
 	 <if test="status==2 and startDate!='' and endDate!=''">
 		and c.updateDate between #{startDate} and #{endDate}
@@ -77,8 +77,8 @@
    </select>
    
    <select id="list" resultType="Complain">
-     select c.*,CONCAT(u.firstName,u.lastName) as userName,u.mobilePhone as userPhone,
-     CONCAT(w.firstName,w.lastName) as waiterName,w.mobilePhone as waiterPhone
+     select c.*,u.nickName as userName,u.mobilePhone as userPhone,
+     w.nickName as waiterName,w.mobilePhone as waiterPhone
 	 from complain c
 	 left join user_info u
 	 on c.uid=u.uid 
@@ -88,7 +88,7 @@
 	 on c.mid=m.mid -->
 	 where c.status=#{status}
 	 <if test="status==2 and searchStr!=''">
-	 	and (u.firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or u.lastName like CONCAT(CONCAT('%', #{searchStr}),'%'))
+	 	and u.nickName like CONCAT(CONCAT('%', #{searchStr}),'%')
 	 </if>
 	 <if test="status==2 and startDate!='' and endDate!=''">
 		and c.updateDate between #{startDate} and #{endDate}

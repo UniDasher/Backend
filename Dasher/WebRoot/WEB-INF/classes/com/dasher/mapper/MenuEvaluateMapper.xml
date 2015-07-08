@@ -23,7 +23,7 @@
    </insert>
    
    <select id="getEvalByMid" parameterType="String" resultType="MenuEvaluate">
-     select me.* ,s.name as shopName,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as waiterName
+     select me.* ,s.name as shopName,u.nickName as userName,u2.nickName as waiterName
 	 from menu_evaluate me
 	 join shop_info s
 	 on me.sid=s.sid
@@ -36,7 +36,7 @@
    </select>
    
    <select id="ListWaiter" resultType="MenuEvaluate">
-     select me.* ,concat(u.firstName,u.lastName) as userName,concat(u2.firstName,u2.lastName) as waiterName
+     select me.* ,u.nickName as userName,u2.nickName as waiterName
 	 from menu_evaluate me
 	 join user_info u
 	 on me.uid=u.uid
@@ -54,7 +54,7 @@
    </select>
    
    <select id="ListShop" resultType="MenuEvaluate">
-     select me.* ,s.name as shopName,concat(u.firstName,u.lastName) as userName
+     select me.* ,s.name as shopName,u.nickName as userName
 	 from menu_evaluate me
 	 join shop_info s
 	 on me.sid=s.sid

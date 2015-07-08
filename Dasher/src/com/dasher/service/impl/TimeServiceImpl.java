@@ -1,6 +1,7 @@
 package com.dasher.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,17 @@ public class TimeServiceImpl implements TimeService {
 
 	public List<Time> getBySId(String sid) {
 		return timeMapper.getBySid(sid);
+	}
+
+	public Time getCurTimeBySId(String sid) {
+		Calendar c = Calendar.getInstance();  
+		int dw = c.get(Calendar.DAY_OF_WEEK);
+		if(dw==1){
+			dw=7;
+		}else{
+			dw=dw-1;
+		}
+		return timeMapper.getCurTimeBySId(sid,dw);
 	}
 
 }

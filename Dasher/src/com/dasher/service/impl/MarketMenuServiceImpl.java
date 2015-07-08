@@ -250,6 +250,10 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 			m.setComplainDate(DateUtil.getCurrentDateStr());
 			result=1;
 		}
+		else if(m.getStatus()==1){
+			m.setCreateBy(DateUtil.getCurrentDateStr());
+			result=1;
+		}
 		if(result>0)
 		{
 			flag=marketMenuMapper.updateStatus(m)>0? true:false;

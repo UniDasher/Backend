@@ -34,6 +34,8 @@
    <select id="getBySid" parameterType="String" resultType="Time">
       select * from time_info where sid=#{sid} and status>0
    </select>
-   
+   <select id="getCurTimeBySId" parameterType="String" resultType="Time">
+      select * from time_info where sid=#{sid} and weeks=#{dw} and status>0
+   </select>
   
 </mapper>

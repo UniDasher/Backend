@@ -32,6 +32,7 @@ import com.dasher.service.ComplainDealService;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
+import com.dasher.util.FileUploadUtil;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -63,13 +64,13 @@ public class UserController extends MyController {
 	    String password="";
 	    String mobilePhone="";
 	    String phoneCode="";
-	    String firstName="";
+	    String nickName="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
 			password = jsonObject.getString("password");
 			mobilePhone=jsonObject.getString("mobilePhone");
 			phoneCode=jsonObject.getString("phoneCode");
-			firstName=jsonObject.getString("firstName");
+			nickName=jsonObject.getString("nickName");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
 			resultCode=2;
@@ -89,9 +90,9 @@ public class UserController extends MyController {
 			resultDesc=ShowMsg.pwdLength;
 			resultCode=1;
 		}
-		else if(firstName=="")
+		else if(nickName=="")
 		{
-			resultDesc=ShowMsg.FirstNameNull;
+			resultDesc=ShowMsg.NickNameNull;
 			resultCode=1;
 		}
 		else
@@ -146,7 +147,8 @@ public class UserController extends MyController {
 						e.printStackTrace();
 					}
 					u.setSalt(salt);
-					u.setFirstName(firstName);
+					u.setNickName(nickName);
+					u.setFirstName("");
 					u.setLastName("");
 					u.setEqumentNumber("");
 					u.setMobilePhone(mobilePhone);
@@ -154,7 +156,7 @@ public class UserController extends MyController {
 					u.setAddress("");
 					u.setLongitude("");
 					u.setLatitude("");
-					u.setLogo("/upload/user/images/default.png");
+					u.setLogo("/upload/user/images/default.jpg");
 					u.setCreateDate(DateUtil.getCurrentDateStr());
 					u.setBankAccount("");
 					u.setBankType("");
@@ -233,14 +235,14 @@ public class UserController extends MyController {
 				model.put("authCode", loginService.userHandleLogin(us.getUid()));
 				Login l=loginService.getByLogId(us.getUid());
 				//环信账号登陆
-				ObjectNode imUserLoginNode = EasemobIMUsers.imUserLogin(us.getUid(),Constants.DEFAULT_PASSWORD);
+				//ObjectNode imUserLoginNode = EasemobIMUsers.imUserLogin(us.getUid(),Constants.DEFAULT_PASSWORD);
 		        
 				resultDesc=ShowMsg.loginSuc;
 				resultCode=0;
 				model.put("uid", us.getUid());
 				model.put("cid", l.getPushClientId());
-				model.put("name", us.getFirstName()+us.getLastName());
-				
+				model.put("name", us.getNickName());
+				model.put("logo", us.getLogo());
 			}
 			else
 			{
@@ -290,6 +292,8 @@ public class UserController extends MyController {
 			User u=userService.getByUId(uid);
 			if(u!=null)
 			{
+				u.setSalt("");
+				u.setPassword("");
 				resultCode=0;
 				resultDesc=ShowMsg.findSuc;
 				model.put("data", u);
@@ -349,7 +353,7 @@ public class UserController extends MyController {
 		return model;
 	}
 	
-	@RequestMapping("phone/user/update/name")
+	@RequestMapping("phone/user/update/nickname")
 	@ResponseBody
 	protected Object updateName(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
@@ -358,13 +362,13 @@ public class UserController extends MyController {
 		String JSONStr=getJsonString(request);
 	    JSONObject jsonObject=null;
 	    String authCode="";
-	    String uid="";
-	    String firstName="";
+	    //String uid="";
+	    String nickName="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
 			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			uid=jsonObject.getString("uid");
-			firstName=jsonObject.getString("firstName");
+			//uid=jsonObject.getString("uid");
+			nickName=jsonObject.getString("nickName");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
 			resultCode=2;
@@ -382,14 +386,72 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", authCode);
 		
-		
-		if(uid=="")
+		if(nickName=="")
 		{
-			resultDesc=ShowMsg.ParFail;
+			resultDesc=ShowMsg.NickNameNull;
 			resultCode=2;
-		}else if(firstName=="")
+		}
+		else
+		{
+			//用户名修改
+			User u=new User();
+			u.setNickName(nickName);
+			u.setUid(myloginId);
+			result=userService.updateUserName(u);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
+			}
+			
+			
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
+	@RequestMapping("phone/user/update/truename")
+	@ResponseBody
+	protected Object updateTrueName(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		//获取参数
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String firstName="";
+	    String lastName="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
+			
+			firstName=jsonObject.getString("firstName");
+			lastName=jsonObject.getString("lastName");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		//判断是否已登录
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		
+		if(firstName=="")
 		{
 			resultDesc=ShowMsg.FirstNameNull;
 			resultCode=2;
@@ -399,8 +461,9 @@ public class UserController extends MyController {
 			//用户名修改
 			User u=new User();
 			u.setFirstName(firstName);
-			u.setUid(uid);
-			result=userService.updateUserName(u);
+			u.setLastName(lastName);
+			u.setUid(myloginId);
+			result=userService.updateTrueName(u);
 			if(result==true)
 			{
 				resultCode=0;
@@ -607,13 +670,13 @@ public class UserController extends MyController {
 		String JSONStr=getJsonString(request);
 	    JSONObject jsonObject=null;
 	    String authCode="";
-	    String uid="";
+	    //String uid="";
 	    String bankAccount="";
 	    String bankType="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
 			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			uid=jsonObject.getString("uid");
+			//uid=jsonObject.getString("uid");
 			bankAccount=jsonObject.getString("bankAccount");
 			bankType=jsonObject.getString("bankType");
 		} catch (JSONException e1) {
@@ -635,12 +698,7 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		if(uid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else if(bankAccount=="")
+		if(bankAccount=="")
 		{
 			resultDesc=ShowMsg.bankAccountNull;
 			resultCode=2;
@@ -653,7 +711,7 @@ public class UserController extends MyController {
 		else
 		{
 			User u=new User();
-			u.setUid(uid);
+			u.setUid(myloginId);
 			u.setBankAccount(bankAccount);
 			u.setBankType(bankType);
 			result=userService.update(u);
@@ -679,22 +737,17 @@ public class UserController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String uid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			uid=jsonObject.getString("uid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
+		Map<String,String> dataMap=FileUploadUtil.uploadFile(request, "/upload/user/images");
+		if(dataMap==null){
+			resultCode=1;
+			resultDesc=ShowMsg.imageUploadFail;
 			model.put("resultCode", resultCode);	
 			model.put("resultDesc", resultDesc);
 			return model;
 		}
+		
+		String authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
+		
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -707,38 +760,31 @@ public class UserController extends MyController {
 		}
 		model.put("authCode", authCode);
 		
-		//String logo=FileUploadUtil.uploadFile(request, "/WEB-INF/upload/user/images");
-		String logo="";
-		if(uid=="")
+		String logo=dataMap.get("fileName");
+		
+		if("false".equals(logo))
 		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
+			resultCode=1;
+			resultDesc=ShowMsg.imageUploadFail;
 		}
 		else
 		{
-			if("false".equals(logo))
+			User u=new User();
+			u.setUid(myloginId);
+			u.setLogo("/upload/user/images/"+logo);
+			result=userService.updateLogo(u);
+			if(result==true)
 			{
-				resultCode=1;
-				resultDesc=ShowMsg.imageUploadFail;
+				resultCode=0;
+				resultDesc=ShowMsg.updateSuc;
+				model.put("fileName", "/upload/user/images/"+logo);
 			}
 			else
 			{
-				User u=new User();
-				u.setUid(uid);
-				u.setLogo("/upload/user/images/"+logo);
-				result=userService.updateLogo(u);
-				if(result==true)
-				{
-					resultCode=0;
-					resultDesc=ShowMsg.updateSuc;
-				}
-				else
-				{
-					resultCode=1;
-					resultDesc=ShowMsg.updateFail;
-				}
-				
+				resultCode=1;
+				resultDesc=ShowMsg.updateFail;
 			}
+			
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
@@ -948,6 +994,14 @@ public class UserController extends MyController {
 				{
 					//获取用户的信息
 					User uInfo=userService.getByUId(uid);
+					if("".equals(uInfo.getFirstName())){
+						resultCode=1;
+						resultDesc=ShowMsg.chkTrueName;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);	
+						return model;
+					}
+					
 					if("".equals(uInfo.getBankType())||"".equals(uInfo.getBankAccount())){
 						resultCode=1;
 						resultDesc=ShowMsg.chkBank;
@@ -1108,6 +1162,8 @@ public class UserController extends MyController {
 			User u=userService.getByUId(uid);
 			if(u!=null)
 			{
+				u.setSalt("");
+				u.setPassword("");
 				resultCode=0;
 				resultDesc=ShowMsg.findSuc;
 				model.put("data", u);

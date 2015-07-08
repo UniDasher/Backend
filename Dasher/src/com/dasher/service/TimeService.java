@@ -13,4 +13,6 @@ public interface TimeService {
 			String week_6, String flag_6, String times_6, String week_7,
 			String flag_7, String times_7);
 	public List<Time> getBySId(String sid);
+	//获取商家当日的营业时间
+	public Time getCurTimeBySId(String sid);
 }

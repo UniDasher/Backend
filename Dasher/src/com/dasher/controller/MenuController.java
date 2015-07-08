@@ -2,9 +2,7 @@ package com.dasher.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,17 +17,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Menu;
-import com.dasher.model.MenuDish;
-import com.dasher.model.Shop;
-import com.dasher.model.User;
-import com.dasher.service.LoginService;
-import com.dasher.service.MenuDishService;
-import com.dasher.service.MenuService;
-import com.dasher.service.ShopService;
-import com.dasher.service.UserService;
-import com.dasher.util.DateUtil;
-import com.dasher.util.ShowMsg;
+import com.dasher.model.*;
+import com.dasher.service.*;
+import com.dasher.util.*;
 
 @Controller
 public class MenuController extends MyController {
@@ -41,7 +31,11 @@ public class MenuController extends MyController {
 	@Autowired
 	private UserService userService;
 	@Autowired
+	private TimeService timeService;
+	@Autowired
 	private ShopService shopService;
+	@Autowired
+	private ShopDishService shopDishService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -101,7 +95,7 @@ public class MenuController extends MyController {
 			latitude=jsonObject.getString("latitude");
 			
 
-			if(sid==""||uid=="")
+			if(sid==""||uid==""||mealEndDate=="")
 			{
 				resultDesc=ShowMsg.ParFail;
 				resultCode=2;
@@ -143,6 +137,32 @@ public class MenuController extends MyController {
 			}
 			else
 			{
+				//判断送餐时间是否在当前时间之后
+				int cal1=CalendarUtil.timeCurCompare(mealEndDate);
+				if(cal1==0){
+					resultDesc=ShowMsg.mealEndDateOver;
+					resultCode=1;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);	
+					return model;
+				}else if(cal1==-1){
+					resultDesc=ShowMsg.mealEndDateFail;
+					resultCode=1;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);	
+					return model;
+				}
+				
+				//判断商家是否在营业时间
+				Time time=timeService.getCurTimeBySId(sid);
+				if(time!=null&&!CalendarUtil.IsBusiness(time)){
+					resultDesc=ShowMsg.shopNotBusiness;
+					resultCode=1;
+					model.put("resultCode", resultCode);	
+					model.put("resultDesc", resultDesc);	
+					return model;
+				}
+				
 				//验证金额
 				Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
 				Matcher matcher=pattern.matcher(dishsMoney);
@@ -207,11 +227,11 @@ public class MenuController extends MyController {
 				{
 					JSONObject dishObj=dishArray.getJSONObject(i);
 				    String did="";
-				    String name="";
+				    //String name="";
 				    String price="";
 				    String count="";
 				    did=dishObj.getString("did");
-					name=dishObj.getString("name");
+					//name=dishObj.getString("name");
 					price=dishObj.getString("price");
 					count=dishObj.getString("count");
 					if(did=="")
@@ -219,11 +239,11 @@ public class MenuController extends MyController {
 						resultDesc=ShowMsg.ParFail;
 						resultCode=2;
 					}
-					else if(name=="")
-					{
-						resultDesc=ShowMsg.nameNull;
-						resultCode=2;
-					}
+//					else if(name=="")
+//					{
+//						resultDesc=ShowMsg.nameNull;
+//						resultCode=2;
+//					}
 					else if(price=="")
 					{
 						resultDesc=ShowMsg.priceNull;
@@ -252,10 +272,21 @@ public class MenuController extends MyController {
 							model.put("resultDesc", resultDesc);
 							return model;
 						}
+						
+						//判断菜品是否存在
+						ShopDish sd=shopDishService.getByDid(did);
+						if(sd==null||sd.getPrice()!=Float.parseFloat(price)){
+							resultDesc=ShowMsg.shopNotDish;
+							resultCode=2;
+							model.put("resultCode", resultCode);	
+							model.put("resultDesc", resultDesc);
+							return model;
+						}
+						
 						MenuDish md=new MenuDish();
 						md.setMid(mid);
 						md.setDid(did);
-						md.setName(name);
+						md.setName(sd.getName());
 						md.setPrice(Float.parseFloat(price));
 						md.setCount(Integer.parseInt(count));
 						md.setCreateBy(myloginId);
@@ -266,19 +297,29 @@ public class MenuController extends MyController {
 				}
 				//执行订单及订单餐品的新增操作
 				m.setDishs(dishs);
-				result=menuService.add(m);
-				if(result==true)
-				{
-					resultCode=0;
-					resultDesc=ShowMsg.menuSuc;
+				
+				//判断菜品的金额是否等于订单的金额
+				float dishsPriceTal=0;
+				for (MenuDish md : dishs) {
+					dishsPriceTal=md.getPrice()*md.getCount();
 				}
-				else
-				{
+				if(dishsPriceTal==m.getDishsMoney()){
+					result=menuService.add(m);
+					if(result==true)
+					{
+						resultCode=0;
+						resultDesc=ShowMsg.menuSuc;
+					}
+					else
+					{
+						resultCode=1;
+						resultDesc=ShowMsg.menuFail;
+					}
+				}else{
 					resultCode=1;
-					resultDesc=ShowMsg.menuFail;
+					resultDesc=ShowMsg.DishsTotalPriceNotMenuDishPrice;
 				}
 			}
-			
 			model.put("resultCode", resultCode);	
 			model.put("resultDesc", resultDesc);
 			return model;

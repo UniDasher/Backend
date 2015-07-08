@@ -22,14 +22,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Market;
+import com.dasher.model.MarketCommodity;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
+import com.dasher.model.MenuDish;
+import com.dasher.model.ShopDish;
+import com.dasher.model.Time;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
+import com.dasher.service.MarketCommodityService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MarketService;
 import com.dasher.service.ShopService;
+import com.dasher.service.TimeService;
 import com.dasher.service.UserService;
+import com.dasher.util.CalendarUtil;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
 
@@ -44,6 +51,10 @@ public class MarketMenuController extends MyController {
 	private UserService userService;
 	@Autowired
 	private MarketService marketService;
+	@Autowired
+	private TimeService timeService;
+	@Autowired
+	private MarketCommodityService marketCommodityService;
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -155,6 +166,32 @@ public class MarketMenuController extends MyController {
 		}
 		else
 		{
+			//判断送餐时间是否在当前时间之后
+			int cal1=CalendarUtil.timeCurCompare(mealEndDate);
+			if(cal1==0){
+				resultDesc=ShowMsg.mealEndDateOver;
+				resultCode=1;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);	
+				return model;
+			}else if(cal1==-1){
+				resultDesc=ShowMsg.mealEndDateFail;
+				resultCode=1;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);	
+				return model;
+			}
+			
+			//判断商家是否在营业时间
+			Time time=timeService.getCurTimeBySId(smid);
+			if(time!=null&&!CalendarUtil.IsBusiness(time)){
+				resultDesc=ShowMsg.shopNotBusiness;
+				resultCode=1;
+				model.put("resultCode", resultCode);	
+				model.put("resultDesc", resultDesc);	
+				return model;
+			}
+			
 			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
 			Matcher matcher=pattern.matcher(dishsMoney);
 			if(matcher.matches()==false)
@@ -214,17 +251,19 @@ public class MarketMenuController extends MyController {
             JSONArray dishArray=jsonObject.getJSONArray("dishs");
             for(int i=0;i<dishArray.length();i++){
 				JSONObject dishObj=dishArray.getJSONObject(i);
-			    String name="";
+				String mcid="";
+			    //String name="";
 			    String price="";
 			    String unit="";
 			    String count="";
 			    String subscribe="";
-			    name=dishObj.getString("name");
+			    mcid=dishObj.getString("mcid");
+			    //name=dishObj.getString("name");
 			    price=dishObj.getString("price");
 			    unit=dishObj.getString("unit");
 				count=dishObj.getString("count");
 				subscribe=dishObj.getString("subscribe");
-				if(name=="")
+				if(mcid=="")
 				{
 					resultDesc=ShowMsg.nameNull;
 					resultCode=2;
@@ -257,9 +296,20 @@ public class MarketMenuController extends MyController {
 						model.put("resultDesc", resultDesc);
 						return model;
 					}
+					//判断菜品是否存在
+					MarketCommodity mc=marketCommodityService.getByMcid(mcid);
+					if(mc==null||mc.getPrice()!=Float.parseFloat(price)){
+						resultDesc=ShowMsg.shopNotDish;
+						resultCode=2;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);
+						return model;
+					}
+					
 					MarketMenuRecord md=new MarketMenuRecord();
 					md.setMid(mid);
-					md.setName(name);
+					md.setMcid(mcid);
+					md.setName(mc.getName());
 					md.setUnit(unit);
 					md.setPrice(Float.parseFloat(price));
 					md.setCount(Integer.parseInt(count));
@@ -272,18 +322,28 @@ public class MarketMenuController extends MyController {
             }
 
             mm.setDishs(dishs);
-
-            result=marketMenuService.add(mm);
-			if(result==true)
-			{
-				resultCode=0;
-				resultDesc=ShowMsg.menuSuc;
+          //判断菜品的金额是否等于订单的金额
+			float dishsPriceTal=0;
+			for (MarketMenuRecord md : dishs) {
+				dishsPriceTal=md.getPrice()*md.getCount();
 			}
-			else
-			{
+			if(dishsPriceTal==mm.getDishsMoney()){
+				result=marketMenuService.add(mm);
+				if(result==true)
+				{
+					resultCode=0;
+					resultDesc=ShowMsg.menuSuc;
+				}
+				else
+				{
+					resultCode=1;
+					resultDesc=ShowMsg.menuFail;
+				}
+			}else{
 				resultCode=1;
-				resultDesc=ShowMsg.menuFail;
+				resultDesc=ShowMsg.DishsTotalPriceNotMenuDishPrice;
 			}
+            
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);

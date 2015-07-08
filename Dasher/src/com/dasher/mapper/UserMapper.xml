@@ -7,6 +7,7 @@
      <result property="uid" column="uid" />
      <result property="firstName" column="firstName" />
      <result property="lastName" column="lastName" />
+     <result property="nickName" column="nickName" />
      <result property="account" column="account" />
 	 <result property="password" column="password" />
 	 <result property="salt" column="salt" />
@@ -30,8 +31,8 @@
    </resultMap>
    
    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="User">
-     insert into user_info(uid,firstName,lastName,account,password,salt,equmentNumber,mobilePhone,logo,email,address,longitude,latitude,createDate,status,bankAccount,bankType)
-     values(#{uid},#{firstName},#{lastName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate},0,#{bankAccount},#{bankType})
+     insert into user_info(uid,firstName,lastName,nickName,account,password,salt,equmentNumber,mobilePhone,logo,email,address,longitude,latitude,createDate,status,bankAccount,bankType)
+     values(#{uid},#{firstName},#{lastName},#{nickName},#{account},#{password},#{salt},#{equmentNumber},#{mobilePhone},#{logo},#{email},#{address},#{longitude},#{latitude},#{createDate},0,#{bankAccount},#{bankType})
    </insert>
    
    <select id="getByUId" parameterType="String" resultType="User">
@@ -44,7 +45,8 @@
    
    <update id="update" parameterType="User">
      update user_info 
-     set firstName=#{firstName},lastName=#{lastName},email=#{email},address=#{address},longitude=#{longitude},latitude=#{latitude},bankAccount=#{bankAccount},bankType=#{bankType}
+     set firstName=#{firstName},lastName=#{lastName},email=#{email},address=#{address},
+     longitude=#{longitude},latitude=#{latitude},bankAccount=#{bankAccount},bankType=#{bankType}
      where uid=#{uid}
    </update>
    
@@ -79,7 +81,7 @@
      	and (status=2 or status=3)
      </if>
      <if test="searchStr!=''">
-	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
 	 
    </select>
@@ -91,7 +93,7 @@
      	and (status=2 or status=3)
      </if>
      <if test="searchStr!=''">
-	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
      limit #{startRow},#{pageSize}
    </select>
@@ -104,7 +106,13 @@
    
    <update id="updateUserName" parameterType="User">
      update user_info 
-     set firstName=#{firstName}
+     set nickName=#{nickName}
+     where uid=#{uid}
+   </update>
+   
+   <update id="updateTrueName" parameterType="User">
+     update user_info 
+     set firstName=#{firstName},lastName=#{lastName}
      where uid=#{uid}
    </update>
    
@@ -125,7 +133,7 @@
      from user_info
      where balance>0
      <if test="searchStr!=''">
-	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
      limit #{startRow},#{pageSize}
    </select>
@@ -147,7 +155,7 @@
      from user_info
      where balance>0 
      <if test="searchStr!=''">
-	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
    </select>
    
@@ -156,7 +164,7 @@
      from user_info
      where balance>0 
      <if test="searchStr!=''">
-	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
+	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
    </select>
    

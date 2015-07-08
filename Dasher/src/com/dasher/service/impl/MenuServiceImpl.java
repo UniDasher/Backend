@@ -271,6 +271,10 @@ public class MenuServiceImpl implements MenuService {
 			//配送投诉
 			m.setComplainDate(DateUtil.getCurrentDateStr());
 			result=1;
+		}else if(m.getStatus()==1){
+			//订单付款完成，生成预订单
+			m.setCreateBy(DateUtil.getCurrentDateStr());
+			result=1;
 		}
 		if(result>0)
 		{
