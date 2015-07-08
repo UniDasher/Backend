@@ -9,6 +9,6 @@ package com.dasher.chat;
 public interface Roles {
 
 	/** USER_ROLE_APPADMIN value: appAdmin */
-	public static String USER_ROLE_APPADMIN = "appAdmin";
+	public static String USER_ROLE_APPADMIN = "dasherAdmin";
 
 }

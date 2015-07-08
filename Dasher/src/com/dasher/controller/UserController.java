@@ -230,7 +230,7 @@ public class UserController extends MyController {
 			{
 				User us=userService.getUserByTel(mobilePhone);
 				//获取authCode
-				model.put("authCode", loginService.handleLogin(us.getUid()));
+				model.put("authCode", loginService.userHandleLogin(us.getUid()));
 				Login l=loginService.getByLogId(us.getUid());
 				//环信账号登陆
 				ObjectNode imUserLoginNode = EasemobIMUsers.imUserLogin(us.getUid(),Constants.DEFAULT_PASSWORD);

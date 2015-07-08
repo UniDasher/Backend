@@ -91,6 +91,8 @@ public class UserServiceImpl implements UserService {
 	        }
 		} catch (JSONException e) {
 			e.printStackTrace();
+			transactionManager.rollback(ts);  
+        	return false;
 		}
 		if(!result){
 	    	transactionManager.rollback(ts);
