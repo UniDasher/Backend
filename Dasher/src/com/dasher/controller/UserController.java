@@ -2,12 +2,7 @@ package com.dasher.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,21 +18,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.chat.Constants;
-import com.dasher.chat.httpclient.apidemo.EasemobIMUsers;
-import com.dasher.model.ComplainDeal;
-import com.dasher.model.Login;
-import com.dasher.model.User;
-import com.dasher.service.ComplainDealService;
-import com.dasher.service.LoginService;
-import com.dasher.service.UserService;
-import com.dasher.util.DateUtil;
-import com.dasher.util.FileUploadUtil;
-import com.dasher.util.MyMD5Util;
-import com.dasher.util.ShowMsg;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-
+import com.dasher.model.*;
+import com.dasher.service.*;
+import com.dasher.util.*;
 
 @Controller
 public class UserController extends MyController {

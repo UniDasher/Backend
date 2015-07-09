@@ -33,6 +33,7 @@
 	    </property>  
 	    <property name="prefix" value="/" />  
 	    <property name="suffix" value=".jsp" />  
-	</bean>  
-                 
+	</bean> 
+	
+	
 </beans>

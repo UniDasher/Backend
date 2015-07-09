@@ -50,7 +50,7 @@ public class CalendarUtil {
 				c.set(Calendar.MINUTE,Integer.parseInt(time.get(i+1).split(":")[1]));
 				long c2=c.getTimeInMillis();
 				
-				if(c1<=cur&&cur>=c2){
+				if(c1<=cur&&cur<=c2){
 					return true;
 				}
 			}
@@ -87,27 +87,27 @@ public class CalendarUtil {
 		try{
 			List<String> time=new ArrayList<String>();
 			String time1=t.getTime1();
-			if(time1!=""){
+			if(!"".equals(time1)&&time1!=null){
 				time.add(time1.split("-")[0]);
 				time.add(time1.split("-")[1]);
 			}
 			String time2=t.getTime2();
-			if(time2!=""){
+			if(!"".equals(time2)&&time2!=null){
 				time.add(time2.split("-")[0]);
 				time.add(time2.split("-")[1]);
 			}
 			String time3=t.getTime3();
-			if(time3!=""){
+			if(!"".equals(time3)&&time3!=null){
 				time.add(time3.split("-")[0]);
 				time.add(time3.split("-")[1]);
 			}
 			String time4=t.getTime4();
-			if(time4!=""){
+			if(!"".equals(time4)&&time4!=null){
 				time.add(time4.split("-")[0]);
 				time.add(time4.split("-")[1]);
 			}
 			String time5=t.getTime5();
-			if(time5!=""){
+			if(!"".equals(time5)&&time5!=null){
 				time.add(time5.split("-")[0]);
 				time.add(time5.split("-")[1]);
 			}

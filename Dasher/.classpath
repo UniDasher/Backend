@@ -86,7 +86,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-schemas-3.12-20150511.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-scratchpad-3.12-20150511.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/servlet-api-2.5-20081211.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-aop-3.1.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-asm-3.1.0.RELEASE.jar"/>
@@ -132,5 +131,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/javax.inject-2.3.0-b05.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mimepull-1.9.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/osgi-resource-locator-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

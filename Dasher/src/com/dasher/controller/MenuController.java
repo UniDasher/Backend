@@ -301,7 +301,7 @@ public class MenuController extends MyController {
 				//判断菜品的金额是否等于订单的金额
 				float dishsPriceTal=0;
 				for (MenuDish md : dishs) {
-					dishsPriceTal=md.getPrice()*md.getCount();
+					dishsPriceTal+=md.getPrice()*md.getCount();
 				}
 				if(dishsPriceTal==m.getDishsMoney()){
 					result=menuService.add(m);

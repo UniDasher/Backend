@@ -38,7 +38,7 @@
 		useGeneratedKeys="true">
 		insert into
 		menu(mid,sid,uid,dishsMoney,carriageMoney,taxesMoney,serviceMoney,tipMoney,menuCount,payType,mealStartDate,mealEndDate,address,longitude,latitude,distance,direction,createBy,createDate,status)
-		values(#{mid},#{sid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{distance},#{direction},#{createBy},#{createDate},0)
+		values(#{mid},#{sid},#{uid},#{dishsMoney},#{carriageMoney},#{taxesMoney},#{serviceMoney},#{tipMoney},#{menuCount},#{payType},#{mealStartDate},#{mealEndDate},#{address},#{longitude},#{latitude},#{distance},#{direction},#{createBy},#{createDate},1)
 	</insert>
 
 	<update id="receive" parameterType="Menu">
