@@ -12,7 +12,7 @@ public class AutoJobTask {
     public void doBiz() {
 	  // 执行业务逻辑
 	  // ........
-    	System.out.print("asasas");
+    	//System.out.print("asasas");
     	menuService.getListOverTime();
     }
 }

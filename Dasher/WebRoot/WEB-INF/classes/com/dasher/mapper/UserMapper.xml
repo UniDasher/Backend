@@ -170,7 +170,8 @@
    
    <update id="serveApply" parameterType="User">
      update user_info 
-     set applyTime=#{applyTime},status=#{status}
+     set applyTime=#{applyTime},status=#{status},firstName=#{firstName},
+     	lastName=#{lastName},bankAccount=#{bankAccount},bankType=#{bankType}
      where uid=#{uid}
    </update>
    

@@ -132,5 +132,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mimepull-1.9.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/osgi-resource-locator-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-all-1.8.5.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

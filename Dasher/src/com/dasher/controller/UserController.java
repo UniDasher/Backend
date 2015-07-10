@@ -935,13 +935,21 @@ public class UserController extends MyController {
 		String JSONStr=getJsonString(request);
 	    JSONObject jsonObject=null;
 	    String authCode="";
-	    String uid="";
-	    String myStatus="";
+	    //String uid="";
+	    //String myStatus="";
+	    String firstName="";
+	    String lastName="";
+	    String bankAccount="";
+	    String bankType="";
 		try {
 			jsonObject = new JSONObject(JSONStr);
 			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			uid=jsonObject.getString("uid");
-			myStatus=jsonObject.getString("status");
+			//uid=jsonObject.getString("uid");
+			//myStatus=jsonObject.getString("status");
+			firstName=jsonObject.getString("firstName");
+			lastName=jsonObject.getString("lastName");
+			bankAccount=jsonObject.getString("bankAccount");
+			bankType=jsonObject.getString("bankType");
 		} catch (JSONException e1) {
 			resultDesc="参数获取失败";
 			resultCode=2;
@@ -959,10 +967,44 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		model.put("authCode", authCode);
+		//model.put("authCode", authCode);
 		
-
-		if(uid==""||myStatus=="")
+		if(bankAccount=="")
+		{
+			resultDesc=ShowMsg.bankAccountNull;
+			resultCode=2;
+		}
+		else if(bankType=="")
+		{
+			resultDesc=ShowMsg.bankTypeNull;
+			resultCode=2;
+		}else if(firstName=="")
+		{
+			resultDesc=ShowMsg.FirstNameNull;
+			resultCode=2;
+		}else{
+			User u=new User();
+			u.setUid(myloginId);
+			u.setBankType(bankType);
+			u.setBankAccount(bankAccount);
+			u.setFirstName(firstName);
+			u.setLastName(lastName);
+			u.setApplyTime(DateUtil.getCurrentDateStr());
+			u.setStatus(1);
+			result=userService.serveApply(u);
+			if(result==true)
+			{
+				resultCode=0;
+				resultDesc=ShowMsg.checkIng;
+			}
+			else
+			{
+				resultCode=1;
+				resultDesc=ShowMsg.checkFail;
+			}
+		}
+/*
+		if(myStatus=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
@@ -975,44 +1017,47 @@ public class UserController extends MyController {
 				//用户申请为送餐人
 				if(status==1)
 				{
+					String firstName="";
+				    String lastName="";
+				    String bankAccount="";
+				    String bankType="";
+					try {
+						jsonObject = new JSONObject(JSONStr);
+						firstName=jsonObject.getString("firstName");
+						lastName=jsonObject.getString("lastName");
+						bankAccount=jsonObject.getString("bankAccount");
+						bankType=jsonObject.getString("bankType");
+					} catch (JSONException e1) {
+						resultDesc="参数获取失败";
+						resultCode=2;
+						model.put("resultCode", resultCode);	
+						model.put("resultDesc", resultDesc);
+						return model;
+					}
+					
+					
 					//获取用户的信息
-					User uInfo=userService.getByUId(uid);
-					if("".equals(uInfo.getFirstName())){
-						resultCode=1;
-						resultDesc=ShowMsg.chkTrueName;
-						model.put("resultCode", resultCode);	
-						model.put("resultDesc", resultDesc);	
-						return model;
-					}
-					
-					if("".equals(uInfo.getBankType())||"".equals(uInfo.getBankAccount())){
-						resultCode=1;
-						resultDesc=ShowMsg.chkBank;
-						model.put("resultCode", resultCode);	
-						model.put("resultDesc", resultDesc);	
-						return model;
-					}
-					
-					User u=new User();
-					u.setUid(uid);
-					u.setApplyTime(DateUtil.getCurrentDateStr());
-					u.setStatus(1);
-					result=userService.serveApply(u);
-					if(result==true)
-					{
-						resultCode=0;
-						resultDesc=ShowMsg.checkIng;
-					}
-					else
-					{
-						resultCode=1;
-						resultDesc=ShowMsg.checkFail;
-					}
+//					User uInfo=userService.getByUId(uid);
+//					if("".equals(uInfo.getFirstName())){
+//						resultCode=1;
+//						resultDesc=ShowMsg.chkTrueName;
+//						model.put("resultCode", resultCode);	
+//						model.put("resultDesc", resultDesc);	
+//						return model;
+//					}
+//					
+//					if("".equals(uInfo.getBankType())||"".equals(uInfo.getBankAccount())){
+//						resultCode=1;
+//						resultDesc=ShowMsg.chkBank;
+//						model.put("resultCode", resultCode);	
+//						model.put("resultDesc", resultDesc);	
+//						return model;
+//					}
 				}
 				else
 				{
 					User u=new User();
-					u.setUid(uid);
+					u.setUid(myloginId);
 					u.setStatus(status);
 					result=userService.userApply(u);
 					if(result==true)
@@ -1032,7 +1077,7 @@ public class UserController extends MyController {
 				resultDesc=ShowMsg.statusErr;
 				resultCode=2;
 			}
-		}
+		}*/
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -1077,7 +1122,22 @@ public class UserController extends MyController {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
 		//获取参数
-	    String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
+		String JSONStr=getJsonString(request);
+	    JSONObject jsonObject=null;
+	    String authCode="";
+	    String cid="";
+		try {
+			jsonObject = new JSONObject(JSONStr);
+			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
+			cid=jsonObject.getString("cid");
+		} catch (JSONException e1) {
+			resultDesc="参数获取失败";
+			resultCode=2;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);
+			return model;
+		}
+		
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -1088,9 +1148,6 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		
-		String cid=getHeadersInfo(request,"cid");
-		
 		if("".equals(cid))
 		{
 			resultDesc=ShowMsg.ParFail;

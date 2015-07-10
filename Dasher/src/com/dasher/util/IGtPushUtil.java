@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gexin.rp.sdk.base.IAliasResult;
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.*;
 import com.gexin.rp.sdk.http.IGtPush;
@@ -16,21 +17,34 @@ public class IGtPushUtil {
 	private static String master = "NaQBVsNDXp85qr77AiDvU5";
 	static String CID = "请输入CID";
 	static String Alias = "请输入Alias";
-	static String host = "http://sdk.open.api.igexin.com/apiex.htm";
+	static String host = "";
 	
 	private static IGtPush push =null;
-	public IGtPushUtil(){
-		push = new IGtPush(host, appkey, master);
+	
+//	static{
+//		push = new IGtPush(appkey, master);
+//		
+//        try {
+//			push.connect();
+//			
+//			System.out.println(push.toString());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
+	//对指定用户进行信息推送
+	public static IPushResult PushtoSingle(String CID,String title,String content){
+		push = new IGtPush(appkey, master);
+		
         try {
 			push.connect();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	//对指定用户进行信息推送
-	public static IPushResult PushtoSingle(String CID,String title,String content){
-		LinkTemplate template = linkTemplateDemo(title,content);
+		
+		//LinkTemplate template = linkTemplateDemo(title,content);
+		NotificationTemplate template = notificationTemplateDemo(title,content,content);
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         //离线有效时间，单位为毫秒，可选
@@ -38,17 +52,18 @@ public class IGtPushUtil {
         message.setData(template);
         message.setPushNetWorkType(0); //可选。判断是否客户端是否wifi环境下推送，1为在WIFI环境下，0为不限制网络环境。
         Target target = new Target();
-   
         target.setAppId(appId);
         target.setClientId(CID);
         //用户别名推送，cid和用户别名只能2者选其一
         //String alias = "个";
         //target.setAlias(alias);
         IPushResult ret = push.pushMessageToSingle(message, target);
+        
         return ret;
 	}
 	//对用户列表进行推送
 	public static IPushResult PushtoList(String[] CIDS,String title,String content,String transmissionContent){
+		
 		//通知透传模板
         NotificationTemplate template = notificationTemplateDemo(title,content,transmissionContent);
    
@@ -107,9 +122,9 @@ public class IGtPushUtil {
         template.setTitle(title);
         template.setText(content);
         // 配置通知栏图标
-        template.setLogo("");
+        template.setLogo("http://58.211.23.95:8080/app/push.png");
         // 配置通知栏网络图标
-        template.setLogoUrl("");
+        template.setLogoUrl("http://58.211.23.95:8080/app/push.png");
         // 设置通知是否响铃，震动，或者可清除
         template.setIsRing(true);
         template.setIsVibrate(true);
