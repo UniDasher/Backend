@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,27 +41,12 @@ public class EarningController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
-	@RequestMapping("phone/earning/listTotal")
+	@RequestMapping("phone/earn/total")
 	@ResponseBody
-	protected Object phoneUserList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object earnWeek(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String wid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			wid=jsonObject.getString("wid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
+	    String authCode= getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -70,63 +57,33 @@ public class EarningController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		
-		model.put("authCode", authCode);
-		
-		if(wid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			List<Earning> list=earningService.getByWid(wid);
-			float total=0;
-			
-			if(list.size()>0)
-			{
-				for(Earning earn:list)
-				{
-					total=total+earn.getTotalMoney();
-				}
-				
-				model.put("data", total);
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
+		//获取送餐人总收益
+		Map<String,Object> map=earningService.getEarnTotal(myloginId);
+		//{balance=610.0, weekEarn=6.0, totalEarn=6.0, settleDate=2015-07-13 15:39:08.0, totalMoney=534.0}
+		Set<String> keys=map.keySet();
+		for (String key : keys) {
+			if("settleDate".equals(key)){
+				model.put(key, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(map.get(key)));
+			}else{
+				model.put(key, map.get(key));
 			}
-			else
-			{
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-			
 		}
+		//获取送餐人最近七天的收益
+		List<Map<String,Object>> list=earningService.getEarnWeek(myloginId);
+		model.put("list", list);
+		resultDesc=ShowMsg.findSuc;
+		resultCode=0;
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
 	}
 	
-	@RequestMapping("phone/earning/listService")
+	@RequestMapping("phone/earn/list")
 	@ResponseBody
-	protected Object listService(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+	protected Object earnList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String wid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			wid=jsonObject.getString("wid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
+	    String authCode= getHeadersInfo(request,ShowMsg.X_Auth_Token);
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
@@ -137,357 +94,19 @@ public class EarningController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		
-		model.put("authCode", authCode);
-		
-		if(wid=="")
-		{
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
+		if(!"".equals(startDate)&&!"".equals(endDate)){
+			List<Earning> list=earningService.getEarnList(myloginId,startDate,endDate);
+			
+			model.put("list", list);
+			resultDesc=ShowMsg.findSuc;
+			resultCode=0;
+		}else{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
-		else
-		{
-			List<Earning> list=earningService.getByWid(wid);
-			float total=0;
-			if(list.size()>0)
-			{
-				for(Earning earn:list)
-				{
-					total=total+earn.getCarriageMoney();
-				}
-				model.put("data", total);
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-			else
-			{
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}
-	
-	@RequestMapping("phone/earning/listMonth")
-	@ResponseBody
-	protected Object listMonth(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String wid="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			wid=jsonObject.getString("wid");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
 		
-		model.put("authCode", authCode);
-		
-		if(wid=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			List<Earning> list=earningService.listMonth(wid);
-			float total=0;
-			if(list.size()>0)
-			{
-				for(Earning earn:list)
-				{
-					total=total+earn.getCarriageMoney();
-				}
-				model.put("data", total);
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-			else
-			{
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-			
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}
-	
-	@RequestMapping("phone/earning/carriageDay")
-	@ResponseBody
-	protected Object listDay(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-		//获取参数
-		String JSONStr=getJsonString(request);
-	    JSONObject jsonObject=null;
-	    String authCode="";
-	    String wid="";
-	    String str="";
-		try {
-			jsonObject = new JSONObject(JSONStr);
-			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
-			wid=jsonObject.getString("wid");
-			str=jsonObject.getString("str");
-		} catch (JSONException e1) {
-			resultDesc="参数获取失败";
-			resultCode=2;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);
-			return model;
-		}
-		//判断是否已登录
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		
-		model.put("authCode", authCode);
-		
-		if(wid==""||str=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else if(!str.matches("^[0-9]*$"))
-		{
-			resultDesc=ShowMsg.inputErr;
-			resultCode=2;
-		}
-		else
-		{
-			List<Earning> list=earningService.listDay(wid, Integer.parseInt(str));
-			float total=0;
-			if(list.size()>0)
-			{
-				for(Earning earn:list)
-				{
-					total=total+earn.getCarriageMoney();
-				}
-				model.put("data", total);
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-			else
-			{
-				resultDesc=ShowMsg.findSuc;
-				resultCode=0;
-			}
-			
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}
-	
-	/*---------------------------------------------------------------------------------------------*/
-	
-	/*
-	 * 
-	 * 添加测试
-	 */
-	@RequestMapping("/test/add")
-	@ResponseBody
-	protected Object add(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-	    String wid=getString(request, "wid");
-	    String mid=getString(request, "mid");
-	    String carriageMoney=getString(request, "carriageMoney");
-	    String totalMoney=getString(request, "totalMoney");
-	    String type=getString(request, "type");
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
-		Date date=new Date();
-		String strs[]=sdf.format(date).split("-");
-		String eid="";
-		for(int i=0;i<strs.length;i++)
-		{
-			eid=eid+strs[i];
-		}
-	    Earning e=new Earning();
-	    e.setEid(eid);
-	    e.setWid(wid);
-	    e.setMid(mid);
-	    e.setCarriageMoney(Float.parseFloat(carriageMoney));
-	    e.setTotalMoney(Float.parseFloat(totalMoney));
-	    e.setType(Integer.parseInt(type));
-	    e.setCreateDate(DateUtil.getCurrentDateStr());
-	    result=earningService.add(e);
-	    if(result==true)
-		{
-			resultCode=0;
-			resultDesc=ShowMsg.addSuc;
-		}
-		else
-		{
-			resultCode=1;
-			resultDesc=ShowMsg.addFail;
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}
-	
-	/*
-	 * 
-	 * 测试累计总收入
-	 * 
-	 */
-	@RequestMapping("/earning/listTotal")
-	@ResponseBody
-	protected Object UserList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-	    String wid=getString(request, "wid");
-		List<Earning> list=earningService.getByWid(wid);
-		float total=0;
-		
-		if(list.size()>0)
-		{
-			for(Earning earn:list)
-			{
-				total=total+earn.getTotalMoney();
-			}
-			
-			model.put("data", total);
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
-		else
-		{
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}
-	
-    /*
-     * 累计运费收入
-     * 
-     */
-	
-	@RequestMapping("/earning/listService")
-	@ResponseBody
-	protected Object listservice(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-	    String wid=getString(request, "wid");
-		List<Earning> list=earningService.getByWid(wid);
-		float total=0;
-		if(list.size()>0)
-		{
-			for(Earning earn:list)
-			{
-				total=total+earn.getCarriageMoney();
-			}
-			model.put("data", total);
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
-		else
-		{
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}
-	
-	/*
-	 * 
-	 * 测试本月累计收入
-	 * 
-	 */
-	
-	@RequestMapping("/earning/listMonth")
-	@ResponseBody
-	protected Object listmonth(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-	    String wid=getString(request, "wid");
-		List<Earning> list=earningService.listMonth(wid);
-		float total=0;
-		if(list.size()>0)
-		{
-			for(Earning earn:list)
-			{
-				total=total+earn.getCarriageMoney();
-			}
-			model.put("data", total);
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
-		else
-		{
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
-			
-		model.put("resultCode", resultCode);	
-		model.put("resultDesc", resultDesc);
-		return model;
-	}
-	
-	
-	/*
-	 * 
-	 * 测试每日收益
-	 * 
-	 */
-	@RequestMapping("/earning/carriageDay")
-	@ResponseBody
-	protected Object listday(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
-		response.setContentType("text/html;charset=utf-8");
-		model=new ModelMap();
-	    String wid=getString(request, "wid");
-	    String str=getString(request, "str");
-		List<Earning> list=earningService.listDay(wid, Integer.parseInt(str));
-		float total=0;
-		if(list.size()>0)
-		{
-			for(Earning earn:list)
-			{
-				total=total+earn.getCarriageMoney();
-			}
-			model.put("data", total);
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
-		else
-		{
-			resultDesc=ShowMsg.findSuc;
-			resultCode=0;
-		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;

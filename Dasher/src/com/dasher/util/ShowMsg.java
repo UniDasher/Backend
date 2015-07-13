@@ -160,6 +160,8 @@ public class ShowMsg {
 	public static final String chkBank="您尚未填写银行账户。";
 	public static final String chkTrueName="您尚未填写真实姓名。";
 	
+	public static final String ImLoginFail="用户环信账号登陆失败。";
+	
 	//订单超时时间
 	public static final String mealEndDateOver="您的送达时间已过，请重新选择";
 	public static final String mealEndDateFail="您的送达时间格式出错";

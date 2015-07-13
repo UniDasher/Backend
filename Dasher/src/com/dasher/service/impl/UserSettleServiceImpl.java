@@ -166,4 +166,8 @@ public class UserSettleServiceImpl implements UserSettleService {
 		// TODO Auto-generated method stub
 		return userSettleMapper.getListByWid(wid);
 	}
+	public List<UserSettle> getSettleByWid(String wid, String startDate,
+			String endDate) {
+		return userSettleMapper.getSettleByWid(wid,startDate,endDate);
+	}
 }

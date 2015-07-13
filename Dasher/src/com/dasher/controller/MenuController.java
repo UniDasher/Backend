@@ -570,7 +570,7 @@ public class MenuController extends MyController {
 		{
 			//送餐人获取附近订单
 			List<Shop> list=shopService.getListByMenu(Double.parseDouble(longitude), 
-					Double.parseDouble(latitude),ShowMsg.distance);
+					Double.parseDouble(latitude),ShowMsg.distance,myloginId);
 			if(list.size()>0)
 			{
 				model.put("list", list);
@@ -616,7 +616,7 @@ public class MenuController extends MyController {
 		else
 		{
 			//送餐人获取附近订单
-			List<Menu> list=menuService.getNearListBySid(sid);
+			List<Menu> list=menuService.getNearListBySid(sid,myloginId);
 			if(list.size()>0)
 			{
 				model.put("list", list);

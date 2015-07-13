@@ -77,7 +77,7 @@
 		on m.sid=s.sid
      where (m.longitude between #{minlon} and #{maxlon}) 
 		and (m.latitude between #{minlat} and #{maxlat}) 
-		and m.status=1 group by m.sid
+		and m.status=1 and m.uid!=#{uid} group by m.sid
    </select>
    <select id="getShopCount" resultType="Integer" parameterType="String">
      select count(*) from shop_info

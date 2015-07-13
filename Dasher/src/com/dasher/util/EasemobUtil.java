@@ -1,60 +1,110 @@
 package com.dasher.util;
 
+import java.util.*;
 import com.dasher.chat.Constants;
-import com.dasher.chat.HTTPMethod;
-import com.dasher.chat.Roles;
-import com.dasher.chat.httpclient.utils.HTTPClientUtils;
-import com.dasher.chat.httpclient.vo.ClientSecretCredential;
-import com.dasher.chat.httpclient.vo.Credential;
-import com.dasher.chat.httpclient.vo.EndPoints;
+import com.dasher.chat.httpclient.apidemo.EasemobIMUsers;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class EasemobUtil {
-	private static final JsonNodeFactory factory = new JsonNodeFactory(false);
-	// 通过app的client_id和client_secret来获取app管理员token
-    private static Credential credential = new ClientSecretCredential(Constants.APP_CLIENT_ID,
-            Constants.APP_CLIENT_SECRET, Roles.USER_ROLE_APPADMIN);
-	/**
-     * 注册IM用户[单个]
-     */
-	public static ObjectNode createNewIMUserSingle(String username,String password){
+	//环信用户注册
+	public static Map<String,String> createNewIMUserSingle(String username){
+		Map<String,String> map=new HashMap<String, String>();
+		//注册用户的环信账号
 		ObjectNode datanode = JsonNodeFactory.instance.objectNode();
         datanode.put("username",username);
-        datanode.put("password", password);
-        ObjectNode createNewIMUserSingleNode = createNewIMUserSingle(datanode);
-        
-		return createNewIMUserSingleNode;
+        datanode.put("password", Constants.DEFAULT_PASSWORD);
+        ObjectNode createNewIMUserSingleNode = EasemobIMUsers.createNewIMUserSingle(datanode);
+        /*正确
+        {"action":"post",
+        "application":"86239b00-237e-11e5-93dc-2db313e5772c",
+        "path":"/users",
+        "uri":"http://a1.easemob.com/dashertest/dasher/users",
+        "entities":[
+        	{"uuid":"a943314a-2900-11e5-98d6-03e5d80ded45",
+        	"type":"user",
+        	"created":1436751852116,
+        	"modified":1436751852116,
+        	"username":"hjbtest",
+        	"activated":true}],
+        "timestamp":1436751852111,
+        "duration":35,
+        "organization":"dashertest",
+        "applicationName":"dasher",
+        "statusCode":200}
+        */
+       /*错误
+        {"error":"duplicate_unique_property_exists",
+        "timestamp":1436752995070,
+        "duration":0,
+        "exception":"org.apache.usergrid.persistence.exceptions.DuplicateUniquePropertyExistsException",
+        "error_description":"Application 86239b00-237e-11e5-93dc-2db313e5772cEntity user requires that property named username be unique, value of hjbtest1 exists",
+        "statusCode":400}
+        */
+        if(createNewIMUserSingleNode==null){
+        	map.put("statusCode", "-1");
+        	return map;
+        }
+        List<String> statusCodeList=createNewIMUserSingleNode.findValuesAsText("statusCode");
+        if(statusCodeList.size()<=0){
+        	map.put("statusCode", "-1");
+        	return map;
+        }
+        String statusCode=statusCodeList.get(0);
+        map.put("statusCode", statusCode);
+        if("200".equals(statusCode)){
+        	JsonNode jsonObject=createNewIMUserSingleNode.get("entities");
+        	for (JsonNode jsonNode : jsonObject) {
+            	List<String> uuid=jsonNode.findValuesAsText("uuid");
+            	//保存用户环信账号
+            	map.put("uuid", uuid.get(0));
+    		}
+        }
+		return map;
 	}
-	/**
-	 * 注册IM用户[单个]
-	 * 给指定Constants.APPKEY创建一个新的用户
-	 * @param dataNode
-	 * @return
-	 */
-	public static ObjectNode createNewIMUserSingle(ObjectNode dataNode) {
-		ObjectNode objectNode = factory.objectNode();
-		if (!HTTPClientUtils.match("^(?!-)[0-9a-zA-Z\\-]+#[0-9a-zA-Z]+", Constants.APPKEY)) {
-			objectNode.put("message", "Bad format of Constants.APPKEY");
-			return objectNode;
-		}
-		objectNode.removeAll();
-		// check properties that must be provided
-		if (null != dataNode && !dataNode.has("username")) {
-			objectNode.put("message", "Property that named username must be provided .");
-			return objectNode;
-		}
-		if (null != dataNode && !dataNode.has("password")) {
-			objectNode.put("message", "Property that named password must be provided .");
-			return objectNode;
-		}
-		try {
-		    objectNode = HTTPClientUtils.sendHTTPRequest(EndPoints.USERS_URL, credential, dataNode,
-					HTTPMethod.METHOD_POST);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return objectNode;
+	//环信用户登录
+	public static Map<String,String> imUserLogin(String userName){
+		Map<String,String> map=new HashMap<String, String>();
+		//环信用户登录
+		ObjectNode imUserLoginNode = EasemobIMUsers.imUserLogin(userName, Constants.DEFAULT_PASSWORD);
+		/*正确
+        {"access_token":"YWMtNrZQ-ikIEeW6cy2yEATD7wAAAU-6RIFieKQWItPkvkMq-vdI5H2n9z-_NRg",
+        "expires_in":5184000,
+        "user":{
+        	"uuid":"ccec464a-2905-11e5-9289-2509cc4ef0e0",
+        	"type":"user",
+        	"created":1436754059428,
+        	"modified":1436754059428,
+        	"username":"hjbtest3",
+        	"activated":true},
+        "statusCode":200}
+        */
+       /*错误
+        {"error_description":"invalid username or password",
+        "error":"invalid_grant",
+        "statusCode":404}
+        */
+		if(imUserLoginNode==null){
+        	map.put("statusCode", "-1");
+        	return map;
+        }
+		List<String> statusCodeList=imUserLoginNode.findValuesAsText("statusCode");
+        if(statusCodeList.size()<=0){
+        	map.put("statusCode", "-1");
+        	return map;
+        }
+        String statusCode=statusCodeList.get(0);
+        map.put("statusCode", statusCode);
+        if("200".equals(statusCode)){
+        	JsonNode jsonObject=imUserLoginNode.get("user");
+        	for (JsonNode jsonNode : jsonObject) {
+            	List<String> uuid=jsonNode.findValuesAsText("uuid");
+            	//保存用户环信账号
+            	map.put("uuid", uuid.get(0));
+    		}
+        }
+		return map;
 	}
-
+	
 }

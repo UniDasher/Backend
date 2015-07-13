@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.model.Earning;
 import com.dasher.model.UserSettle;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserSettleService;
@@ -31,6 +32,38 @@ public class UserSettleController extends MyController {
 	private String resultDesc;
 	private ModelMap model;
 
+	@RequestMapping("phone/settle/user/list")
+	@ResponseBody
+	protected Object widSettleList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		String authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
+		String myloginId=loginService.getByAuthCode(authCode);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
+		if(!"".equals(startDate)&&!"".equals(endDate)){
+			List<UserSettle> list=userSettleService.getSettleByWid(myloginId,startDate,endDate);
+			
+			model.put("list", list);
+			resultDesc=ShowMsg.findSuc;
+			resultCode=0;
+		}else{
+			resultDesc=ShowMsg.ParFail;
+			resultCode=2;
+		}
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}	
+	
 	@RequestMapping("/settle/user")
 	@ResponseBody
 	protected Object settleUser(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

@@ -10,6 +10,7 @@ import com.gexin.rp.sdk.base.impl.*;
 import com.gexin.rp.sdk.http.IGtPush;
 import com.gexin.rp.sdk.template.LinkTemplate;
 import com.gexin.rp.sdk.template.NotificationTemplate;
+import com.gexin.rp.sdk.template.TransmissionTemplate;
 
 public class IGtPushUtil {
 	private static String appId = "4dxBQRR2psAs0rZu4umjF3";
@@ -17,7 +18,7 @@ public class IGtPushUtil {
 	private static String master = "NaQBVsNDXp85qr77AiDvU5";
 	static String CID = "请输入CID";
 	static String Alias = "请输入Alias";
-	static String host = "";
+	static String host = "http://sdk.open.api.getui.net/serviceex";
 	
 	private static IGtPush push =null;
 	
@@ -44,7 +45,8 @@ public class IGtPushUtil {
 		}
 		
 		//LinkTemplate template = linkTemplateDemo(title,content);
-		NotificationTemplate template = notificationTemplateDemo(title,content,content);
+		//NotificationTemplate template = notificationTemplateDemo(title,content,content);
+		TransmissionTemplate template = transmissionTemplateDemo(title,content);
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         //离线有效时间，单位为毫秒，可选
@@ -130,9 +132,23 @@ public class IGtPushUtil {
         template.setIsVibrate(true);
         template.setIsClearable(true);
         // 透传消息设置，1为强制启动应用，客户端接收到消息后就会立即启动应用；2为等待应用启动
-        template.setTransmissionType(2);
+        template.setTransmissionType(1);
         //"请输入您要透传的内容"
         template.setTransmissionContent(transmissionContent);
         return template;
     }
+	//对用户进行透传
+	private static TransmissionTemplate transmissionTemplateDemo(String title,String content){
+		TransmissionTemplate template=new TransmissionTemplate();
+		// 设置APPID与APPKEY
+        template.setAppId(appId);
+        template.setAppkey(appkey);
+        // 透传消息设置，1为强制启动应用，客户端接收到消息后就会立即启动应用；2为等待应用启动
+        template.setTransmissionType(1);
+        //"请输入您要透传的内容"
+        template.setTransmissionContent(title+":"+content);
+        
+        return template;
+	}
+	
 }

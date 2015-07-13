@@ -253,7 +253,7 @@
 		on m.sid=s.sid
 		join user_info u
 		on m.uid=u.uid
-		where m.sid=#{sid} and m.status=1
+		where m.sid=#{sid} and m.uid!=#{uid} and m.status=1
 	</select>
 	
 	

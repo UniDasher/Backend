@@ -1,6 +1,8 @@
 package com.dasher.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +22,7 @@ import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
+import com.dasher.util.EasemobUtil;
 import com.dasher.util.MyMD5Util;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -53,47 +56,24 @@ public class UserServiceImpl implements UserService {
 	    	transactionManager.rollback(ts);  
 	    	return result;
 	    }
-	    /*
+	    
 	    User user=getUserByTel(u.getMobilePhone());
 	    
-		//注册用户的环信账号
-		ObjectNode datanode = JsonNodeFactory.instance.objectNode();
-        datanode.put("username",user.getUid());
-        datanode.put("password", Constants.DEFAULT_PASSWORD);
-        ObjectNode createNewIMUserSingleNode = EasemobIMUsers.createNewIMUserSingle(datanode);
-        if(createNewIMUserSingleNode==null){
-        	transactionManager.rollback(ts);  
+	    Map<String,String> map=EasemobUtil.createNewIMUserSingle(user.getUid());
+	    if(map==null||!"200".equals(map.get("statusCode"))){
+	    	//环信注册失败
+	    	transactionManager.rollback(ts);  
 	    	return result;
-        }
-        
-        JSONObject jsonObject=new JSONObject(createNewIMUserSingleNode);
-        JSONArray dishArray;
-		try {
-			dishArray = jsonObject.getJSONArray("entities");
-			if(dishArray.length()==1){
-	        	//用户环信注册成功
-	        	JSONObject dishObj=dishArray.getJSONObject(0);
-	        	String uuid=dishObj.getString("uuid");
-	        	//保存用户环信账号
-	        	
-	        	Login l=new Login();
-	    		l.setLoginId(user.getUid());
-	    		l.setPushClientId(uuid);
-	    		l.setType(1);
-	    		l.setLoginTime(DateUtil.getCurrentDateStr());
-	        	
-	    		result=loginService.updateUUID(l);
-	    		
-	        }else{
-	        	//用户环信注册失败
-	        	transactionManager.rollback(ts);  
-	        	return result;
-	        }
-		} catch (JSONException e) {
-			e.printStackTrace();
-			transactionManager.rollback(ts);  
-        	return false;
-		}*/
+	    }
+	    String uuid=map.get("uuid");
+	    
+	    Login l=new Login();
+		l.setLoginId(user.getUid());
+		l.setPushClientId(uuid);
+		l.setType(1);
+		l.setLoginTime(DateUtil.getCurrentDateStr());
+    	
+		result=loginService.updateUUID(l);
 		if(!result){
 	    	transactionManager.rollback(ts);
 	    }else{

@@ -20,6 +20,6 @@ public interface ShopMapper {
 	public List<Shop> getListByLati(@Param(value="minlon") double minlon,@Param(value="maxlon") double maxlon,
 			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat,@Param(value="dw") int dw);
 	public List<Shop> getListByMenu(@Param(value="minlon") double minlon,@Param(value="maxlon") double maxlon,
-			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat);
+			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat,@Param(value="uid") String uid);
 	public int updateEvaluate(Shop shop);
 }

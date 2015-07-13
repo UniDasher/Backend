@@ -73,7 +73,7 @@ public class ShopServiceImpl implements ShopService {
 		
 		return shopMapper.getListByLati(minlon, maxlon, minlat, maxlat,dw);
 	}
-	public List<Shop> getListByMenu(double longitude, double latitude,float distance) {
+	public List<Shop> getListByMenu(double longitude, double latitude,float distance,String uid) {
 		double r = BaiDuMapUtil.DEF_R;
 		double dlng =  2*Math.asin(Math.sin(distance/(2*r))/Math.cos(latitude*Math.PI/180));
 		dlng = dlng*180/Math.PI;
@@ -83,7 +83,7 @@ public class ShopServiceImpl implements ShopService {
 		double maxlat = latitude+dlat;
 		double minlon = longitude -dlng;
 		double maxlon = longitude + dlng;
-		return shopMapper.getListByMenu(minlon, maxlon, minlat, maxlat);
+		return shopMapper.getListByMenu(minlon, maxlon, minlat, maxlat,uid);
 	}
 
 	public List<Shop> list(String searchStr, int startRow, int pageSize) {

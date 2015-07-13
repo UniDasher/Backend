@@ -41,7 +41,7 @@
    </select>
    
    <select id="list" resultType="UserSettle">
-     select us.*,concat(u.firstName,u.lastName) as userName,u.mobilePhone
+     select us.*,u.nickName as userName,u.mobilePhone
 	 from user_settle us
 	 join user_info u
 	 on us.wid=u.uid
@@ -55,15 +55,21 @@
      limit #{startRow},#{pageSize} 
    </select>
    
-   
-   
-   
    <select id="getListByWid" resultType="UserSettle" parameterType="String">
-     select us.*,concat(u.firstName,u.lastName) as userName
+     select us.*,u.nickName as userName
 	 from user_settle us
 	 join user_info u
 	 on us.wid=u.uid
 	 where us.wid=#{wid}
    </select>
+  
+  	<select id="getSettleByWid" resultType="UserSettle" parameterType="String">
+     select us.*,u.nickName as userName
+	 from user_settle us
+	 join user_info u
+	 on us.wid=u.uid
+	 where us.wid=#{wid} and us.type=2 and us.createDate between #{startDate} and #{endDate}
+   </select>
+  
   
 </mapper>

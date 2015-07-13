@@ -3,25 +3,24 @@ package com.dasher.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.regex.*;
+import javax.servlet.http.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasher.chat.Constants;
+import com.dasher.chat.httpclient.apidemo.EasemobChatMessage;
+import com.dasher.chat.httpclient.apidemo.EasemobIMUsers;
 import com.dasher.model.*;
 import com.dasher.service.*;
 import com.dasher.util.*;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.node.*;
 
+import org.json.*;
 @Controller
 public class UserController extends MyController {
 
@@ -218,14 +217,18 @@ public class UserController extends MyController {
 				model.put("authCode", loginService.userHandleLogin(us.getUid()));
 				Login l=loginService.getByLogId(us.getUid());
 				//环信账号登陆
-				//ObjectNode imUserLoginNode = EasemobIMUsers.imUserLogin(us.getUid(),Constants.DEFAULT_PASSWORD);
-		        
-				resultDesc=ShowMsg.loginSuc;
-				resultCode=0;
-				model.put("uid", us.getUid());
-				model.put("cid", l.getPushClientId());
-				model.put("name", us.getNickName());
-				model.put("logo", us.getLogo());
+				Map<String,String> map = EasemobUtil.imUserLogin(us.getUid());
+				if(map!=null&&"200".equals(map.get("statusCode"))&&l.getPushClientId().equals(map.get("uuid"))){
+					resultDesc=ShowMsg.loginSuc;
+					resultCode=0;
+					model.put("uid", us.getUid());
+					model.put("cid", l.getPushClientId());
+					model.put("name", us.getNickName());
+					model.put("logo", us.getLogo());
+				}else{
+					resultDesc=ShowMsg.ImLoginFail;
+					resultCode=1;
+				}
 			}
 			else
 			{
@@ -524,15 +527,15 @@ public class UserController extends MyController {
 			else
 			{
 				//验证码判断
-				ComplainDeal cd=complainDealService.getByTel(mobilePhone);
-				if(!cd.getPhoneCode().equals(phoneCode))
-				{
-					resultCode=2;
-					resultDesc=ShowMsg.phoneCodeErr;
-					model.put("resultCode", resultCode);	
-					model.put("resultDesc", resultDesc);
-					return model;
-				}
+//				ComplainDeal cd=complainDealService.getByTel(mobilePhone);
+//				if(!cd.getPhoneCode().equals(phoneCode))
+//				{
+//					resultCode=2;
+//					resultDesc=ShowMsg.phoneCodeErr;
+//					model.put("resultCode", resultCode);	
+//					model.put("resultDesc", resultDesc);
+//					return model;
+//				}
 				//判断手机号是否存在
 				User u=userService.getUserByTel(mobilePhone);
 				if(u==null)
@@ -552,14 +555,12 @@ public class UserController extends MyController {
 						resultCode=1;
 						resultDesc=ShowMsg.updateFail;
 					}
-					
 				}
 				else
 				{
 					resultDesc=ShowMsg.phoneRepeat;
 					resultCode=2;
 				}
-				
 			}
 		}
 		model.put("resultCode", resultCode);	
@@ -801,6 +802,7 @@ public class UserController extends MyController {
 		}
 		//判断是否已登录
 		String myloginId=loginService.getByAuthCode(authCode);
+		
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
 			resultDesc=ShowMsg.NoLogin;
@@ -823,7 +825,6 @@ public class UserController extends MyController {
 			try {
 				u.setPassword(MyMD5Util.getEncryptedPwd(newPassword));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			int flag=userService.getPwd(uid, oldPassword);
@@ -906,7 +907,6 @@ public class UserController extends MyController {
 			try {
 				u.setPassword(MyMD5Util.getEncryptedPwd(newPassword));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			result=userService.forgetPwd(u);
@@ -967,7 +967,6 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
-		//model.put("authCode", authCode);
 		
 		if(bankAccount=="")
 		{
@@ -1003,81 +1002,6 @@ public class UserController extends MyController {
 				resultDesc=ShowMsg.checkFail;
 			}
 		}
-/*
-		if(myStatus=="")
-		{
-			resultDesc=ShowMsg.ParFail;
-			resultCode=2;
-		}
-		else
-		{
-			if(myStatus.matches("^[0-9]*$"))
-			{
-				int status=Integer.parseInt(myStatus);
-				//用户申请为送餐人
-				if(status==1)
-				{
-					String firstName="";
-				    String lastName="";
-				    String bankAccount="";
-				    String bankType="";
-					try {
-						jsonObject = new JSONObject(JSONStr);
-						firstName=jsonObject.getString("firstName");
-						lastName=jsonObject.getString("lastName");
-						bankAccount=jsonObject.getString("bankAccount");
-						bankType=jsonObject.getString("bankType");
-					} catch (JSONException e1) {
-						resultDesc="参数获取失败";
-						resultCode=2;
-						model.put("resultCode", resultCode);	
-						model.put("resultDesc", resultDesc);
-						return model;
-					}
-					
-					
-					//获取用户的信息
-//					User uInfo=userService.getByUId(uid);
-//					if("".equals(uInfo.getFirstName())){
-//						resultCode=1;
-//						resultDesc=ShowMsg.chkTrueName;
-//						model.put("resultCode", resultCode);	
-//						model.put("resultDesc", resultDesc);	
-//						return model;
-//					}
-//					
-//					if("".equals(uInfo.getBankType())||"".equals(uInfo.getBankAccount())){
-//						resultCode=1;
-//						resultDesc=ShowMsg.chkBank;
-//						model.put("resultCode", resultCode);	
-//						model.put("resultDesc", resultDesc);	
-//						return model;
-//					}
-				}
-				else
-				{
-					User u=new User();
-					u.setUid(myloginId);
-					u.setStatus(status);
-					result=userService.userApply(u);
-					if(result==true)
-					{
-						resultCode=0;
-						resultDesc=ShowMsg.updateSuc;
-					}
-					else
-					{
-						resultCode=1;
-						resultDesc=ShowMsg.updateFail;
-					}
-				}
-			}
-			else
-			{
-				resultDesc=ShowMsg.statusErr;
-				resultCode=2;
-			}
-		}*/
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
 		return model;
@@ -1443,5 +1367,98 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
+	@RequestMapping("/user/asw/test")
+	@ResponseBody
+	protected Object testUser(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		JsonNodeFactory factory = new JsonNodeFactory(false);
+		// 聊天消息 获取7天以内的消息
+        String currentTimestamp = String.valueOf(System.currentTimeMillis());
+        String senvenDayAgo = String.valueOf(System.currentTimeMillis() - 1 * 24 * 60 * 60 * 1000);
+        ObjectNode queryStrNode1 = factory.objectNode();
+        queryStrNode1.put("ql", "select * where timestamp>" + senvenDayAgo + " and timestamp<" + currentTimestamp);
+        ObjectNode messages1 = EasemobChatMessage.getChatMessages(queryStrNode1);
+		System.out.println(messages1.toString());
+		/*
+		 {"action":"get",
+		 "params":{"ql":["select * where timestamp>1436679126844 and timestamp<1436765526844"]},
+		 "path":"/chatmessages",
+		 "uri":"http://a1.easemob.com/dashertest/dasher/chatmessages",
+		 "entities":[
+		 	{"uuid":"9060a01e-291d-11e5-8983-63e445f6cc0c",
+			 	"type":"chatmessage",
+			 	"created":1436764265771,
+			 	"modified":1436764265771,
+			 	"timestamp":1436764265528,
+			 	"from":"admin",
+			 	"msg_id":"82461076486095412",
+			 	"to":"hjbtest1",
+			 	"chat_type":"chat",
+			 	"payload":{"bodies":[{"type":"txt","msg":"你好啊。test数据"}]}},
+		 	{"uuid":"9060a046-291d-11e5-8e7d-89257392aa93",
+			 	"type":"chatmessage",
+			 	"created":1436764265771,
+			 	"modified":1436764265771,
+			 	"timestamp":1436764265531,
+			 	"from":"admin",
+			 	"msg_id":"82461076490289716",
+			 	"to":"hjbtest3",
+			 	"chat_type":"chat",
+			 	"payload":{"bodies":[{"type":"txt","msg":"你好啊。test数据"}]}},
+		 	{"uuid":"9060c6f2-291d-11e5-ab73-1bf9ca8d3b82",
+		 		"type":"chatmessage","created":1436764265772,
+		 		"modified":1436764265772,"timestamp":1436764265532,
+		 		"from":"admin","msg_id":"82461076502872628","to":"hjbtest",
+		 		"chat_type":"chat",
+		 		"payload":{"bodies":[{"type":"txt","msg":"你好啊。test数据"}]}},
+		 	{"uuid":"9060c6fc-291d-11e5-994b-e173aaa37ae6","type":"chatmessage",
+		 		"created":1436764265772,"modified":1436764265772,"timestamp":1436764265537,
+		 		"from":"admin","msg_id":"82461076515455540","to":"hjbtest1","chat_type":"chat",
+		 		"payload":{
+		 			"bodies":[
+		 				{"type":"img","filename":"1.png",
+		 				"secret":"jvRliikdEeWUy6V8_hZbwVWVqfl12tl_gyJI2F6ObfXl59Vu",
+		 				"url":"https://a1.easemob.com/dashertest/dasher/chatfiles/8ef46580-291d-11e5-81fa-2d9064f6f060"}]}},
+		 	{"uuid":"9060c72e-291d-11e5-b722-197c14423af6","type":"chatmessage","created":1436764265772,
+		 		"modified":1436764265772,"timestamp":1436764265540,"from":"admin","msg_id":"82461076532232756",
+		 		"to":"hjbtest3","chat_type":"chat",
+		 		"payload":{
+		 			"bodies":[
+		 				{"type":"img","filename":"1.png","secret":"jvRliikdEeWUy6V8_hZbwVWVqfl12tl_gyJI2F6ObfXl59Vu",
+		 				"url":"https://a1.easemob.com/dashertest/dasher/chatfiles/8ef46580-291d-11e5-81fa-2d9064f6f060"}]}},
+		 	{"uuid":"9060c706-291d-11e5-a681-7d3c96068b2d","type":"chatmessage","created":1436764265772,
+		 		"modified":1436764265772,"timestamp":1436764265546,"from":"admin","msg_id":"82461076540621364",
+		 		"to":"hjbtest","chat_type":"chat",
+		 			"payload":{
+		 				"bodies":[
+		 					{"type":"img","filename":"1.png",
+		 					"secret":"jvRliikdEeWUy6V8_hZbwVWVqfl12tl_gyJI2F6ObfXl59Vu",
+		 					"url":"https://a1.easemob.com/dashertest/dasher/chatfiles/8ef46580-291d-11e5-81fa-2d9064f6f060"}]}},
+		 	{"uuid":"afa8be02-291d-11e5-adb5-f9bbba0914da","type":"chatmessage","created":1436764318253,
+		 		"modified":1436764318253,"timestamp":1436764317682,"from":"admin","msg_id":"82461300466123168",
+		 		"to":"hjbtest1","chat_type":"chat","payload":{"bodies":[{"type":"txt","msg":"测试数据二"}]}},
+		 	{"uuid":"afa89742-291d-11e5-b8a8-3df24c0d7955","type":"chatmessage","created":1436764318252,
+		 		"modified":1436764318252,"timestamp":1436764317685,"from":"admin","msg_id":"82461300474511776",
+		 		"to":"hjbtest3","chat_type":"chat","payload":{"bodies":[{"type":"txt","msg":"测试数据二"}]}},
+		 	{"uuid":"afa8be02-291d-11e5-abd2-e1c4740baeea","type":"chatmessage","created":1436764318253,
+		 		"modified":1436764318253,"timestamp":1436764317688,"from":"admin","msg_id":"82461300487094688",
+		 		"to":"hjbtest","chat_type":"chat","payload":{"bodies":[{"type":"txt","msg":"测试数据二"}]}}],
+		 "timestamp":1436765522867,
+		 "duration":5,
+		 "count":9,
+		 "statusCode":200}
+		 */
+		/*
+		 {"action":"get",
+		 "params":{"ql":["select * where timestamp>1436765884729 and timestamp<1436765885729"]},
+		 "path":"/chatmessages","uri":"http://a1.easemob.com/dashertest/dasher/chatmessages",
+		 "entities":[],"timestamp":1436765881731,"duration":4,"count":0,"statusCode":200}
+		 */
+		resultCode=0;
+		resultDesc=ShowMsg.findSuc;
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);	
+		return model;
+	}
 }

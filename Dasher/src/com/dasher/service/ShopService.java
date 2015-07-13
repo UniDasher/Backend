@@ -15,7 +15,7 @@ public interface ShopService {
 	public Shop getBySid(String sid);
 	public Shop getByName(String name);
 	public List<Shop> getListByLati(double longitude,double latitude,float distance);
-	public List<Shop> getListByMenu(double longitude,double latitude,float distance);
+	public List<Shop> getListByMenu(double longitude,double latitude,float distance, String uid);
 	public List<Shop> list(String searchStr, int startRow,int pageSize);
 	public List<Shop> menuList();
 	public boolean updateEvaluate(Shop shop);

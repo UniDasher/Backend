@@ -21,7 +21,7 @@ public interface MenuService {
 	public List<Menu> getListByStr(int type,String uid,int userType);
 	
 	public void getListOverTime();//获取超时的订单列表
-	public List<Menu> getNearListBySid(String sid);
+	public List<Menu> getNearListBySid(String sid, String uid);
 	public boolean updateStatus_2(Menu m);
 	public boolean menuComplete(String mid, int evalShop, int evalServer,
 			String myloginId);

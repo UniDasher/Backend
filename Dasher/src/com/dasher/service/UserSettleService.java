@@ -16,4 +16,6 @@ public interface UserSettleService {
 	public boolean add(UserSettle us);
 	public boolean update(UserSettle us);
 	public List<UserSettle> getListByWid(String wid);
+	public List<UserSettle> getSettleByWid(String myloginId, String startDate,
+			String endDate);
 }

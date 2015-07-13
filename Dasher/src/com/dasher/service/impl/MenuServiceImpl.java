@@ -429,8 +429,8 @@ public class MenuServiceImpl implements MenuService {
 		
 	}
 
-	public List<Menu> getNearListBySid(String sid) {
-		return menuMapper.getNearListBySid(sid);
+	public List<Menu> getNearListBySid(String sid,String uid) {
+		return menuMapper.getNearListBySid(sid,uid);
 	}
 
 }

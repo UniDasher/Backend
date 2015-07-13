@@ -22,7 +22,7 @@ public interface MenuMapper {
 	public List<Menu> getListByStr(@Param(value="type") int type,@Param(value="uid") String uid,@Param(value="userType") int userType);
 	public List<Menu> getNearlist(@Param(value="minlon") double minlon,@Param(value="maxlon")double maxlon,@Param(value="minlat")double minlat,@Param(value="maxlat")double maxlat);
 	public List<Menu> getListOverTime(@Param(value="mealEndDate") String mealEndDate);
-	public List<Menu> getNearListBySid(@Param(value="sid") String sid);
+	public List<Menu> getNearListBySid(@Param(value="sid") String sid,@Param(value="uid") String uid);
 	public int updateOverTime(@Param(value="mealEndDate") String mealEndDate,@Param(value="updateDate") String updateDate);
 
 }
