@@ -106,5 +106,9 @@
      select sid,name from shop_info
      where status>0
    </select>
+   
+   <select id="getShopType" resultType="String">
+   		select distinct typeTab from shop_info
+   </select>
   
 </mapper>

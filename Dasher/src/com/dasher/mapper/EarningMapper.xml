@@ -51,7 +51,11 @@
 	 on e.wid=u.uid 
 	 left join user_settle us
 	 on e.wid=us.wid
-     where e.wid=#{wid} group by us.createDate
+     where e.wid=#{wid} 
+     <if test="sigin==1">
+     and us.type=2
+     </if>
+     group by us.createDate
    </select>
    
    <select id="getByWid" parameterType="String" resultType="Earning">

@@ -1,7 +1,12 @@
 package com.dasher.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+
+import org.elasticsearch.common.mvel2.conversion.ArrayHandler;
+import org.springframework.ui.ModelMap;
 
 import com.dasher.mapper.ShopMapper;
 import com.dasher.model.Market;
@@ -109,5 +114,18 @@ public class ShopServiceImpl implements ShopService {
 	public boolean updateEvaluate(Shop shop) {
 		// TODO Auto-generated method stub
 		return shopMapper.updateEvaluate(shop)>0? true:false;
+	}
+
+	public List<ModelMap> getShopType() {
+		ModelMap model=null;
+		List<ModelMap> map=new ArrayList<ModelMap>();
+		
+		List<String> list=shopMapper.getShopType();
+		for (String val : list) {
+			model=new ModelMap();
+			model.put("typeTab", val);
+			map.add(model);
+		}
+		return map;
 	}
 }

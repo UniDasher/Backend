@@ -16,7 +16,7 @@ public interface EarningMapper {
 	public List<Earning> listMonth(String wid);
 	public List<Earning> listDay(@Param(value="wid") String wid,@Param(value="str") int str);
 	public Map<String, Object> getEarnTotal(@Param(value="wid") String wid,@Param(value="startDate") String startDate,
-			@Param(value="endDate") String endDate);
+			@Param(value="endDate") String endDate,@Param(value="sigin") int sigin);
 	public Map<String, Object> getEarnWeek(@Param(value="wid") String wid,@Param(value="startDate") String startDate,
 			@Param(value="endDate") String endDate);
 	public List<Earning> getEarnList(@Param(value="wid") String wid,@Param(value="startDate") String startDate,

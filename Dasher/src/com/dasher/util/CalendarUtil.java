@@ -16,12 +16,12 @@ public class CalendarUtil {
 			//获取当前时间
 			Calendar c = Calendar.getInstance();
 			//处理时间time--12:00
-			c.set(Calendar.HOUR,Integer.parseInt(time1.split(":")[0]));
+			c.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time1.split(":")[0]));
 			c.set(Calendar.MINUTE,Integer.parseInt(time1.split(":")[1]));
 			
 			long c1=c.getTimeInMillis();
 			
-			c.set(Calendar.HOUR,Integer.parseInt(time2.split(":")[0]));
+			c.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time2.split(":")[0]));
 			c.set(Calendar.MINUTE,Integer.parseInt(time2.split(":")[1]));
 			
 			long c2=c.getTimeInMillis();
@@ -40,16 +40,13 @@ public class CalendarUtil {
 			//获取当前时间
 			Calendar c = Calendar.getInstance();
 			long cur=c.getTimeInMillis();
-			
 			for(int i=0;i<time.size();i=i+2){
-				c.set(Calendar.HOUR,Integer.parseInt(time.get(i).split(":")[0]));
+				c.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.get(i).split(":")[0]));
 				c.set(Calendar.MINUTE,Integer.parseInt(time.get(i).split(":")[1]));
 				long c1=c.getTimeInMillis();
-				
-				c.set(Calendar.HOUR,Integer.parseInt(time.get(i+1).split(":")[0]));
+				c.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.get(i+1).split(":")[0]));
 				c.set(Calendar.MINUTE,Integer.parseInt(time.get(i+1).split(":")[1]));
 				long c2=c.getTimeInMillis();
-				
 				if(c1<=cur&&cur<=c2){
 					return true;
 				}
@@ -70,7 +67,7 @@ public class CalendarUtil {
 			long c2=c.getTimeInMillis();
 			
 			//处理时间time--12:00
-			c.set(Calendar.HOUR,Integer.parseInt(time1.split(":")[0]));
+			c.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time1.split(":")[0]));
 			c.set(Calendar.MINUTE,Integer.parseInt(time1.split(":")[1]));
 			long c1=c.getTimeInMillis();
 			

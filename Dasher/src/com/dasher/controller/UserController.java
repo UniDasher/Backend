@@ -72,7 +72,7 @@ public class UserController extends MyController {
 			resultDesc=ShowMsg.pwdLength;
 			resultCode=1;
 		}
-		else if(nickName=="")
+		else if(nickName==""||nickName.length()>10)
 		{
 			resultDesc=ShowMsg.NickNameNull;
 			resultCode=1;

@@ -11,6 +11,7 @@ import java.util.Map;
 import com.dasher.mapper.EarningMapper;
 import com.dasher.model.Earning;
 import com.dasher.service.EarningService;
+import com.dasher.util.DateUtil;
 
 public class EarningServiceImpl implements EarningService {
 
@@ -46,7 +47,20 @@ public class EarningServiceImpl implements EarningService {
             e.printStackTrace();
         }
         Date startDate=c.getTime();
-		Map<String, Object> map=earningMapper.getEarnTotal(wid,sdfLong.format(startDate),sdfLong.format(endDate));
+        //1表示type=2，0表示没有条件type
+		Map<String, Object> map=earningMapper.getEarnTotal(wid,sdfLong.format(startDate),sdfLong.format(endDate),1);
+		map=(map==null)?earningMapper.getEarnTotal(wid,sdfLong.format(startDate),sdfLong.format(endDate),0):map;
+		if(map==null){
+			map=new HashMap<String, Object>();
+			map.put("weekEarn", 0);
+			map.put("totalEarn", 0);
+			map.put("totalMoney", 0);
+			map.put("balance", 0);
+			map.put("settleDate", DateUtil.getCurrentDateStr());
+		}else if(!map.containsKey("settleDate")){
+			map.put("settleDate", DateUtil.getCurrentDateStr());
+		}
+		
 		return map;
 	}
 	//获取用户最近一周的收益

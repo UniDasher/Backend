@@ -91,6 +91,33 @@ public class ShopController extends MyController {
 		return model;
 	}	
 	
+	@RequestMapping("phone/shop/type")
+	@ResponseBody
+	protected Object shopType(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		model=new ModelMap();
+		
+		String authCode=getHeadersInfo(request,ShowMsg.X_Auth_Token);
+		String myloginId=loginService.getByAuthCode(authCode);
+		//Login l=loginService.getByLogId(myloginId);
+		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+		{
+			resultDesc=ShowMsg.NoLogin;
+			resultCode=3;
+			model.put("resultCode", resultCode);	
+			model.put("resultDesc", resultDesc);	
+			return model;
+		}
+		
+		List<ModelMap> s=shopService.getShopType();
+		model.put("list", s);
+		resultCode=0;
+		resultDesc=ShowMsg.findSuc;
+		model.put("resultCode", resultCode);	
+		model.put("resultDesc", resultDesc);
+		return model;
+	}
+	
 	@RequestMapping("phone/shop/info")
 	@ResponseBody
 	protected Object phoneInfo(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

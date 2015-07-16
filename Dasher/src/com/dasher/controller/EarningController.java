@@ -1,6 +1,7 @@
 package com.dasher.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -57,13 +58,21 @@ public class EarningController extends MyController {
 			model.put("resultDesc", resultDesc);	
 			return model;
 		}
+		
+		
 		//获取送餐人总收益
 		Map<String,Object> map=earningService.getEarnTotal(myloginId);
 		//{balance=610.0, weekEarn=6.0, totalEarn=6.0, settleDate=2015-07-13 15:39:08.0, totalMoney=534.0}
 		Set<String> keys=map.keySet();
 		for (String key : keys) {
 			if("settleDate".equals(key)){
-				model.put(key, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(map.get(key)));
+				Date date=null;
+				try {
+					date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(map.get(key).toString());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				model.put(key, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
 			}else{
 				model.put(key, map.get(key));
 			}

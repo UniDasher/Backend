@@ -1,6 +1,9 @@
 package com.dasher.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.ui.ModelMap;
 
 import com.dasher.model.Market;
 import com.dasher.model.Shop;
@@ -19,5 +22,6 @@ public interface ShopService {
 	public List<Shop> list(String searchStr, int startRow,int pageSize);
 	public List<Shop> menuList();
 	public boolean updateEvaluate(Shop shop);
+	public List<ModelMap> getShopType();
 	
 }

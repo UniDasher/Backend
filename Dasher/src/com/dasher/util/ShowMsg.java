@@ -62,7 +62,7 @@ public class ShowMsg {
 	public static final String delSuc="删除成功！";//Information deleted successfully
 	public static final String delFail="删除失败！";//Information deleted unsuccessfully
 	public static final String ParFail="无效的参数！";//Parameter is invalid
-	public static final String NickNameNull="昵称不可为空！";//FirstName is null
+	public static final String NickNameNull="昵称不可为空,且长度需小于十！";//FirstName is null
 	public static final String FirstNameNull="FirstName为空！";//FirstName is null
 	public static final String LastNameNull="LastNameNull为空！";//LastNameNull is null
 	public static final String EmailNull = "邮箱地址为空！";//Email is null
