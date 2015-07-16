@@ -7,7 +7,7 @@ import com.dasher.model.Menu;
 public interface MenuService {
 	
 	public int getCount(String status, String sid, String searchStr, String startDate, String endDate);
-	public int getListByUidCount(int type,String searchStr);
+	public int getListByUidCount(int type,String searchStr,String startDate,String endDate);
 	public int CountByStatus(String uid,String status);
 	public boolean add(Menu m);
 	public int receive(Menu m);
@@ -15,7 +15,7 @@ public interface MenuService {
 	public boolean updateMealDate(Menu m);
 	public Menu getByMid(String mid);
 	public List<Menu> list(String status, String sid, String searchStr, String startDate, String endDate,int curPage, int countPage);
-	public List<Menu> getListByUid(int type,String searchStr,int curPage, int countPage);
+	public List<Menu> getListByUid(int type,String searchStr,String startDate,String endDate,int curPage, int countPage);
     public List<Menu> listByStatus(String uid,String status, int curPage, int countPage);
     public List<Menu> getNearList(double longitude,double latitude,float distance);
 	public List<Menu> getListByStr(int type,String uid,int userType);

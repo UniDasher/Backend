@@ -195,11 +195,10 @@ public class ComplainServiceImpl implements ComplainService {
 			//判断用户是否登录
 			Login log=loginService.getByLogId(com.getUid());
 			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
-				IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
-						com.getComType()==1?ShowMsg.menuComplainDealTitle:(com.getComType()==2?ShowMsg.menuCancleDealTitle:ShowMsg.menuOverTimeDealTitle), 
-						com.getComType()==1?ShowMsg.menuComplainDealContent:(com.getComType()==2?ShowMsg.menuCancleDealContent:ShowMsg.menuOverTimeDealContent));
+				IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(), 
+						com.getComType()==1?ShowMsg.menuComplainDealIndex:(com.getComType()==2?ShowMsg.menuCancleDealIndex:ShowMsg.menuOverTimeDealIndex));
 				
-				System.out.println(ipr.getResponse().toString());
+				//System.out.println(ipr.getResponse().toString());
 			}
         }else{
         	//订单为超市订单
@@ -216,9 +215,8 @@ public class ComplainServiceImpl implements ComplainService {
 			//判断用户是否登录
 			Login log=loginService.getByLogId(com.getUid());
 			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
-				IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
-						com.getComType()==1?ShowMsg.menuComplainDealTitle:(com.getComType()==2?ShowMsg.menuCancleDealTitle:ShowMsg.menuOverTimeDealTitle), 
-						com.getComType()==1?ShowMsg.menuComplainDealContent:(com.getComType()==2?ShowMsg.menuCancleDealContent:ShowMsg.menuOverTimeDealContent));
+				IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(), 
+						com.getComType()==1?ShowMsg.menuComplainDealIndex:(com.getComType()==2?ShowMsg.menuCancleDealIndex:ShowMsg.menuOverTimeDealIndex));
 			}
         }
         

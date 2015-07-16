@@ -8,7 +8,7 @@ public interface UserService {
 	
 	public int userLoin(String mobilePhone,String pwd);
 	public int getPwd(String uid,String pwd);
-	public int getUserByStatus2(int type,String searchStr);
+	public int getUserByStatus2(int type,String searchStr,String startDate,String endDate);
 	public int balanceListCount(String searchStr);
 	public boolean addUser(User u);
 	public boolean update(User u);
@@ -25,7 +25,7 @@ public interface UserService {
 	public boolean cheakUser(User u);
 	public User getByUId(String uid);
 	public User getUserByTel(String mobilePhone);
-	public List<User> searchUser(int type,String searchStr,int startRow,int pageSize);
+	public List<User> searchUser(int type,String searchStr,String startDate,String endDate,int startRow,int pageSize);
 	public List<User> balanceList(String searchStr,int startRow,int pageSize);
 	public List<User> settleList(String searchStr);
 	public List<User> applyList();

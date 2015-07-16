@@ -213,22 +213,28 @@ public class UserController extends MyController {
 			else if(flag==0)
 			{
 				User us=userService.getUserByTel(mobilePhone);
+				resultDesc=ShowMsg.loginSuc;
+				resultCode=0;
+				model.put("uid", us.getUid());
+//				model.put("cid", l.getPushClientId());
+				model.put("name", us.getNickName());
+				model.put("logo", us.getLogo());
 				//获取authCode
 				model.put("authCode", loginService.userHandleLogin(us.getUid()));
-				Login l=loginService.getByLogId(us.getUid());
-				//环信账号登陆
-				Map<String,String> map = EasemobUtil.imUserLogin(us.getUid());
-				if(map!=null&&"200".equals(map.get("statusCode"))&&l.getPushClientId().equals(map.get("uuid"))){
-					resultDesc=ShowMsg.loginSuc;
-					resultCode=0;
-					model.put("uid", us.getUid());
-					model.put("cid", l.getPushClientId());
-					model.put("name", us.getNickName());
-					model.put("logo", us.getLogo());
-				}else{
-					resultDesc=ShowMsg.ImLoginFail;
-					resultCode=1;
-				}
+//				Login l=loginService.getByLogId(us.getUid());
+//				//环信账号登陆
+//				Map<String,String> map = EasemobUtil.imUserLogin(us.getUid());
+//				if(map!=null&&"200".equals(map.get("statusCode"))&&l.getPushClientId().equals(map.get("uuid"))){
+//					resultDesc=ShowMsg.loginSuc;
+//					resultCode=0;
+//					model.put("uid", us.getUid());
+//					model.put("cid", l.getPushClientId());
+//					model.put("name", us.getNickName());
+//					model.put("logo", us.getLogo());
+//				}else{
+//					resultDesc=ShowMsg.ImLoginFail;
+//					resultCode=1;
+//				}
 			}
 			else
 			{
@@ -1143,6 +1149,7 @@ public class UserController extends MyController {
 		return model;
 	}
 
+	
 	@RequestMapping("/user/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1164,6 +1171,8 @@ public class UserController extends MyController {
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		String mytype=getString(request, "type");
 		String searchStr=getString(request, "searchStr");
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
 		if(mycurPage.equals("")||mypageSize.equals("")||mytype.equals(""))
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -1176,12 +1185,12 @@ public class UserController extends MyController {
 				int curPage=Integer.parseInt(mycurPage);
 				int pageSize=Integer.parseInt(mypageSize);
 				int type=Integer.parseInt(mytype);
-				int count=userService.getUserByStatus2(type,searchStr);
+				int count=userService.getUserByStatus2(type,searchStr,startDate,endDate);
 				if(count>0)
 				{
 					model.put("count", count);
 					int startRow=(curPage-1)*pageSize;
-					List<User> userList=userService.searchUser(type, searchStr, startRow, pageSize);
+					List<User> userList=userService.searchUser(type, searchStr,startDate,endDate ,startRow, pageSize);
 					model.put("list", userList);
 					resultCode=0;
 					resultDesc=ShowMsg.findSuc;
@@ -1461,4 +1470,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
+	
+	
 }

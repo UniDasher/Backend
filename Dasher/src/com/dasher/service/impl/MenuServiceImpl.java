@@ -121,8 +121,7 @@ public class MenuServiceImpl implements MenuService {
 				//判断用户是否登录
 				Login log=loginService.getByLogId(uid);
 				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
-					IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
-							ShowMsg.menuReceiveTitle, ShowMsg.menuReceiveContent);
+					IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.menuReceiveIndex);
 				}
 				
 				return result;
@@ -187,6 +186,11 @@ public class MenuServiceImpl implements MenuService {
 		if(!flag){
 			transactionManager.rollback(ts); 
 		}else{
+			//向接单人推送消息
+			Login log=loginService.getByLogId(m_1.getWid());
+			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
+				IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.menuCompleteIndex);
+			}
 			transactionManager.commit(ts);
 		}
 		return flag;
@@ -271,6 +275,18 @@ public class MenuServiceImpl implements MenuService {
 			//配送投诉
 			m.setComplainDate(DateUtil.getCurrentDateStr());
 			result=1;
+			
+			//获取订单信息
+			Menu m_1=menuMapper.getByMid(m.getMid());
+			if(m_1.getStatus()!=2){
+				transactionManager.rollback(ts);  
+				return false;
+			}
+			
+			Login log=loginService.getByLogId(m_1.getWid());
+			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
+				IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.menuComplainIndex);
+			}
 		}else if(m.getStatus()==1){
 			//订单付款完成，生成预订单
 			m.setCreateBy(DateUtil.getCurrentDateStr());
@@ -309,17 +325,13 @@ public class MenuServiceImpl implements MenuService {
 		return menuMapper.getCount(status, sid, searchStr, startDate, endDate);
 	}
 
-	public List<Menu> getListByUid(int type, String searchStr, int curPage,
+	public List<Menu> getListByUid(int type, String searchStr,String startDate,String endDate, int curPage,
 			int countPage) {
 		// TODO Auto-generated method stub
-		return menuMapper.getListByUid(type, searchStr, curPage, countPage);
+		return menuMapper.getListByUid(type, searchStr,startDate, endDate,curPage, countPage);
 	}
 
-	public int getListByUidCount(int type, String searchStr) {
-		// TODO Auto-generated method stub
-		return menuMapper.getListByUidCount(type, searchStr);
-	}
-
+	
 	public Menu getByMid(String mid) {
 		// TODO Auto-generated method stub
 		return menuMapper.getByMid(mid);
@@ -409,8 +421,7 @@ public class MenuServiceImpl implements MenuService {
 				//判断用户是否登录
 				Login log=loginService.getByLogId(uid);
 				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
-					IPushResult ipr=IGtPushUtil.PushtoSingle(log.getIgtClientId(), 
-							ShowMsg.menuOverTimeTitle, ShowMsg.menuOverTimeContent);
+					IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.menuOverTimeIndex);
 				}
 				
 				if(!result){
@@ -432,5 +443,14 @@ public class MenuServiceImpl implements MenuService {
 	public List<Menu> getNearListBySid(String sid,String uid) {
 		return menuMapper.getNearListBySid(sid,uid);
 	}
+
+	public int getListByUidCount(int type, String searchStr, String startDate,
+			String endDate) {
+		// TODO Auto-generated method stub
+		return menuMapper.getListByUidCount(type, searchStr, startDate, endDate)                 ;
+	}
+
+	
+
 
 }

@@ -950,6 +950,9 @@ public class MenuController extends MyController {
 		model.put("authCode", authCode);
 		String uid=getString(request, "uid");
 		String type=getString(request, "type");
+		
+		String startDate=getString(request, "startDate");
+		String endDate=getString(request, "endDate");
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
 		if(!mycurPage.equals("")&&!mypageSize.equals("")&&!type.equals(""))
@@ -960,12 +963,11 @@ public class MenuController extends MyController {
 				int curPage=Integer.parseInt(mycurPage);
 				int pageSize=Integer.parseInt(mypageSize);
 				int startRow=(curPage-1)*pageSize;
-				int count=menuService.getListByUidCount(Integer.parseInt(type), uid);
+				int count=menuService.getListByUidCount(Integer.parseInt(type), uid,startDate,endDate);
 				if(count>0)
 				{
-
 					model.put("count", count);
-					List<Menu> list=menuService.getListByUid(Integer.parseInt(type), uid, startRow, pageSize);
+					List<Menu> list=menuService.getListByUid(Integer.parseInt(type), uid,startDate,endDate, startRow, pageSize);
 					model.put("list", list);
 					resultDesc=ShowMsg.findSuc;
 					resultCode=0;
@@ -1037,5 +1039,4 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
 }

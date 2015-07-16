@@ -138,6 +138,9 @@
 	  <if test="type==1 and searchStr!=''">
 		and wid=#{searchStr}
       </if>
+      <if test="startDate!='' and endDate!=''">
+		and createDate between #{startDate} and #{endDate}
+      </if>
    </select>
    
    <select id="getListByUid" resultType="MarketMenu">
@@ -157,6 +160,9 @@
       </if>
 	  <if test="type==1 and searchStr!=''">
 		and mm.wid=#{searchStr}
+      </if>
+      <if test="startDate!='' and endDate!=''">
+			and mm.createDate between #{startDate} and #{endDate}
       </if>
 	  limit #{curPage},#{countPage}
    </select>

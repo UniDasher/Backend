@@ -7,7 +7,7 @@ import com.dasher.model.MarketMenu;
 public interface MarketMenuService {
 
 	public int getCount(String status,String smid,String searchStr,String startDate,String endDate);
-	public int getListByUidCount(int type,String searchStr);
+	public int getListByUidCount(int type,String searchStr,String startDate,String endDate);
 	public boolean add(MarketMenu mm);
 	public int receive(MarketMenu mm);
 	public boolean updateStatus(MarketMenu mm);
@@ -15,7 +15,7 @@ public interface MarketMenuService {
 	public MarketMenu getByMid(String mid);
 	public List<MarketMenu> getNearList(double longitude,double latitude,float distance);
 	public List<MarketMenu> list(String status,String smid,String searchStr,String startDate,String endDate,int startRow,int pageSize);
-	public List<MarketMenu> getListByUid(int type,String searchStr,int curPage,int countPage);
+	public List<MarketMenu> getListByUid(int type,String searchStr,String startDate,String endDate,int curPage,int countPage);
 	public List<MarketMenu> ListByUid(int type, String uid, int userType);
 	public List<MarketMenu> getNearListSmid(String smid);
 	public void getListOverTime();

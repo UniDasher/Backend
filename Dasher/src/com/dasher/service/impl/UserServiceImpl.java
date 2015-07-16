@@ -23,11 +23,15 @@ import com.dasher.service.LoginService;
 import com.dasher.service.UserService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.EasemobUtil;
+import com.dasher.util.IGtPushUtil;
 import com.dasher.util.MyMD5Util;
+import com.dasher.util.ShowMsg;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.gexin.rp.sdk.base.IPushResult;
 
 public class UserServiceImpl implements UserService {
+	
 	@Autowired
 	private LoginService loginService;
 	
@@ -155,15 +159,15 @@ public class UserServiceImpl implements UserService {
 		return userMapper.userApply(u)>0? true:false;
 	}
 
-	public List<User> searchUser(int type, String searchStr, int startRow,
+	public List<User> searchUser(int type, String searchStr,String startDate,String endDate ,int startRow,
 			int pageSize) {
 		// TODO Auto-generated method stub
-		return userMapper.searchUser(type, searchStr, startRow, pageSize);
+		return userMapper.searchUser(type, searchStr,startDate,endDate ,startRow, pageSize);
 	}
 	
-	public int getUserByStatus2(int type,String searchStr) {
+	public int getUserByStatus2(int type,String searchStr,String startDate,String endDate ) {
 		// TODO Auto-generated method stub
-		return userMapper.getUserByStatus2(type,searchStr);
+		return userMapper.getUserByStatus2(type,searchStr,startDate,endDate);
 	}
 
 	public boolean updateLogo(User u) {
@@ -218,6 +222,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public boolean cheakUser(User u) {
+		Login log=loginService.getByLogId(u.getUid());
+		if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&
+				log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
+			IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.userApplyIndex);
+		}
 		return userMapper.cheakUser(u)>0? true:false;
 	}
 
@@ -232,4 +241,5 @@ public class UserServiceImpl implements UserService {
 	public boolean updateEvaluate(User user) {
 		return userMapper.updateEvaluate(user)>0? true:false;
 	}
+
 }

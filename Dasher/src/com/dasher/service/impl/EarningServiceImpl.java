@@ -73,7 +73,7 @@ public class EarningServiceImpl implements EarningService {
 		Date endDate=c.getTime();
 		for(int i=0;i<7;i++){
 			try {
-	            c.add(Calendar.DATE, -1);
+	            c.add(Calendar.DATE,i==0?0:-1);
 	            c.setTime(sdfLong.parse(sdfShort.format(c.getTime()) + " 00:00:00"));
 	        } catch (Exception e) {
 	            e.printStackTrace();

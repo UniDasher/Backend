@@ -171,17 +171,52 @@ public class ShowMsg {
 	public static final String DishsTotalPriceNotMenuDishPrice="菜品总额不等于订单菜品的金额。";//The price of the format is not correct
 	
 	//用户推送信息（个推）
+	/*
+1.	用户申请送餐人推送
+2.	用户订单接收推送
+3.	用户订单完成推送（推送给送餐人）
+4.	用户订单超时推送
+5.	用户订单投诉推送（推送给送餐人）
+6.	用户订单取消处理完成，退款推送
+7.	用户订单超时处理完成，退款推送
+8.	用户订单投诉处理完成，退款推送
+9.	送餐人结算推送（推送给送餐人）
+
+	 */
+	public static final int userApplyIndex=1;
+	public static final String userApplyTitle="送餐人申请";
+	public static final String userApplyContent="您的送餐人申请已处理。";
+	
+	public static final int menuReceiveIndex=2;
 	public static final String menuReceiveTitle="订单结单";
 	public static final String menuReceiveContent="您的订单已被接收，配送人员正在为您送餐，请耐心等待。";
 	
+	public static final int menuCompleteIndex=3;
+	public static final String menuCompleteTitle="订单完成";
+	public static final String menuCompleteContent="您配送的订单，用户已确认完成。";
+	
+	public static final int menuOverTimeIndex=4;
 	public static final String menuOverTimeTitle="订单超时";
 	public static final String menuOverTimeContent="您的订单已超时，系统正在对超时订单进行处理，请耐心等待。";
 	
+	public static final int menuComplainIndex=5;
+	public static final String menuComplainTitle="订单投诉";
+	public static final String menuComplainContent="您接受订单用户已投诉，请耐心等待处理结果。";
+	
+	public static final int menuCancleDealIndex=6;
 	public static final String menuCancleDealTitle="订单取消退款";
 	public static final String menuCancleDealContent="您取消订单已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
+	
+	public static final int menuOverTimeDealIndex=7;
 	public static final String menuOverTimeDealTitle="订单超时退款";
 	public static final String menuOverTimeDealContent="您超时订单已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
+	
+	public static final int menuComplainDealIndex=8;
 	public static final String menuComplainDealTitle="订单投诉退款";
 	public static final String menuComplainDealContent="您投诉订单已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
+	
+	public static final int serverSettleIndex=9;
+	public static final String serverSettleTitle="结算通知";
+	public static final String serverSettleContent="本期结算已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
 	
 }

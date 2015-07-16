@@ -13,14 +13,19 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.UserSettleMapper;
+import com.dasher.model.Login;
 import com.dasher.model.ServerSettle;
 import com.dasher.model.User;
 import com.dasher.model.UserSettle;
+import com.dasher.service.LoginService;
 import com.dasher.service.ServerSettleService;
 import com.dasher.service.UserService;
 import com.dasher.service.UserSettleService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.FileUploadUtil;
+import com.dasher.util.IGtPushUtil;
+import com.dasher.util.ShowMsg;
+import com.gexin.rp.sdk.base.IPushResult;
 
 public class UserSettleServiceImpl implements UserSettleService {
 
@@ -29,7 +34,8 @@ public class UserSettleServiceImpl implements UserSettleService {
 	private UserService userService;
 	@Autowired
 	private ServerSettleService serverSettleService;
-	
+	@Autowired
+	private LoginService loginService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -88,6 +94,10 @@ public class UserSettleServiceImpl implements UserSettleService {
 			}else{
 				return false;
 			}
+	        Login log=loginService.getByLogId(uid);
+			if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
+				IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.serverSettleIndex);
+			}
 	        transactionManager.commit(ts);
 			return true;
 		}catch (Exception e) {
@@ -138,6 +148,12 @@ public class UserSettleServiceImpl implements UserSettleService {
 	            ss.setCreateBy(myloginId);
 	            ss.setCreateDate(DateUtil.getCurrentDateStr());
 	            serverSettleService.add(ss);
+	            
+	            Login log=loginService.getByLogId(user.getUid());
+				if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
+					IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.serverSettleIndex);
+				}
+			
 			}
 	        transactionManager.commit(ts);
 			return true;

@@ -96,13 +96,16 @@ public class EasemobUtil {
         }
         String statusCode=statusCodeList.get(0);
         map.put("statusCode", statusCode);
-        //System.out.println(imUserLoginNode);
         if("200".equals(statusCode)){
         	JsonNode jsonObject=imUserLoginNode.get("user");
         	List<String> uuid=jsonObject.findValuesAsText("uuid");
-        	//System.out.println(uuid);
         	//保存用户环信账号
         	map.put("uuid", uuid.get(0));
+//        	for (JsonNode jsonNode : jsonObject) {
+//            	List<String> uuid=jsonNode.findValuesAsText("uuid");
+//            	//保存用户环信账号
+//            	map.put("uuid", uuid.get(0));
+//    		}
         }
 		return map;
 	}

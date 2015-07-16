@@ -13,7 +13,7 @@ public interface UserMapper {
 	public int delete(User u);
 	public int updatePwd(User u);
 	public int userApply(User u);
-	public int getUserByStatus2(@Param(value="type") int type,@Param(value="searchStr") String searchStr);
+	public int getUserByStatus2(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startDate")String startDate,@Param(value="endDate")String endDate);
 	public int updateLogo(User u);
 	public int updateUserName(User u);
 	public int updatePhone(User u);
@@ -25,11 +25,11 @@ public interface UserMapper {
 	public int cheakUser(User u);
 	public User getByUId(String uid);
 	public User getUserByTel(String mobilePhone);
-	public List<User> searchUser(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
+	public List<User> searchUser(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startDate")String startDate,@Param(value="endDate")String endDate,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<User> balanceList(@Param(value="searchStr") String searchStr,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);
 	public List<User> settleList(@Param(value="searchStr") String searchStr);
 	public List<User> applyList();
 	public int updateStatus(User u);
 	public int updateEvaluate(User user);
-	public int updateTrueName(User u);
+	public int updateTrueName(User u);	
 }

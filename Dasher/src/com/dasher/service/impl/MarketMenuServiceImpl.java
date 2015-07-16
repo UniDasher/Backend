@@ -292,15 +292,14 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		return marketMenuMapper.getByMid(mid);
 	}
 
-	public List<MarketMenu> getListByUid(int type, String searchStr,
-			int curPage, int countPage) {
+	public List<MarketMenu> getListByUid(int type, String searchStr,String startDate,String endDate,int curPage, int countPage) {
 		// TODO Auto-generated method stub
-		return marketMenuMapper.getListByUid(type, searchStr, curPage, countPage);
+		return marketMenuMapper.getListByUid(type, searchStr,startDate,endDate ,curPage, countPage);
 	}
 
-	public int getListByUidCount(int type, String searchStr) {
+	public int getListByUidCount(int type, String searchStr,String startDate,String endDate) {
 		// TODO Auto-generated method stub
-		return marketMenuMapper.getListByUidCount(type, searchStr);
+		return marketMenuMapper.getListByUidCount(type, searchStr,startDate,endDate);
 	}
 
 	public List<MarketMenu> ListByUid(int type, String uid, int userType) {
