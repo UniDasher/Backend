@@ -43,9 +43,9 @@ public class ShopDishTypeServiceImpl implements ShopDishTypeService {
 		return shopDishTypeMapper.getByName(name);
 	}
 
-	public List<ShopDishType> list(int type) {
+	public List<ShopDishType> list(int type,String searchStr) {
 		// TODO Auto-generated method stub
-		return shopDishTypeMapper.list(type);
+		return shopDishTypeMapper.list(type,searchStr);
 	}
 
 	public String getMax() {

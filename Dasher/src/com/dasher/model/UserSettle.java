@@ -18,8 +18,9 @@ public class UserSettle implements Serializable {
 	private String createDate;
 	private String updateBy;
 	private String updateDate;
-	private int status;
 	private String userName;
+	private String nickName;
+	private int status;
 	private String mobilePhone;
 	
 	public UserSettle() {
@@ -29,8 +30,9 @@ public class UserSettle implements Serializable {
 	public UserSettle(int id, String wid, float oldBalance, int type,
 			String typeDesc, float settlePrice, float curBalance,
 			String settleNumberType, String settleNumber, String settleDesc,
-			String userName, String createBy, String createDate,
-			String updateBy, String updateDate, int status,String mobilePhone) {
+			String createBy, String createDate, String updateBy,
+			String updateDate, String userName, String nickName, int status,
+			String mobilePhone) {
 		super();
 		this.id = id;
 		this.wid = wid;
@@ -42,13 +44,14 @@ public class UserSettle implements Serializable {
 		this.settleNumberType = settleNumberType;
 		this.settleNumber = settleNumber;
 		this.settleDesc = settleDesc;
-		this.userName = userName;
 		this.createBy = createBy;
 		this.createDate = createDate;
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
+		this.userName = userName;
+		this.nickName = nickName;
 		this.status = status;
-		this.mobilePhone=mobilePhone;
+		this.mobilePhone = mobilePhone;
 	}
 
 	public int getId() {
@@ -105,6 +108,14 @@ public class UserSettle implements Serializable {
 
 	public void setCurBalance(float curBalance) {
 		this.curBalance = curBalance;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getSettleNumberType() {

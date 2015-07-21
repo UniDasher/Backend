@@ -17,16 +17,18 @@ public class ServerSettle implements Serializable {
 	private String createBy;
 	private String createDate;
 	private String userName;
+	private String nickName;
 	private String mobilePhone;
 	
 	public ServerSettle() {
 	
 	}
+	
 	public ServerSettle(int id, String uid, float oldBalance, int type,
 			String typeDesc, float settlePrice, float curBalance,
 			String settleNumberType, String settleNumber, String settleDesc,
 			String createBy, String createDate, String userName,
-			String mobilePhone) {
+			String nickName, String mobilePhone) {
 		super();
 		this.id = id;
 		this.uid = uid;
@@ -41,8 +43,10 @@ public class ServerSettle implements Serializable {
 		this.createBy = createBy;
 		this.createDate = createDate;
 		this.userName = userName;
+		this.nickName = nickName;
 		this.mobilePhone = mobilePhone;
 	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -90,8 +94,14 @@ public class ServerSettle implements Serializable {
 	public void setOldBalance(float oldBalance) {
 		this.oldBalance = oldBalance;
 	}
-
 	
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 
 	public float getSettlePrice() {
 		return settlePrice;

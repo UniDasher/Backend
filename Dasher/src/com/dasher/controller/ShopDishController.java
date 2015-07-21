@@ -582,6 +582,7 @@ public class ShopDishController extends MyController {
 		return model;
 	}	
 	
+	
 	@RequestMapping("/dish/list")
 	@ResponseBody
 	protected Object pclist(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

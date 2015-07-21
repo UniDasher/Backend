@@ -19,6 +19,8 @@
      <result property="status" column="status"/>
      <result property="type" column="type"/>
      <result property="typeDesc" column="typeDesc"/>
+     <result property="userName" column="userName"/>
+     <result property="nickName" column="nickName"/>
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="UserSettle">
@@ -41,7 +43,7 @@
    </select>
    
    <select id="list" resultType="UserSettle">
-     select us.*,u.nickName as userName,u.mobilePhone
+     select us.*,concat(u.firstName,u.lastName) as userName,u.mobilePhone,u.nickName
 	 from user_settle us
 	 join user_info u
 	 on us.wid=u.uid

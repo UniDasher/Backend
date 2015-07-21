@@ -277,7 +277,7 @@ public class FileUploadUtil {
         // 构建表头  
         XSSFRow headRow = sheet.createRow(0);
         XSSFCell cell = null;  
-        String[] titles={"用户名","手机号","账户余额","结算账号类型","结算账号"};
+        String[] titles={"真实姓名","用户名","手机号","账户余额","结算账号类型","结算账号","结算时间","备注"};
         for (int i = 0; i < titles.length; i++)  
         {  
             cell = headRow.createCell(i);  
@@ -298,19 +298,31 @@ public class FileUploadUtil {
   
                 cell = bodyRow.createCell(1);  
                 cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(u.getNickName());  
+                
+                cell = bodyRow.createCell(2);  
+                cell.setCellStyle(bodyStyle);  
                 cell.setCellValue(u.getMobilePhone());  
   
-                cell = bodyRow.createCell(2);  
+                cell = bodyRow.createCell(3);  
                 cell.setCellStyle(bodyStyle);  
                 cell.setCellValue(u.getBalance());  
                 
-                cell = bodyRow.createCell(3);  
+                cell = bodyRow.createCell(4);  
                 cell.setCellStyle(bodyStyle);  
                 cell.setCellValue(u.getBankType()); 
                 
-                cell = bodyRow.createCell(4);  
+                cell = bodyRow.createCell(5);  
                 cell.setCellStyle(bodyStyle);  
                 cell.setCellValue(u.getBankAccount()); 
+                
+                cell = bodyRow.createCell(6);  
+                cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(DateUtil.getCurrentDateStr()); 
+                
+                cell = bodyRow.createCell(7);  
+                cell.setCellStyle(bodyStyle);  
+                cell.setCellValue(""); 
             }  
         }  
         try  

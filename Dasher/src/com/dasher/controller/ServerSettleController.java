@@ -28,7 +28,7 @@ public class ServerSettleController extends MyController{
 	private String resultDesc;
 	private ModelMap model;
 	
-	
+
 	@RequestMapping("/settle/server/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

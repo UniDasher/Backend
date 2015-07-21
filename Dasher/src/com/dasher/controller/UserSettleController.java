@@ -64,6 +64,7 @@ public class UserSettleController extends MyController {
 		return model;
 	}	
 	
+
 	@RequestMapping("/settle/user")
 	@ResponseBody
 	protected Object settleUser(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -140,6 +141,7 @@ public class UserSettleController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
 	
 	@RequestMapping("/settle/user/list")
 	@ResponseBody

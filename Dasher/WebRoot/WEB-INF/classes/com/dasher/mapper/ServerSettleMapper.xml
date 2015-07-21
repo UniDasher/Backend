@@ -13,6 +13,8 @@
 	     <result property="settleNumberType" column="settleNumberType"/>
 	     <result property="settleNumber" column="settleNumber"/>
 	     <result property="settleDesc" column="settleDesc"/>
+	     <result property="userName" column="userName"/>
+	     <result property="nickName" column="nickName"/>
 	     <result property="createBy" column="createBy"/>
 	     <result property="createDate" column="createDate"/>
    </resultMap>
@@ -35,7 +37,7 @@
    </select>
    
    <select id="list" resultType="ServerSettle">
-     select us.*,u.nickName as userName,u.mobilePhone
+     select us.*,concat(u.firstName,u.lastName) as userName,u.mobilePhone,u.nickName
 	 from server_settle us
 	 join user_info u
 	 on us.uid=u.uid

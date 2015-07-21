@@ -44,9 +44,12 @@
      select max(sortNum) from shop_dish_type where status>0
    </select>
    
-   <select id="list" resultType="ShopDishType" parameterType="Integer">
+   <select id="list" resultType="ShopDishType">
      select * from shop_dish_type 
      where status>0 and type=#{type}
+     <if test="searchStr!=''">
+        and name like CONCAT(CONCAT('%',#{searchStr}),'%')
+     </if>
      order by sortNum asc
    </select>
    

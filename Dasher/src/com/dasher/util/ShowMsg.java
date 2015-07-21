@@ -188,7 +188,7 @@ public class ShowMsg {
 	public static final String userApplyContent="您的送餐人申请已处理。";
 	
 	public static final int menuReceiveIndex=2;
-	public static final String menuReceiveTitle="订单结单";
+	public static final String menuReceiveTitle="订单接单";
 	public static final String menuReceiveContent="您的订单已被接收，配送人员正在为您送餐，请耐心等待。";
 	
 	public static final int menuCompleteIndex=3;

@@ -2,6 +2,8 @@ package com.dasher.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.dasher.model.ShopDishType;
 
 public interface ShopDishTypeService {
@@ -13,7 +15,7 @@ public interface ShopDishTypeService {
 	public String getMax();
 	public ShopDishType getById(int id);
 	public ShopDishType getByName(String name);
-	public List<ShopDishType> list(int type);
+	public List<ShopDishType> list(int type,String searchStr);
 	public List<ShopDishType> listBySid(String sid);
 	public List<ShopDishType> listBySmid(String smid);
 }

@@ -14,7 +14,7 @@ public interface ShopDishTypeMapper {
 	public int updateSortNum(ShopDishType sdt);
 	public ShopDishType getById(int id);
 	public ShopDishType getByName(String name);
-	public List<ShopDishType> list(int type);
+	public List<ShopDishType> list(@Param(value="type")int type,@Param(value="searchStr")String searchStr);
 	public String getMax();
 	public List<ShopDishType> listBySid(@Param(value="sid") String sid);
 	public List<ShopDishType> listBySmid(@Param(value="smid") String smid);

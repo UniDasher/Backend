@@ -1,5 +1,6 @@
 package com.dasher.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +105,8 @@ public class UserSettleServiceImpl implements UserSettleService {
 			return false;
 		}
 	}
+	
+	
 	public boolean settleUserAll(HttpServletRequest request,String searchStr,String myloginId,String fileName) {
 		try{
 			//添加事务处理
@@ -184,6 +187,15 @@ public class UserSettleServiceImpl implements UserSettleService {
 	}
 	public List<UserSettle> getSettleByWid(String wid, String startDate,
 			String endDate) {
+		SimpleDateFormat sdfLong=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		startDate=startDate+" 00:00:00";
+	    endDate=endDate+" 24:00:00";
+		try {
+			startDate=sdfLong.format(sdfLong.parse(startDate));
+			endDate=sdfLong.format(sdfLong.parse(endDate));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return userSettleMapper.getSettleByWid(wid,startDate,endDate);
 	}
 }

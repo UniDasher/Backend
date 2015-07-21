@@ -93,7 +93,15 @@ public class EarningServiceImpl implements EarningService {
 	}
 	public List<Earning> getEarnList(String wid, String startDate,
 			String endDate) {
-		
+		SimpleDateFormat sdfLong=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		startDate=startDate+" 00:00:00";
+	    endDate=endDate+" 24:00:00";
+		try {
+			startDate=sdfLong.format(sdfLong.parse(startDate));
+			endDate=sdfLong.format(sdfLong.parse(endDate));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return earningMapper.getEarnList(wid,startDate,endDate);
 	}
 	public boolean add(Earning e) {

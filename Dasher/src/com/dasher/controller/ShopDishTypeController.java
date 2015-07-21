@@ -263,6 +263,7 @@ public class ShopDishTypeController extends MyController {
 		model=new ModelMap();
 		String authCode=getString(request, "authCode");
 		String myloginId=loginService.getByAuthCode(authCode);
+		String searchStr=getString(request, "searchStr");
 		Login l=loginService.getByLogId(myloginId);
 		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
 		{
@@ -296,7 +297,7 @@ public class ShopDishTypeController extends MyController {
 		}
 		else
 		{
-			List<ShopDishType> list=shopDishTypeService.list(Integer.parseInt(type));
+			List<ShopDishType> list=shopDishTypeService.list(Integer.parseInt(type),searchStr);
 			if(list.size()>0)
 			{
 				model.put("list", list);
