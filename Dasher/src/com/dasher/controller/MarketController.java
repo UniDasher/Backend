@@ -479,6 +479,7 @@ public class MarketController extends MyController {
 		return model;
 	}	
 	
+	
 	@RequestMapping("/market/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -520,6 +521,9 @@ public class MarketController extends MyController {
 				{
 					model.put("count", count);
 					List<Market> list=marketService.list(searchStr, startRow, pageSize);
+					for (Market m : list) {
+						System.out.println(m.getServiceTimes());
+					}
 					model.put("list", list);
 					resultDesc=ShowMsg.findSuc;
 					resultCode=0;

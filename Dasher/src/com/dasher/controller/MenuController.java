@@ -316,7 +316,7 @@ public class MenuController extends MyController {
 						resultDesc=ShowMsg.menuFail;
 					}
 				}else{
-					resultCode=1;
+					resultCode=2;
 					resultDesc=ShowMsg.DishsTotalPriceNotMenuDishPrice;
 				}
 			}
@@ -331,6 +331,7 @@ public class MenuController extends MyController {
 			return model;
 		}
 	}
+	
 	
 	@RequestMapping("phone/menu/receive")
 	@ResponseBody
@@ -533,7 +534,7 @@ public class MenuController extends MyController {
 			else
 			{
 				resultCode=1;
-				resultDesc=ShowMsg.updateFail;
+				resultDesc=ShowMsg.menuCanFail;
 			}
 		}
 		model.put("resultCode", resultCode);	

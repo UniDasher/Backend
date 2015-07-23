@@ -47,23 +47,23 @@ public class ShowMsg {
 	public static final String checkLogin="您尚未登录，请先登录！";  //You are not logged in, please login first.
 	public static final String addSuc="添加成功！";  //Information added successfully
 	public static final String addFail="添加失败！"; //Information added unsuccessfully
-	public static final String addRepeat="该手机号已被注册！";//User name already exists. Please enter again
+	public static final String addRepeat="手机号已注册，请重新输入。";//User name already exists. Please enter again
 	public static final String ShopaddRepeat="商家名称已存在！";//Business name already exists. Please enter again
 	public static final String loginSuc="登录成功！";  //Login successful
 	public static final String loginFail="登录失败！";  //Login failed
 	public static final String userNameNull="账号不存在！";//User name does not exist
-	public static final String pwdErr="密码错误！";//Password Error
+	public static final String pwdErr="密码不正确，请重新提交！";//Password Error
 	public static final String findSuc="查询成功！";//Information query is successful
 	public static final String findFail="查询失败！";//Information query is unsuccessful
 	public static final String updateSuc="修改成功！";//Information modify success
 	public static final String updateFail="修改失败！";//Information modify fail
 	public static final String userNull="登陆账号为空，请重新输入！";//User is null, please input again
-	public static final String pwdLength="密码不可为空且长度为6-30之间！";//Password cannot be empty and length is between 6 to 30
+	public static final String pwdLength="密码不能小于六位，请重新提交。";//Password cannot be empty and length is between 6 to 30
 	public static final String delSuc="删除成功！";//Information deleted successfully
 	public static final String delFail="删除失败！";//Information deleted unsuccessfully
 	public static final String ParFail="无效的参数！";//Parameter is invalid
 	public static final String NickNameNull="昵称不可为空,且长度需小于十！";//FirstName is null
-	public static final String FirstNameNull="FirstName为空！";//FirstName is null
+	public static final String FirstNameNull="真实姓名不能为空，请重新提交。";//FirstName is null
 	public static final String LastNameNull="LastNameNull为空！";//LastNameNull is null
 	public static final String EmailNull = "邮箱地址为空！";//Email is null
 	public static final String AddressNull = "地址为空！";//Address is null
@@ -74,7 +74,7 @@ public class ShowMsg {
 	public static final String NoLogin = "用户没有登录！";//The user is not login, please login again
 	public static final String LogoutSuccess = "用户登出完成！";
 	public static final String LogoutFail = "用户登出失败！";
-	public static final String mobilePhoneErr="手机号码格式不正确！";//Mobile phone number format is not correct, please enter again
+	public static final String mobilePhoneErr="手机号格式不正确，请重新提交。";//Mobile phone number format is not correct, please enter again
 	public static final String inputErr="你输入的格式不正确！";//You input format is not correct
 	public static final String LogoNull = "店铺logo为空！";//The store logo is empty
 	public static final String shopNull="商家名为空！";//Businessman named empty
@@ -141,7 +141,7 @@ public class ShowMsg {
 	public static final String settleNumberNull="订单号或银行账号为空";
 	public static final String settlePriceNull="收支金额为空";
 	public static final String settlePriceErr="收支金额格式错误";
-	public static final String phoneCodeErr="手机验证码错误！";
+	public static final String phoneCodeErr="验证码不正确，请重新提交。";
 	public static final String phoneRepeat="该手机号已被绑定！";
 	public static final String NoLocatInfo = "没有获取位置，请重试！";
 	public static final String distanceNull="附近距离为空！";
@@ -166,9 +166,9 @@ public class ShowMsg {
 	public static final String mealEndDateOver="您的送达时间已过，请重新选择";
 	public static final String mealEndDateFail="您的送达时间格式出错";
 	
-	public static final String shopNotBusiness="商家暂不营业，请见谅。";
+	public static final String shopNotBusiness="商家已暂停营业，请重新点单。";
 	public static final String shopNotDish="商家对应的菜品不存在。";//The price of the format is not correct
-	public static final String DishsTotalPriceNotMenuDishPrice="菜品总额不等于订单菜品的金额。";//The price of the format is not correct
+	public static final String DishsTotalPriceNotMenuDishPrice="餐品数据已变更，请重新点单。";//The price of the format is not correct
 	
 	//用户推送信息（个推）
 	/*
@@ -218,5 +218,14 @@ public class ShowMsg {
 	public static final int serverSettleIndex=9;
 	public static final String serverSettleTitle="结算通知";
 	public static final String serverSettleContent="本期结算已处理，您的费用将在3到15个工作日打到您的账户，请耐心等待。";
+
+	public static final String mobilePhoneNull = "手机号未注册，请重新提交。";
+	public static final String oldpwdErr="原密码错误，请重新提交。";
+
+	public static final String newPwdLength = "（新）密码不能小于六位，请重新提交。";
+
+	public static final String menuCanFail = "订单取消失败";
+
+	public static final String pwdUpdateFail = "密码修改失败";
 	
 }

@@ -75,7 +75,7 @@ public class UserController extends MyController {
 		else if(nickName==""||nickName.length()>10)
 		{
 			resultDesc=ShowMsg.NickNameNull;
-			resultCode=1;
+			resultCode=2;
 		}
 		else
 		{
@@ -195,20 +195,20 @@ public class UserController extends MyController {
 		if(mobilePhone=="")
 		{
 			resultDesc=ShowMsg.userNull;
-			resultCode=2;
+			resultCode=1;
 		}
 		else if(password.length()>5&&password.length()<31)
 		{
 			int flag=userService.userLoin(mobilePhone, password);
 			if(flag==1)
 			{
-				resultDesc=ShowMsg.userNameNull;
-				resultCode=1;
+				resultDesc=ShowMsg.mobilePhoneNull;
+				resultCode=2;
 			}
 			else if(flag==2)
 			{
 				resultDesc=ShowMsg.pwdErr;
-				resultCode=1;
+				resultCode=2;
 			}
 			else if(flag==0)
 			{
@@ -245,7 +245,7 @@ public class UserController extends MyController {
 		else
 		{
 			resultDesc=ShowMsg.pwdLength;
-			resultCode=2;
+			resultCode=1;
 		}
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);	
@@ -519,7 +519,7 @@ public class UserController extends MyController {
 		}else if(mobilePhone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
-			resultCode=2;
+			resultCode=1;
 		}else{
 			//手机格式验证
 			Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
@@ -527,7 +527,7 @@ public class UserController extends MyController {
 			
 			if(matcher2.matches()==false)
 			{
-				resultCode=2;
+				resultCode=1;
 				resultDesc=ShowMsg.mobilePhoneErr;
 			}
 			else
@@ -565,7 +565,7 @@ public class UserController extends MyController {
 				else
 				{
 					resultDesc=ShowMsg.phoneRepeat;
-					resultCode=2;
+					resultCode=1;
 				}
 			}
 		}
@@ -624,7 +624,7 @@ public class UserController extends MyController {
 			Matcher matcher=pattern.matcher(email);
 			if(matcher.matches()==false)
 			{
-				resultCode=2;
+				resultCode=1;
 				resultDesc=ShowMsg.emailErr;
 			}
 			else
@@ -754,7 +754,7 @@ public class UserController extends MyController {
 		
 		if("false".equals(logo))
 		{
-			resultCode=1;
+			resultCode=2;
 			resultDesc=ShowMsg.imageUploadFail;
 		}
 		else
@@ -824,6 +824,11 @@ public class UserController extends MyController {
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
+		else if(newPassword.length()<6)
+		{
+			resultDesc=ShowMsg.newPwdLength;
+			resultCode=1;
+		}
 		else
 		{
 			User u=new User();
@@ -841,7 +846,7 @@ public class UserController extends MyController {
 			}
 			else if(flag==2)
 			{
-				resultDesc=ShowMsg.pwdErr;
+				resultDesc=ShowMsg.oldpwdErr;
 				resultCode=1;
 			}
 			else if(flag==0)
@@ -887,6 +892,8 @@ public class UserController extends MyController {
 			model.put("resultDesc", resultDesc);
 			return model;
 		}
+		Pattern pattern2=Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+		Matcher matcher2=pattern2.matcher(mobilePhone);
 		
 		
 		if(mobilePhone==""||phoneCode==""||newPassword=="")
@@ -894,18 +901,28 @@ public class UserController extends MyController {
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
 		}
+		else if(newPassword.length()<6)
+		{
+			resultDesc=ShowMsg.pwdLength;
+			resultCode=1;
+		}
+		else if(matcher2.matches()==false)
+		{
+			resultCode=1;
+			resultDesc=ShowMsg.mobilePhoneErr;
+		}
 		else
 		{
 			//判断手机验证码是否正确
-			ComplainDeal cd=complainDealService.getByTel(mobilePhone);
-			if(!cd.getPhoneCode().equals(phoneCode))
-			{
-				resultCode=2;
-				resultDesc=ShowMsg.phoneCodeErr;
-				model.put("resultCode", resultCode);	
-				model.put("resultDesc", resultDesc);
-				return model;
-			}
+//			ComplainDeal cd=complainDealService.getByTel(mobilePhone);
+//			if(!cd.getPhoneCode().equals(phoneCode))
+//			{
+//				resultCode=2;
+//				resultDesc=ShowMsg.phoneCodeErr;
+//				model.put("resultCode", resultCode);	
+//				model.put("resultDesc", resultDesc);
+//				return model;
+//			}
 			
 			//修改密码
 			User u=new User();
@@ -924,7 +941,7 @@ public class UserController extends MyController {
 			else
 			{
 				resultCode=1;
-				resultDesc=ShowMsg.updateFail;
+				resultDesc=ShowMsg.pwdUpdateFail;
 			}
 		}
 		model.put("resultCode", resultCode);	
@@ -982,11 +999,11 @@ public class UserController extends MyController {
 		else if(bankType=="")
 		{
 			resultDesc=ShowMsg.bankTypeNull;
-			resultCode=2;
+			resultCode=1;
 		}else if(firstName=="")
 		{
 			resultDesc=ShowMsg.FirstNameNull;
-			resultCode=2;
+			resultCode=1;
 		}else{
 			User u=new User();
 			u.setUid(myloginId);

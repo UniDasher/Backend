@@ -6,17 +6,29 @@ import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.common.mvel2.conversion.ArrayHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.ui.ModelMap;
 
 import com.dasher.mapper.ShopMapper;
 import com.dasher.model.Market;
 import com.dasher.model.Shop;
 import com.dasher.service.ShopService;
+import com.dasher.service.TimeService;
 import com.dasher.util.BaiDuMapUtil;
 
 public class ShopServiceImpl implements ShopService {
 
 	private ShopMapper shopMapper;
+	@Autowired
+	private TimeService timeService;
+	@Autowired
+    @Qualifier("transactionManager")
+    private PlatformTransactionManager transactionManager = null;
 
 	public ShopMapper getShopMapper() {
 		return shopMapper;
@@ -27,8 +39,55 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	public boolean add(Shop s) {
-		// TODO Auto-generated method stub
-		return shopMapper.add(s)>0? true:false;
+		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
+        dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus ts = transactionManager.getTransaction(dtd);
+        
+		boolean flag= shopMapper.add(s)>0? true:false;
+		
+		if(flag){
+			String sid=s.getSid();
+			String week_1="1";
+			String flag_1="1";
+			String times_1="";
+			
+			String week_2="2";
+			String flag_2="1";
+			String times_2="";
+			
+			String week_3="3";
+			String flag_3="1";
+			String times_3="";
+			
+			String week_4="4";
+			String flag_4="1";
+			String times_4="";
+			
+			String week_5="5";
+			String flag_5="1";
+			String times_5="";
+			
+			String week_6="6";
+			String flag_6="1";
+			String times_6="";
+			
+			String week_7="7";
+			String flag_7="1";
+			String times_7="";
+			
+			flag=timeService.add(sid,s.getCreateBy()+"",week_1,flag_1,times_1,week_2,flag_2,times_2,week_3,flag_3,times_3,
+					week_4,flag_4,times_4,week_5,flag_5,times_5,week_6,flag_6,times_6,week_7,flag_7,times_7);
+			
+		}
+		if(flag==true)
+		{
+			transactionManager.commit(ts);
+		}
+		else
+		{
+			transactionManager.rollback(ts);  
+		}
+		return flag;
 	}
 
 	public boolean delete(Shop s) {
@@ -92,8 +151,15 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	public List<Shop> list(String searchStr, int startRow, int pageSize) {
-		// TODO Auto-generated method stub
-		return shopMapper.list(searchStr, startRow, pageSize);
+		Calendar c = Calendar.getInstance();  
+		int dw = c.get(Calendar.DAY_OF_WEEK);
+		if(dw==1){
+			dw=7;
+		}else{
+			dw=dw-1;
+		}
+		
+		return shopMapper.list(searchStr, startRow, pageSize,dw);
 	}
 
 	public boolean updateLogo(Shop s) {

@@ -22,8 +22,8 @@
    </resultMap>
    
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="Market">
-      insert into market_info(smid,name,address,subscribe,email,phone,serviceTime,longitude,latitude,createBy,createDate,status)
-      values(#{smid},#{name},#{address},#{subscribe},#{email},#{phone},#{serviceTime},#{longitude},#{latitude},#{createBy},#{createDate},1)
+      insert into market_info(smid,name,address,subscribe,email,phone,longitude,latitude,createBy,createDate,status)
+      values(#{smid},#{name},#{address},#{subscribe},#{email},#{phone},#{longitude},#{latitude},#{createBy},#{createDate},1)
    </insert>
    
    <update id="update" parameterType="Market">
@@ -65,13 +65,19 @@
          and name like CONCAT(CONCAT('%',#{searchStr}),'%')
        </if>
    </select>
-   
+ 
    <select id="list" resultType="Market">
-       select * from market_info where status>0
-       <if test="searchStr!=''">
-         and name like CONCAT(CONCAT('%',#{searchStr}),'%')
-       </if>
-       limit #{startRow},#{pageSize}
+       select m.*,t.flag as openService,
+	   CONCAT(t.time1,',',t.time2,',',t.time3,',',t.time4,',',t.time5) as serviceTimes
+	   from market_info m
+	   left join time_info t
+	   on m.smid=t.sid
+	   where m.status>0 
+	   and t.weeks=#{dw}
+	   <if test="searchStr!=''">
+		   and m.name like CONCAT(CONCAT('%',#{searchStr}),'%')
+	   </if>
+	   limit #{startRow},#{pageSize}
    </select>
    
    <select id="menuList" resultType="Market">

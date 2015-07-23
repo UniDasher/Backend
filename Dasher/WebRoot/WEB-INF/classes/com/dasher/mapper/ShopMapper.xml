@@ -61,7 +61,8 @@
    </update>
    
    <select id="getListByLati" resultType="Shop">
-     select s.*,t.flag as openService,CONCAT(t.time1,',',t.time2,',',t.time3,',',t.time4,',',t.time5) as serviceTimes
+     select s.*,t.flag as openService,
+     CONCAT(t.time1,',',t.time2,',',t.time3,',',t.time4,',',t.time5) as serviceTimes
      from shop_info s
      left join time_info t
 	 on s.sid=t.sid
@@ -88,10 +89,15 @@
    </select>
    
    <select id="list" resultType="Shop">
-     select * from shop_info
-     where status>0
+     select s.*,t.flag as openService,
+     CONCAT(t.time1,',',t.time2,',',t.time3,',',t.time4,',',t.time5) as serviceTimes
+     from shop_info s 
+     left join time_info t
+	 on s.sid=t.sid
+     where s.status>0 
+     and t.weeks=#{dw}
      <if test="searchStr!=''">
-       and name like CONCAT(CONCAT('%',#{searchStr}),'%')
+       and s.name like CONCAT(CONCAT('%',#{searchStr}),'%')
      </if>
      limit #{startRow},#{pageSize}
    </select>

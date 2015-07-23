@@ -200,11 +200,11 @@ public class Market implements Serializable {
 			for(int i=0;i<st.length;i++){
 				serviceTimes+=st[i]+',';
 			}
-			serviceTimes=serviceTimes.substring(0,serviceTimes.lastIndexOf(','));
+			serviceTimes="".equals(serviceTimes)?"":serviceTimes.substring(0,serviceTimes.lastIndexOf(','));
 		}
 		return serviceTimes;
 	}
-
+	
 	public void setServiceTimes(String serviceTimes) {
 		this.serviceTimes = serviceTimes;
 	}

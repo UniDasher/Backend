@@ -615,17 +615,17 @@ public class ShopController extends MyController {
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
 		model=new ModelMap();
-		String authCode=getString(request, "authCode");
-		String myloginId=loginService.getByAuthCode(authCode);
-		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
-		{
-			resultDesc=ShowMsg.NoLogin;
-			resultCode=3;
-			model.put("resultCode", resultCode);	
-			model.put("resultDesc", resultDesc);	
-			return model;
-		}
-		model.put("authCode", authCode);
+//		String authCode=getString(request, "authCode");
+//		String myloginId=loginService.getByAuthCode(authCode);
+//		if("".equals(authCode)||"".equals(myloginId)||myloginId==null||myloginId.equals(""))
+//		{
+//			resultDesc=ShowMsg.NoLogin;
+//			resultCode=3;
+//			model.put("resultCode", resultCode);	
+//			model.put("resultDesc", resultDesc);	
+//			return model;
+//		}
+//		model.put("authCode", authCode);
 		
 		String mycurPage=getString(request, "curPage");  
 		String mypageSize=getString(request, "countPage");//每页的数据数
@@ -642,6 +642,9 @@ public class ShopController extends MyController {
 				{
 					model.put("count", count);
 					List<Shop> shopList=shopService.list(searchStr, startRow, pageSize);
+					for (Shop shop : shopList) {
+						System.out.println(shop.getServiceTimes());
+					}
 					model.put("list", shopList);
 					resultDesc=ShowMsg.findSuc;
 					resultCode=0;
