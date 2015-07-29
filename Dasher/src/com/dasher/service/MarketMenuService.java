@@ -12,6 +12,7 @@ public interface MarketMenuService {
 	public int receive(MarketMenu mm);
 	public boolean updateStatus(MarketMenu mm);
 	public boolean updateDate(MarketMenu mm);
+	public boolean updateStatus2(MarketMenu mm);
 	public MarketMenu getByMid(String mid);
 	public List<MarketMenu> getNearList(double longitude,double latitude,float distance);
 	public List<MarketMenu> list(String status,String smid,String searchStr,String startDate,String endDate,int startRow,int pageSize);
@@ -20,8 +21,7 @@ public interface MarketMenuService {
 	public List<MarketMenu> getNearListSmid(String smid);
 	public void getListOverTime();
 	public boolean updateStatus_2(MarketMenu menu);
-	public boolean menuComplete(String mid, int evalShop, int evalServer,
-			String myloginId);
+	public boolean menuComplete(String mid, int evalShop, int evalServer,String myloginId);
 	
     
 }

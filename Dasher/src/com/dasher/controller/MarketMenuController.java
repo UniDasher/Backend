@@ -25,15 +25,12 @@ import com.dasher.model.Market;
 import com.dasher.model.MarketCommodity;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
-import com.dasher.model.MenuDish;
-import com.dasher.model.ShopDish;
 import com.dasher.model.Time;
 import com.dasher.model.User;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketCommodityService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MarketService;
-import com.dasher.service.ShopService;
 import com.dasher.service.TimeService;
 import com.dasher.service.UserService;
 import com.dasher.util.CalendarUtil;
@@ -1028,8 +1025,10 @@ public class MarketMenuController extends MyController {
 				}
 				else
 				{
-					resultDesc=ShowMsg.findFail;
-					resultCode=1;
+					model.put("count", 0);
+					model.put("list", null);
+					resultDesc=ShowMsg.findSuc;
+					resultCode=0;
 				}
 			}
 			else

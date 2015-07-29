@@ -38,7 +38,12 @@
 	 <!--join menu m
 	 on c.mid=m.mid  -->
 	 where c.status=#{status}
-	 order by c.createDate desc
+	 <if test="updateDate=''">
+        order by c.createDate desc
+     </if>
+     <if test="updateDate!=''">
+        order by c.updateDate desc
+     </if>
    </select>
    
    <select id="getByComId" parameterType="String" resultType="Complain">
@@ -104,7 +109,7 @@
    <update id="handle" parameterType="Complain">
      update complain 
      set comResult=#{comResult},comContent=#{comContent},returnMoney=#{returnMoney},
-     	deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
+     deductMoney=#{deductMoney},updateBy=#{updateBy},updateDate=#{updateDate},status=#{status}
      where comId=#{comId} 
    </update>
 </mapper>

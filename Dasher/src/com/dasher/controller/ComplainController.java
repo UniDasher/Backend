@@ -21,8 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasher.model.Complain;
 import com.dasher.model.Login;
+import com.dasher.model.MarketMenu;
+import com.dasher.model.Menu;
 import com.dasher.service.ComplainService;
 import com.dasher.service.LoginService;
+import com.dasher.service.MarketMenuService;
+import com.dasher.service.MenuService;
 import com.dasher.util.DateUtil;
 import com.dasher.util.ShowMsg;
 
@@ -33,6 +37,11 @@ public class ComplainController extends MyController {
 	private ComplainService complainService;
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private MenuService menuService;
+	@Autowired
+	private MarketMenuService marketMenuService;
+	
 	private boolean result=false;
 	private int resultCode;
 	private String resultDesc;
@@ -332,6 +341,15 @@ public class ComplainController extends MyController {
 		return model;
 	}	
 	
+	
+	/*
+	 * flag:1,列表
+       flag:2,详细
+       flag:3,驳回
+       type=1,餐厅订单
+       type=2,超市订单
+	 * 
+	 */
 	@RequestMapping("/complain/deal")
 	@ResponseBody
 	protected Object deal(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -365,8 +383,10 @@ public class ComplainController extends MyController {
 		String comContent=getString(request, "comContent");
 		String returnMoney=getString(request, "returnMoney");
 		String deductMoney=getString(request, "deductMoney");
+		String flag=getString(request, "flag");
 		
-		if(comId=="")
+		
+		if(comId==""||flag=="")
 		{
 			resultDesc=ShowMsg.ParFail;
 			resultCode=2;
@@ -383,6 +403,7 @@ public class ComplainController extends MyController {
 		}
 		else
 		{
+			
 			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
 		    if(!returnMoney.equals(""))
 			{
@@ -415,10 +436,35 @@ public class ComplainController extends MyController {
 		    c.setType(Integer.parseInt(type));
 		    c.setComResult(Integer.parseInt(comResult));
 		    c.setComContent(comContent);
-		    if(!returnMoney.equals(""))
-		    {
-		    	c.setReturnMoney(Float.parseFloat(returnMoney));
-		    }
+		    
+		    Complain com=complainService.getByComId(comId, Integer.parseInt(type));
+			if(com.getType()==1)
+			{
+				Menu m=menuService.getByMid(com.getMid());
+				if(flag.equals("1")&&!returnMoney.equals(""))
+				{
+				   c.setReturnMoney(m.getDishsMoney()+m.getCarriageMoney()); 
+				}
+				else if(flag.equals("2")&&!returnMoney.equals(""))
+				{
+				   c.setReturnMoney(Float.parseFloat(returnMoney));
+				}
+				
+			}
+			else if(com.getType()==2)
+			{
+				MarketMenu mm=marketMenuService.getByMid(com.getMid());
+				if(flag.equals("1")&&!returnMoney.equals(""))
+				{
+				    c.setReturnMoney(mm.getDishsMoney()+mm.getCarriageMoney()); 
+				}
+				else if(flag.equals("2")&&!returnMoney.equals(""))
+				{
+				    c.setReturnMoney(Float.parseFloat(returnMoney));
+				}
+				
+			}
+		   
 		    if(!deductMoney.equals(""))
 		    {
 		    	c.setDeductMoney(Float.parseFloat(deductMoney));
@@ -426,7 +472,7 @@ public class ComplainController extends MyController {
 		    c.setUpdateBy(myloginId);
 		    c.setUpdateDate(DateUtil.getCurrentDateStr());
 		    c.setStatus(2);
-		    
+		   
 		    SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
 			Date date=new Date();
 			String fileName=sdf.format(date);
@@ -438,6 +484,24 @@ public class ComplainController extends MyController {
 				model.put("fileName","/upload/settle/user/"+fileName);	
 				resultCode=0;
 				resultDesc=ShowMsg.handleSuc;
+				
+				if(flag.equals("3")&&com.getType()==2)
+				{
+					MarketMenu me=new MarketMenu();
+					me.setUpdateBy(myloginId);
+					me.setUpdateDate(DateUtil.getCurrentDateStr());
+					me.setSmid(com.getMid());
+					boolean boo=marketMenuService.updateStatus2(me);
+				}
+				else if(flag.equals("3")&&com.getType()==1)
+				{
+					Menu me=new Menu();
+					me.setUpdateBy(myloginId);
+					me.setUpdateDate(DateUtil.getCurrentDateStr());
+					me.setMid(com.getMid());
+					boolean boo=menuService.updateStatus2(me);
+				}
+				
 			}
 			else
 			{

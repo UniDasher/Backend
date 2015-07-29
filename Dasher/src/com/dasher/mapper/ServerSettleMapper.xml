@@ -48,6 +48,7 @@
      <if test="startDate!='' and endDate!=''">
 		and us.createDate between #{startDate} and #{endDate}
      </if>
+     order by us.createDate desc
      limit #{startRow},#{pageSize} 
    </select>
 </mapper>

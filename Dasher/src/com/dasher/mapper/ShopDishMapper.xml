@@ -68,6 +68,12 @@
      <if test="typeId!=0">
        and sd.typeId=#{typeId}
      </if>
+     <if test="updateDate=''">
+        order by sd.createDate desc
+     </if>
+     <if test="updateDate!=''">
+        order by sd.updateDate desc
+     </if>
      limit #{startRow},#{pageSize}
    </select>
    

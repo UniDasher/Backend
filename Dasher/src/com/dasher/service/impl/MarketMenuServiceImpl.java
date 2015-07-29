@@ -18,11 +18,8 @@ import com.dasher.model.Earning;
 import com.dasher.model.Market;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.MarketMenuRecord;
-import com.dasher.model.Menu;
-import com.dasher.model.Shop;
 import com.dasher.model.User;
 import com.dasher.service.EarningService;
-import com.dasher.service.MarketCommodityService;
 import com.dasher.service.MarketMenuRecordService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MarketService;
@@ -385,6 +382,11 @@ public class MarketMenuServiceImpl implements MarketMenuService {
 		{
 			transactionManager.rollback(ts);  
 		}
+	}
+
+	public boolean updateStatus2(MarketMenu mm) {
+		// TODO Auto-generated method stub
+		return marketMenuMapper.updateStatus2(mm)>0? true:false;
 	}
 
 }

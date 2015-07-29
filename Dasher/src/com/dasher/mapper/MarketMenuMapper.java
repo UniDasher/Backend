@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.dasher.model.MarketMenu;
-import com.dasher.model.Menu;
 
 public interface MarketMenuMapper {
 
@@ -15,6 +14,7 @@ public interface MarketMenuMapper {
 	public int getCount(@Param(value="status") String status,@Param(value="smid") String smid,@Param(value="searchStr") String searchStr,@Param(value="startDate") String startDate,@Param(value="endDate") String endDate);
 	public int getListByUidCount(@Param(value="type") int type,@Param(value="searchStr") String searchStr,@Param(value="startDate")String startDate,@Param(value="endDate")String endDate);
 	public int updateDate(MarketMenu mm);
+	public int updateStatus2(MarketMenu mm);
 	public MarketMenu getByMid(String mid);
 	public List<MarketMenu> getNearlist(@Param(value="minlon")double minlon,@Param(value="maxlon")double maxlon,@Param(value="minlat")double minlat,@Param(value="maxlat")double maxlat);
     public List<MarketMenu> list(@Param(value="status") String status,@Param(value="smid") String smid,@Param(value="searchStr") String searchStr,@Param(value="startDate") String startDate,@Param(value="endDate") String endDate,@Param(value="startRow") int startRow,@Param(value="pageSize") int pageSize);

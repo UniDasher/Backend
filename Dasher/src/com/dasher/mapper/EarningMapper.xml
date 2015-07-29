@@ -44,8 +44,8 @@
    
    <select id="getEarnTotal" parameterType="String" resultType="Map">
      select (select sum(carriageMoney) from earn_info where wid=#{wid} and (createDate between #{startDate} and #{endDate})) as weekEarn,
-     	sum(e.carriageMoney) as totalEarn,sum(e.totalMoney) as totalMoney,
-     	u.balance as balance,max(us.createDate) as settleDate
+     sum(e.carriageMoney) as totalEarn,sum(e.totalMoney) as totalMoney,
+     u.balance as balance,max(us.createDate) as settleDate
      from earn_info e 
      left join user_info u
 	 on e.wid=u.uid 

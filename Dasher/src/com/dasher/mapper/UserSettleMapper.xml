@@ -54,6 +54,12 @@
      <if test="startDate!='' and endDate!=''">
 		and us.createDate between #{startDate} and #{endDate}
      </if>
+     <if test="updateDate=''">
+        order by us.createDate desc
+     </if>
+     <if test="updateDate!=''">
+        order by us.updateDate desc
+     </if>
      limit #{startRow},#{pageSize} 
    </select>
    

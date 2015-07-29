@@ -67,18 +67,18 @@
      left join time_info t
 	 on s.sid=t.sid
      where (s.longitude between #{minlon} and #{maxlon}) 
-	   and (s.latitude between #{minlat} and #{maxlat}) 
-	   and t.weeks=#{dw}
-	   and s.status>0
+	 and (s.latitude between #{minlat} and #{maxlat}) 
+	 and t.weeks=#{dw}
+	 and s.status>0
    </select>
    <select id="getListByMenu" resultType="Shop">
      select distinct s.*,count(m.mid) as orderCount
      from shop_info s
-     	join menu m
-		on m.sid=s.sid
+     join menu m
+	 on m.sid=s.sid
      where (m.longitude between #{minlon} and #{maxlon}) 
-		and (m.latitude between #{minlat} and #{maxlat}) 
-		and m.status=1 and m.uid!=#{uid} group by m.sid
+	 and (m.latitude between #{minlat} and #{maxlat}) 
+	 and m.status=1 and m.uid!=#{uid} group by m.sid
    </select>
    <select id="getShopCount" resultType="Integer" parameterType="String">
      select count(*) from shop_info
@@ -99,6 +99,12 @@
      <if test="searchStr!=''">
        and s.name like CONCAT(CONCAT('%',#{searchStr}),'%')
      </if>
+     <if test="updateDate=''">
+        order by s.createDate desc
+     </if>
+     <if test="updateDate!=''">
+        order by s.updateDate desc
+     </if>
      limit #{startRow},#{pageSize}
    </select>
    
@@ -114,7 +120,7 @@
    </select>
    
    <select id="getShopType" resultType="String">
-   		select distinct typeTab from shop_info
+   	 select distinct typeTab from shop_info
    </select>
   
 </mapper>

@@ -63,6 +63,12 @@
      <if test="typeId!=''">
       and typeId=#{typeId}
      </if>
+     <if test="updateDate=''">
+        order by createDate desc
+     </if>
+     <if test="updateDate!=''">
+        order by updateDate desc
+     </if>
      limit #{startRow},#{pageSize}
    </select>
    

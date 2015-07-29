@@ -98,8 +98,9 @@
 	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
 	 <if test="startDate!='' and endDate!=''">
-			and authTime between #{startDate} and #{endDate}
+		and authTime between #{startDate} and #{endDate}
      </if>
+     order by createDate desc
      limit #{startRow},#{pageSize}
    </select>
   
@@ -140,6 +141,7 @@
      <if test="searchStr!=''">
 	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
+	 order by createDate desc
      limit #{startRow},#{pageSize}
    </select>
    

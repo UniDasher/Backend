@@ -13,6 +13,7 @@ public interface MenuService {
 	public int receive(Menu m);
 	public boolean updateStatus(Menu m);	
 	public boolean updateMealDate(Menu m);
+	public boolean updateStatus2(Menu m);
 	public Menu getByMid(String mid);
 	public List<Menu> list(String status, String sid, String searchStr, String startDate, String endDate,int curPage, int countPage);
 	public List<Menu> getListByUid(int type,String searchStr,String startDate,String endDate,int curPage, int countPage);
@@ -23,6 +24,6 @@ public interface MenuService {
 	public void getListOverTime();//获取超时的订单列表
 	public List<Menu> getNearListBySid(String sid, String uid);
 	public boolean updateStatus_2(Menu m);
-	public boolean menuComplete(String mid, int evalShop, int evalServer,
-			String myloginId);
+	public boolean menuComplete(String mid, int evalShop, int evalServer,String myloginId);
+	public void menuAutoComplete();
 }

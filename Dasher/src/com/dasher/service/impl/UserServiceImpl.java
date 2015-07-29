@@ -1,12 +1,8 @@
 package com.dasher.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -14,8 +10,6 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.dasher.chat.Constants;
-import com.dasher.chat.httpclient.apidemo.EasemobIMUsers;
 import com.dasher.mapper.UserMapper;
 import com.dasher.model.Login;
 import com.dasher.model.User;
@@ -26,8 +20,6 @@ import com.dasher.util.EasemobUtil;
 import com.dasher.util.IGtPushUtil;
 import com.dasher.util.MyMD5Util;
 import com.dasher.util.ShowMsg;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gexin.rp.sdk.base.IPushResult;
 
 public class UserServiceImpl implements UserService {

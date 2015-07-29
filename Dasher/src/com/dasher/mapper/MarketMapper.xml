@@ -77,6 +77,12 @@
 	   <if test="searchStr!=''">
 		   and m.name like CONCAT(CONCAT('%',#{searchStr}),'%')
 	   </if>
+	   <if test="updateDate=''">
+        order by m.createDate desc
+       </if>
+       <if test="updateDate!=''">
+        order by m.updateDate desc
+       </if>
 	   limit #{startRow},#{pageSize}
    </select>
    
@@ -94,12 +100,13 @@
 	   and t.weeks=#{dw}
 	   and m.status>0
 	</select>
+	
   	<select id="getNearListMenu" resultType="Market">
 	   select distinct s.*,count(m.mid) as orderCount
      	from market_info s
      	join market_menu m
 		on m.smid=s.smid
-     where (m.longitude between #{minlon} and #{maxlon}) 
+        where (m.longitude between #{minlon} and #{maxlon}) 
 		and (m.latitude between #{minlat} and #{maxlat}) 
 		and m.status=1 group by m.smid
 	</select>

@@ -3,9 +3,6 @@ package com.dasher.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
-
-import org.elasticsearch.common.mvel2.conversion.ArrayHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -15,7 +12,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.ui.ModelMap;
 
 import com.dasher.mapper.ShopMapper;
-import com.dasher.model.Market;
 import com.dasher.model.Shop;
 import com.dasher.service.ShopService;
 import com.dasher.service.TimeService;

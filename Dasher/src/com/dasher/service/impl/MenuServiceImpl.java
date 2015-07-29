@@ -12,20 +12,22 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.dasher.mapper.ComplainMapper;
-import com.dasher.mapper.LoginMapper;
 import com.dasher.mapper.MenuMapper;
+import com.dasher.mapper.UserSettleMapper;
 import com.dasher.model.Complain;
 import com.dasher.model.Earning;
 import com.dasher.model.Login;
 import com.dasher.model.Menu;
 import com.dasher.model.MenuDish;
+import com.dasher.model.ServerSettle;
 import com.dasher.model.Shop;
 import com.dasher.model.User;
+import com.dasher.model.UserSettle;
 import com.dasher.service.EarningService;
 import com.dasher.service.LoginService;
 import com.dasher.service.MenuDishService;
 import com.dasher.service.MenuService;
-import com.dasher.service.ShopDishService;
+import com.dasher.service.ServerSettleService;
 import com.dasher.service.ShopService;
 import com.dasher.service.UserService;
 import com.dasher.util.BaiDuMapUtil;
@@ -49,6 +51,10 @@ public class MenuServiceImpl implements MenuService {
 	private UserService userService;
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private UserSettleMapper userSettleMapper;
+	@Autowired
+	private ServerSettleService serverSettleService;
 	@Autowired
     @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager = null;
@@ -92,6 +98,20 @@ public class MenuServiceImpl implements MenuService {
 			}
 			if(flag==true)
 			{
+				ServerSettle ss=new ServerSettle();
+	            ss.setUid(m.getUid());
+	            ss.setType(1);
+	            ss.setTypeDesc("用户下单");
+	            ss.setOldBalance(0);
+	            ss.setSettlePrice(m.getDishsMoney()+m.getCarriageMoney());
+	            ss.setCurBalance(0);
+	            ss.setSettleNumberType("用户下单");
+	            ss.setSettleNumber(m.getMid());
+	            ss.setSettleDesc("用户下单");
+	            ss.setCreateBy(m.getCreateBy());
+	            ss.setCreateDate(DateUtil.getCurrentDateStr());
+	            serverSettleService.add(ss); 
+	            
 				transactionManager.commit(ts);
 			}
 			else
@@ -213,13 +233,29 @@ public class MenuServiceImpl implements MenuService {
 			//修改接单人的余额
 			User user=userService.getByUId(m_1.getWid());
 			float curUserBalance=user.getBalance()+m_1.getDishsMoney()+m_1.getCarriageMoney();
-			//更新用户的余额和收支记录
+			
+			UserSettle us=new UserSettle();
+        	us.setWid(m_1.getWid());
+            us.setOldBalance(user.getBalance());
+            us.setType(1);
+            us.setTypeDesc("订单完成");
+            us.setSettlePrice(m_1.getDishsMoney()+m_1.getCarriageMoney());
+            us.setCurBalance(curUserBalance);
+            us.setSettleNumberType("订单号：");
+            us.setSettleNumber(m_1.getMid());
+            us.setSettleDesc("送餐员完成订单配送");
+            us.setCreateBy(m.getUpdateBy());
+            us.setCreateDate(DateUtil.getCurrentDateStr());
+            userService.updateBalance(user.getUid(),0);
+            userSettleMapper.add(us);
+			
+            //更新用户的余额和收支记录
 			flag=userService.updateBalance(m_1.getWid(),curUserBalance);
 			if(!flag){
 				transactionManager.rollback(ts); 
 				return flag;
 			}
-			
+            
 			//新增送餐人结算记录
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-ddHH-mm-ss-SSS");
 			Date date=new Date();
@@ -372,7 +408,34 @@ public class MenuServiceImpl implements MenuService {
 		return list;
 
 	}
+	
 
+	public void menuAutoComplete() {
+		boolean flag=false;
+		List<Menu> list=menuMapper.getOverList();
+		if(list.size()>0)
+		{
+			
+			for(Menu m:list)
+			{
+				Menu menu=new Menu();
+				menu.setStatus(3);
+				menu.setEndDate(DateUtil.getCurrentDateStr());
+				menu.setMid(m.getMid());
+				flag=updateStatus(menu);
+				if(flag==true)
+				{
+					Login log=loginService.getByLogId(m.getWid());
+					if(log!=null&&log.getAuthCode()!=""&&log.getAuthCode()!=null&&log.getIgtClientId()!=""&&log.getIgtClientId()!=null){
+						IPushResult ipr=IGtPushUtil.PushtoSingleDeal(log.getIgtClientId(),ShowMsg.menuCompleteIndex);
+					}
+				}
+			}
+		}
+		
+	}
+	
+	
 	public void getListOverTime() {
 		DefaultTransactionDefinition dtd = new DefaultTransactionDefinition();
         dtd.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -448,6 +511,11 @@ public class MenuServiceImpl implements MenuService {
 			String endDate) {
 		// TODO Auto-generated method stub
 		return menuMapper.getListByUidCount(type, searchStr, startDate, endDate)                 ;
+	}
+
+	public boolean updateStatus2(Menu m) {
+		// TODO Auto-generated method stub
+		return menuMapper.updateStatus2(m)>0? true:false;
 	}
 
 	

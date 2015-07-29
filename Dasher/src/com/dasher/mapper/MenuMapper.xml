@@ -112,10 +112,14 @@
 		<if test="startDate!='' and endDate!=''">
 			and endDate between #{startDate} and #{endDate}
         </if>
-        <if test="status=='3'">
+        <if test="status=='3' and updateDate=''">
+            order by m.createDate desc
 			limit #{curPage},#{countPage}
         </if>
-		
+		<if test="status=='3' and updateDate!=''">
+            order by m.updateDate desc
+			limit #{curPage},#{countPage}
+        </if>
 	</select>
 
 	<select id="getListByUidCount" resultType="Integer">
@@ -133,12 +137,14 @@
 
 	<select id="getListByUid" resultType="Menu">
 		<!--select * from menu where 1=1-->
-		select m.*,s.name as shopName,u.nickName as userName
+		select m.*,s.name as shopName,u.nickName as userName,u2.nickName as serverName
 		from menu m
 		join shop_info s
 		on m.sid=s.sid
 		join user_info u
 		on m.uid=u.uid
+		left join user_info u2
+		on m.wid=u2.uid
 		where 1=1
 		<if test="type==0 and searchStr!=''">
 			and m.uid=#{searchStr}
@@ -148,6 +154,12 @@
         </if>
         <if test="startDate!='' and endDate!=''">
 			and m.createDate between #{startDate} and #{endDate}
+        </if>
+        <if test="updateDate=''">
+            order by m.createDate desc
+        </if>
+        <if test="updateDate!=''">
+            order by m.updateDate desc
         </if>
 		limit #{curPage},#{countPage}
 	</select>
@@ -176,6 +188,12 @@
 		where m.uid=#{uid}
 		<if test="status!=''">
 		    and m.status=#{status}
+        </if>
+        <if test="updateDate=''">
+           order by m.createDate desc
+        </if>
+        <if test="updateDate!=''">
+           order by m.updateDate desc
         </if>
 		limit #{curPage},#{countPage}
 	</select>
@@ -222,7 +240,12 @@
 		<if test="type==3">
 			and m.status not in (1,2,3)
 		</if>
-		order by m.createDate 	
+		<if test="updateDate=''">
+            order by m.createDate desc
+        </if>
+        <if test="updateDate!=''">
+            order by m.updateDate desc
+        </if> 	
 	</select>
     
     <select id="getNearlist" resultType="Menu">
@@ -250,6 +273,12 @@
 		and status=1
 	</update>
 	
+	<select id="getOverList" resultType="Menu">
+	    select *
+		from menu
+		where to_days(now())-to_days(startDate)=1
+		and unix_timestamp(now())-unix_timestamp(startDate)>=86400
+	</select>
 	
 	<select id="getNearListBySid" resultType="Menu">
 		select m.*,s.name as shopName,s.address as shopAddress,s.longitude as shopLongitude,s.latitude as shopLatitude,
@@ -262,5 +291,10 @@
 		where m.sid=#{sid} and m.uid!=#{uid} and m.status=1
 	</select>
 	
+	<update id="updateStatus2" parameterType="Menu">
+	   update menu 
+	   set status=2,updateBy=#{updateBy},updateDate=#{updateDate}
+	   where mid=#{mid} and status>0
+	</update>
 	
 </mapper>

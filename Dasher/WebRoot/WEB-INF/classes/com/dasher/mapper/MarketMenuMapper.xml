@@ -108,7 +108,12 @@
       <if test="startDate!='' and endDate!=''">
 		and endDate between #{startDate} and #{endDate}
       </if>
-      <if test="status=='3'">
+      <if test="status=='3' and updateDate=''">
+        order by mm.createDate desc
+		limit #{startRow},#{pageSize}
+      </if>
+      <if test="status=='3' and updateDate!=''">
+        order by mm.updateDate desc
 		limit #{startRow},#{pageSize}
       </if>
       
@@ -145,8 +150,8 @@
    
    <select id="getListByUid" resultType="MarketMenu">
       select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
-			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone,
-			u2.nickName as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
+	  u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone,
+	  u2.nickName as serverName,u2.logo as serverLogo,u2.mobilePhone as serverPhone
       from market_menu as mm
 	  join market_info as m
 	  on mm.smid=m.smid
@@ -162,7 +167,13 @@
 		and mm.wid=#{searchStr}
       </if>
       <if test="startDate!='' and endDate!=''">
-			and mm.createDate between #{startDate} and #{endDate}
+		and mm.createDate between #{startDate} and #{endDate}
+      </if>
+      <if test="updateDate=''">
+        order by mm.createDate desc
+      </if>
+      <if test="updateDate!=''">
+        order by mm.updateDate desc
       </if>
 	  limit #{curPage},#{countPage}
    </select>
@@ -194,7 +205,12 @@
 		<if test="type==3">
 			and mm.status not in (1,2,3)
 		</if>
-		order by createDate desc
+		<if test="updateDate=''">
+            order by mm.createDate desc
+        </if>
+        <if test="updateDate!=''">
+            order by mm.updateDate desc
+        </if>
    </select>
    
    <update id="updateDate" parameterType="MarketMenu">
@@ -207,9 +223,9 @@
 	 select *,s.name as shopName,u.nickName as userName
      from market_menu m
      join market_info s
-		on m.smid=s.smid
-		join user_info u
-		on m.uid=u.uid
+	 on m.smid=s.smid
+	 join user_info u
+	 on m.uid=u.uid
      where (m.longitude between #{minlon} and #{maxlon}) 
      and (m.latitude between #{minlat} and #{maxlat}) 
      and m.status=1
@@ -236,6 +252,12 @@
 		update market_menu set status=6,overTimeDate=#{updateDate}
 		where mealEndDate &lt; #{mealEndDate}
 		and status=1
+	</update>
+	
+	<update id="updateStatus2" parameterType="MarketMenu">
+	   update market_menu 
+	   set status=2,updateBy=#{updateBy},updateDate=#{updateDate}
+	   where smid=#{smid} and status>0
 	</update>
   
 </mapper>

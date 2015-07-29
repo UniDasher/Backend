@@ -17,12 +17,12 @@ import com.dasher.model.Complain;
 import com.dasher.model.Login;
 import com.dasher.model.MarketMenu;
 import com.dasher.model.Menu;
-import com.dasher.model.User;
-import com.dasher.model.UserSettle;
+import com.dasher.model.ServerSettle;
 import com.dasher.service.ComplainService;
 import com.dasher.service.LoginService;
 import com.dasher.service.MarketMenuService;
 import com.dasher.service.MenuService;
+import com.dasher.service.ServerSettleService;
 import com.dasher.service.UserService;
 import com.dasher.service.UserSettleService;
 import com.dasher.util.DateUtil;
@@ -38,6 +38,8 @@ public class ComplainServiceImpl implements ComplainService {
 	private UserService userService;
 	@Autowired
 	private UserSettleService userSettleService;
+	@Autowired
+	private ServerSettleService serverSettleService;
 	@Autowired
 	private MenuService menuService;
 	@Autowired
@@ -190,6 +192,21 @@ public class ComplainServiceImpl implements ComplainService {
         	menu.setUpdateDate(DateUtil.getCurrentDateStr());
         	result=menuService.updateStatus_2(menu);
         	
+        	//系统结算
+        	ServerSettle ss=new ServerSettle();
+            ss.setUid(menu.getUid());
+            ss.setType(2);
+            ss.setTypeDesc("用户订单"+(com.getComType()==1?"投诉":(com.getComType()==2?"取消":"延时")));
+            ss.setOldBalance(0);
+            ss.setSettlePrice(menu.getDishsMoney()+menu.getCarriageMoney());
+            ss.setCurBalance(0);
+            ss.setSettleNumberType("用户退款");
+            ss.setSettleNumber("用户订单"+(com.getComType()==1?"投诉":(com.getComType()==2?"取消":"延时")));
+            ss.setSettleDesc("用户下单异常退款");
+            ss.setCreateBy(com.getUpdateBy());
+            ss.setCreateDate(DateUtil.getCurrentDateStr());
+            serverSettleService.add(ss); 
+        	
         	//通知用户，订单退款处理
 			//向用户推送信息（个推）
 			//判断用户是否登录
@@ -219,7 +236,6 @@ public class ComplainServiceImpl implements ComplainService {
 						com.getComType()==1?ShowMsg.menuComplainDealIndex:(com.getComType()==2?ShowMsg.menuCancleDealIndex:ShowMsg.menuOverTimeDealIndex));
 			}
         }
-        
         
         if(result){
         	c.setComType(com.getComType());

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gexin.rp.sdk.base.IAliasResult;
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.*;
 import com.gexin.rp.sdk.http.IGtPush;

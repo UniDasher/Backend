@@ -14,5 +14,7 @@ public class AutoJobTask {
 	  // ........
     	//System.out.print("asasas");
     	menuService.getListOverTime();
+    	//订单完成操作
+    	menuService.menuAutoComplete();
     }
 }

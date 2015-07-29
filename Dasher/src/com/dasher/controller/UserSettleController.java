@@ -14,7 +14,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasher.model.Earning;
 import com.dasher.model.UserSettle;
 import com.dasher.service.LoginService;
 import com.dasher.service.UserSettleService;
