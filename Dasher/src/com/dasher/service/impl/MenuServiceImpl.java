@@ -415,7 +415,6 @@ public class MenuServiceImpl implements MenuService {
 		List<Menu> list=menuMapper.getOverList();
 		if(list.size()>0)
 		{
-			
 			for(Menu m:list)
 			{
 				Menu menu=new Menu();

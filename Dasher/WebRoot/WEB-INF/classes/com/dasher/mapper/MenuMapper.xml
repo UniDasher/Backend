@@ -277,7 +277,8 @@
 	    select *
 		from menu
 		where to_days(now())-to_days(startDate)=1
-		and unix_timestamp(now())-unix_timestamp(startDate)>=86400
+		and unix_timestamp(now())-unix_timestamp(startDate)>=86400 
+		and status=2
 	</select>
 	
 	<select id="getNearListBySid" resultType="Menu">
