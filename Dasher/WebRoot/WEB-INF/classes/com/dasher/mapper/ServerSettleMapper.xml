@@ -25,7 +25,7 @@
    <select id="getCount" resultType="Integer" parameterType="Integer">
      select count(us.id)
 	 from server_settle us
-	 join user_info u
+	 left join user_info u
 	 on us.uid=u.uid
 	 where 1=1
 	 <if test="searchStr!=''">
@@ -39,7 +39,7 @@
    <select id="list" resultType="ServerSettle">
      select us.*,concat(u.firstName,u.lastName) as userName,u.mobilePhone,u.nickName
 	 from server_settle us
-	 join user_info u
+	 left join user_info u
 	 on us.uid=u.uid
 	 where 1=1
 	 <if test="searchStr!=''">

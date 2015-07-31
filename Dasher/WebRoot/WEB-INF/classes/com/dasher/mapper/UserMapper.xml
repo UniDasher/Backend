@@ -94,6 +94,9 @@
      <if test="type==1">
      	and (status=2 or status=3)
      </if>
+     <if test="type!=1">
+     	and status!=2 and status!=3
+     </if>
      <if test="searchStr!=''">
 	    and (firstName like CONCAT(CONCAT('%', #{searchStr}),'%') or lastName like CONCAT(CONCAT('%', #{searchStr}),'%') or nickName like CONCAT(CONCAT('%', #{searchStr}),'%')) 
 	 </if>
