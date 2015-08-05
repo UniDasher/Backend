@@ -63,6 +63,7 @@ public class EarningServiceImpl implements EarningService {
 		
 		return map;
 	}
+	
 	//获取用户最近一周的收益
 	public List<Map<String, Object>> getEarnWeek(String wid) {
 		SimpleDateFormat sdfLong=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -91,6 +92,7 @@ public class EarningServiceImpl implements EarningService {
 		}
 		return list;
 	}
+	
 	public List<Earning> getEarnList(String wid, String startDate,
 			String endDate) {
 		SimpleDateFormat sdfLong=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -104,6 +106,7 @@ public class EarningServiceImpl implements EarningService {
 		}
 		return earningMapper.getEarnList(wid,startDate,endDate);
 	}
+	
 	public boolean add(Earning e) {
 		// TODO Auto-generated method stub
 		return earningMapper.add(e)>0? true:false;
@@ -138,6 +141,5 @@ public class EarningServiceImpl implements EarningService {
 		// TODO Auto-generated method stub
 		return earningMapper.listMonth(wid);
 	}
-
 	
 }

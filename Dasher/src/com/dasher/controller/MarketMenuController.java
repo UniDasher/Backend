@@ -746,6 +746,7 @@ public class MarketMenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("phone/market/menu/update/mealdate")
 	@ResponseBody
 	protected Object mealdate(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -939,7 +940,6 @@ public class MarketMenuController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
 	
 	@RequestMapping("/market/menu/info")
 	@ResponseBody
@@ -983,7 +983,6 @@ public class MarketMenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
 
 	@RequestMapping("/market/menu/user/list")
 	@ResponseBody

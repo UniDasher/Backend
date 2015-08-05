@@ -152,6 +152,7 @@ public class MarketMenuRecordController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
 	@RequestMapping("phone/market/menu/commodity/list")
 	@ResponseBody
 	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -239,6 +240,5 @@ public class MarketMenuRecordController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
 
 }

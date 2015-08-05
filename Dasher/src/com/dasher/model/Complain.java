@@ -35,7 +35,6 @@ public class Complain implements Serializable {
 	public void setCarriageMoney(float carriageMoney) {
 		this.carriageMoney = carriageMoney;
 	}
-	
 	public float getDishsMoney() {
 		return dishsMoney;
 	}
@@ -84,7 +83,6 @@ public class Complain implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
 	public String getWid() {
 		return wid;
 	}
@@ -177,12 +175,10 @@ public class Complain implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
 	public Complain() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 	public Complain(int id, String comId,int comType, String uid, String mid, String wid,
 			int type, String content, int comResult, String comContent,
 			float returnMoney, float deductMoney, String createBy,

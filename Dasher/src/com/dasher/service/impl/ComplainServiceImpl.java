@@ -217,6 +217,13 @@ public class ComplainServiceImpl implements ComplainService {
 				
 				//System.out.println(ipr.getResponse().toString());
 			}
+			Login log2=loginService.getByLogId(com.getWid());
+			if(log2!=null&&log2.getAuthCode()!=""&&log2.getAuthCode()!=null&&log2.getIgtClientId()!=""&&log2.getIgtClientId()!=null){
+				IPushResult ipr=IGtPushUtil.PushtoSingleDeal2(log2.getIgtClientId(), 
+						com.getComType()==1?ShowMsg.menuComplainDealIndex:(com.getComType()==2?ShowMsg.menuCancleDealIndex:ShowMsg.menuOverTimeDealIndex));
+				
+				//System.out.println(ipr.getResponse().toString());
+			}
         }else{
         	//订单为超市订单
         	MarketMenu menu=new MarketMenu();

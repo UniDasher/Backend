@@ -78,7 +78,6 @@
 	 <if test="status==2 and startDate!='' and endDate!=''">
 		and c.updateDate between #{startDate} and #{endDate}
      </if>
-	 
    </select>
    
    <select id="list" resultType="Complain">

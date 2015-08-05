@@ -258,8 +258,7 @@ public class MarketCommodityController extends MyController {
 				resultCode=1;
 				resultDesc=ShowMsg.addFail;
 			}
-
-
+			
 		}
 
 		model.put("resultCode", resultCode);	

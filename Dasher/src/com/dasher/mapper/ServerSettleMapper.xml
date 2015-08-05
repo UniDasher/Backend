@@ -18,10 +18,12 @@
 	     <result property="createBy" column="createBy"/>
 	     <result property="createDate" column="createDate"/>
    </resultMap>
+   
    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="ServerSettle">
      insert into server_settle(uid,oldBalance,type,typeDesc,settlePrice,curBalance,settleNumberType,settleNumber,settleDesc,createBy,createDate)
      values(#{uid},#{oldBalance},#{type},#{typeDesc},#{settlePrice},#{curBalance},#{settleNumberType},#{settleNumber},#{settleDesc},#{createBy},#{createDate})
    </insert>
+   
    <select id="getCount" resultType="Integer" parameterType="Integer">
      select count(us.id)
 	 from server_settle us
@@ -51,4 +53,5 @@
      order by us.createDate desc
      limit #{startRow},#{pageSize} 
    </select>
+   
 </mapper>

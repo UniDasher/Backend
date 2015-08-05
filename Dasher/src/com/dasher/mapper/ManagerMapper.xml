@@ -50,6 +50,5 @@
    <select id="listAll" resultType="Manager">
      select * from manager where status>0
    </select>
-   
   
 </mapper>

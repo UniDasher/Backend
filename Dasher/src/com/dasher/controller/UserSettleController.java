@@ -62,7 +62,6 @@ public class UserSettleController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
 
 	@RequestMapping("/settle/user")
 	@ResponseBody
@@ -102,6 +101,7 @@ public class UserSettleController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
 	@RequestMapping("/settle/user/all")
 	@ResponseBody
 	protected Object settleUserAll(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -140,7 +140,6 @@ public class UserSettleController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
 	
 	@RequestMapping("/settle/user/list")
 	@ResponseBody
@@ -192,7 +191,6 @@ public class UserSettleController extends MyController {
 		return model;
 	}	
 	
-	
 	@RequestMapping("/settle/user/info/list")
 	@ResponseBody
 	protected Object infolist(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -235,4 +233,5 @@ public class UserSettleController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+
 }

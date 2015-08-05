@@ -52,7 +52,6 @@
      where m.smid=#{smid} 
      and t.weeks=#{dw}
      and m.status>0
-   
    </select>
    
    <select id="getByMarketName" parameterType="String" resultType="Market">

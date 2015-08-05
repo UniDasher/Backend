@@ -51,7 +51,6 @@ public class EarningController extends MyController {
 			return model;
 		}
 		
-		
 		//获取送餐人总收益
 		Map<String,Object> map=earningService.getEarnTotal(myloginId);
 		//{balance=610.0, weekEarn=6.0, totalEarn=6.0, settleDate=2015-07-13 15:39:08.0, totalMoney=534.0}

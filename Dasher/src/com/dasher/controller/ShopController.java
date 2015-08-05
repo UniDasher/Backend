@@ -213,11 +213,6 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.typeTabNull;
 			resultCode=2;
 		}
-//		else if(email=="")
-//		{
-//			resultDesc=ShowMsg.EmailNull;
-//			resultCode=2;
-//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -349,11 +344,6 @@ public class ShopController extends MyController {
 			resultDesc=ShowMsg.typeTabNull;
 			resultCode=2;
 		}
-//		else if(email=="")
-//		{
-//			resultDesc=ShowMsg.EmailNull;
-//			resultCode=2;
-//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;

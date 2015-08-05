@@ -65,7 +65,6 @@ public class ComplainDealController extends MyController {
 		return model;
 	}	
 	
-	
 	/*
 	 * 
 	 * 

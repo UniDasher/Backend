@@ -316,8 +316,7 @@ public class ShopDishTypeController extends MyController {
 		model.put("resultDesc", resultDesc);
 
 		return model;
-	}	
-
+	}
 
 	@RequestMapping("/dish/type/sort")
 	@ResponseBody
@@ -433,7 +432,6 @@ public class ShopDishTypeController extends MyController {
 
 		return model;
 	}	
-
 	
 	@RequestMapping("/market/type/list")
 	@ResponseBody

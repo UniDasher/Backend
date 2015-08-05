@@ -64,6 +64,5 @@ public class ComplainDeal implements Serializable {
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 	}
-
 	
 }

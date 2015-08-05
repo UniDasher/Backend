@@ -89,7 +89,6 @@ public class UserAddressController extends MyController {
 			}
 		}
 
-
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
@@ -142,7 +141,6 @@ public class UserAddressController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-
 	
 	@RequestMapping("/address/update")
 	@ResponseBody
@@ -198,7 +196,6 @@ public class UserAddressController extends MyController {
 				resultDesc=ShowMsg.updateFail;
 			}
 		}
-
 
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);

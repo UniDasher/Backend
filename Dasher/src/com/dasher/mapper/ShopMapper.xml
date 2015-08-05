@@ -71,6 +71,17 @@
 	 and t.weeks=#{dw}
 	 and s.status>0
    </select>
+   <select id="getListByLatiTest" resultType="Shop">
+     select s.*,t.flag as openService,
+     CONCAT(t.time1,',',t.time2,',',t.time3,',',t.time4,',',t.time5) as serviceTimes
+     from shop_info s
+     left join time_info t
+	 on s.sid=t.sid
+     where t.weeks=#{dw}
+	 and s.status>0
+   </select>
+   
+   
    <select id="getListByMenu" resultType="Shop">
      select distinct s.*,count(m.mid) as orderCount
      from shop_info s
@@ -80,6 +91,14 @@
 	 and (m.latitude between #{minlat} and #{maxlat}) 
 	 and m.status=1 and m.uid!=#{uid} group by m.sid
    </select>
+   <select id="getListByMenuTest" resultType="Shop">
+     select distinct s.*,count(m.mid) as orderCount
+     from shop_info s
+     join menu m
+	 on m.sid=s.sid
+     where m.uid!=#{uid} group by m.sid
+   </select>
+   
    <select id="getShopCount" resultType="Integer" parameterType="String">
      select count(*) from shop_info
      where status>0

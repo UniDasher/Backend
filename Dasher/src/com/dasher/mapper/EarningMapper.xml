@@ -27,20 +27,17 @@
     where eid=#{eid}
    </update>
    
-   
    <select id="getEarnList" parameterType="String" resultType="Earning">
      select *
      from earn_info 
      where wid=#{wid} and (createDate between #{startDate} and #{endDate})
    </select>
    
-   
    <select id="getEarnWeek" parameterType="String" resultType="Map">
      select sum(carriageMoney) as carriageMoney,sum(totalMoney-carriageMoney) as dishMoney
      from earn_info 
      where wid=#{wid} and (createDate between #{startDate} and #{endDate})
    </select>
-   
    
    <select id="getEarnTotal" parameterType="String" resultType="Map">
      select (select sum(carriageMoney) from earn_info where wid=#{wid} and (createDate between #{startDate} and #{endDate})) as weekEarn,
@@ -90,9 +87,9 @@
        and to_days(now())-to_days(updateDate)=#{str}
      </if>
      and status>0
-   </select>
+    </select>
    
-   <select id="listMonth" resultType="Earning">
+    <select id="listMonth" resultType="Earning">
      select * 
      from earn_info
      where wid=#{wid}
@@ -103,6 +100,6 @@
        and date_format(updateDate,'%Y-%m')=date_format(now(),'%Y-%m')
      </if>
      and status>0
-   </select>
+    </select>
    
 </mapper>

@@ -93,7 +93,6 @@ public class MenuController extends MyController {
 			address=jsonObject.getString("address");
 			longitude=jsonObject.getString("longitude");
 			latitude=jsonObject.getString("latitude");
-			
 
 			if(sid==""||uid==""||mealEndDate=="")
 			{
@@ -239,11 +238,6 @@ public class MenuController extends MyController {
 						resultDesc=ShowMsg.ParFail;
 						resultCode=2;
 					}
-//					else if(name=="")
-//					{
-//						resultDesc=ShowMsg.nameNull;
-//						resultCode=2;
-//					}
 					else if(price=="")
 					{
 						resultDesc=ShowMsg.priceNull;
@@ -331,7 +325,6 @@ public class MenuController extends MyController {
 			return model;
 		}
 	}
-	
 	
 	@RequestMapping("phone/menu/receive")
 	@ResponseBody
@@ -423,7 +416,8 @@ public class MenuController extends MyController {
 	    String mid="";
 	    String evalShop="";
 	    String evalServer="";
-		try {
+		try 
+		{
 			jsonObject = new JSONObject(JSONStr);
 			authCode = getHeadersInfo(request,ShowMsg.X_Auth_Token);
 			mid=jsonObject.getString("mid");
@@ -590,6 +584,7 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("phone/menu/list/near/sid")
 	@ResponseBody
 	protected Object listNearSid(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -636,6 +631,7 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("phone/menu/list/near")
 	@ResponseBody
 	protected Object listNear(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -740,6 +736,7 @@ public class MenuController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("phone/menu/update/mealdate")
 	@ResponseBody
 	protected Object mealdate(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

@@ -71,13 +71,12 @@
 	 where us.wid=#{wid}
    </select>
   
-  	<select id="getSettleByWid" resultType="UserSettle" parameterType="String">
+   <select id="getSettleByWid" resultType="UserSettle" parameterType="String">
      select us.*,u.nickName as userName
 	 from user_settle us
 	 join user_info u
 	 on us.wid=u.uid
 	 where us.wid=#{wid} and us.type=2 and us.createDate between #{startDate} and #{endDate}
    </select>
-  
   
 </mapper>

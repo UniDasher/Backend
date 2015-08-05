@@ -196,21 +196,21 @@
        <if test="userType==2">
       	mm.wid=#{searchStr}
       </if>
-      	<if test="type==1">
-			and (mm.status=1 or mm.status=2)
-		</if>
-		<if test="type==2">
-			and mm.status=3
-		</if>
-		<if test="type==3">
-			and mm.status not in (1,2,3)
-		</if>
-		<if test="updateDate=''">
-            order by mm.createDate desc
-        </if>
-        <if test="updateDate!=''">
-            order by mm.updateDate desc
-        </if>
+      <if test="type==1">
+		and (mm.status=1 or mm.status=2)
+	  </if>
+	  <if test="type==2">
+		and mm.status=3
+	  </if>
+	  <if test="type==3">
+		and mm.status not in (1,2,3)
+	  </if>
+	  <if test="updateDate=''">
+        order by mm.createDate desc
+      </if>
+      <if test="updateDate!=''">
+        order by mm.updateDate desc
+      </if>
    </select>
    
    <update id="updateDate" parameterType="MarketMenu">
@@ -230,7 +230,8 @@
      and (m.latitude between #{minlat} and #{maxlat}) 
      and m.status=1
 	</select>
-   <select id="getNearListSmid" resultType="MarketMenu">
+   
+    <select id="getNearListSmid" resultType="MarketMenu">
 	 select mm.*,m.name as shopName,m.address as shopAddress,m.longitude as shopLongitude,m.latitude as shopLatitude,
 			u.nickName as userName,u.logo as userLogo,u.mobilePhone as userPhone
      from market_menu m
@@ -240,7 +241,8 @@
 		on m.uid=u.uid
      where m.smid=#{smid}
      and m.status=1
-	</select>
+	 </select>
+	 
 	<select id="getListOverTime" resultType="MarketMenu">
 		select *
 		from market_menu 

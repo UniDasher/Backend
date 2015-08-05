@@ -297,6 +297,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("phone/user/info/balance")
 	@ResponseBody
 	protected Object userBalance(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -405,6 +406,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("phone/user/update/truename")
 	@ResponseBody
 	protected Object updateTrueName(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1118,6 +1120,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/user/info")
 	@ResponseBody
 	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1162,7 +1165,6 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
 	
 	@RequestMapping("/user/list")
 	@ResponseBody
@@ -1274,6 +1276,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+
 	@RequestMapping("/user/list/apply")
 	@ResponseBody
 	protected Object listApply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1300,6 +1303,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/user/status")
 	@ResponseBody
 	protected Object status(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1344,6 +1348,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/user/update/apply")
 	@ResponseBody
 	protected Object statusApply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1390,6 +1395,7 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/user/asw/test")
 	@ResponseBody
 	protected Object testUser(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -1484,7 +1490,5 @@ public class UserController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-	
-	
 	
 }

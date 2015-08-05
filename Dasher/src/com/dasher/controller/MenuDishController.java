@@ -139,6 +139,7 @@ public class MenuDishController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
 	@RequestMapping("phone/menu/dish/list")
 	@ResponseBody
 	protected Object phoneList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

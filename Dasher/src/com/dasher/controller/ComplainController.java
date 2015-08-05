@@ -143,6 +143,7 @@ public class ComplainController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
+	
 	@RequestMapping("phone/complain/list")
 	@ResponseBody
 	protected Object phoneUserList(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -266,7 +267,6 @@ public class ComplainController extends MyController {
 		String startDate=getString(request, "startDate");
 		String endDate=getString(request, "endDate");
 		
-		
 		if(mycurPage.matches("^[0-9]*$")&&mypageSize.matches("^[0-9]*$")&&status.matches("^[0-9]*$"))
 		{
 			int curPage=Integer.parseInt(mycurPage);
@@ -340,8 +340,7 @@ public class ComplainController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}	
-	
-	
+
 	/*
 	 * flag:1,列表
        flag:2,详细
@@ -350,6 +349,7 @@ public class ComplainController extends MyController {
        type=2,超市订单
 	 * 
 	 */
+	
 	@RequestMapping("/complain/deal")
 	@ResponseBody
 	protected Object deal(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -385,7 +385,6 @@ public class ComplainController extends MyController {
 		String deductMoney=getString(request, "deductMoney");
 		String flag=getString(request, "flag");
 		
-		
 		if(comId==""||flag=="")
 		{
 			resultDesc=ShowMsg.ParFail;
@@ -403,7 +402,6 @@ public class ComplainController extends MyController {
 		}
 		else
 		{
-			
 			Pattern pattern=Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$");// 判断小数点后一位的数字的正则表达式
 		    if(!returnMoney.equals(""))
 			{
@@ -464,7 +462,6 @@ public class ComplainController extends MyController {
 				}
 				
 			}
-		   
 		    if(!deductMoney.equals(""))
 		    {
 		    	c.setDeductMoney(Float.parseFloat(deductMoney));
@@ -501,7 +498,6 @@ public class ComplainController extends MyController {
 					me.setMid(com.getMid());
 					boolean boo=menuService.updateStatus2(me);
 				}
-				
 			}
 			else
 			{

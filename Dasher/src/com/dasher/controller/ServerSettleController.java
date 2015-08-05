@@ -27,8 +27,6 @@ public class ServerSettleController extends MyController{
 	private int resultCode;
 	private String resultDesc;
 	private ModelMap model;
-	
-
 
 	@RequestMapping("/settle/server/list")
 	@ResponseBody

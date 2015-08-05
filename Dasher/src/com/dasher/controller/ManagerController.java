@@ -67,7 +67,6 @@ public class ManagerController extends MyController {
 		{
 			salt=salt+str[i];
 		}
-
 		if(account=="")
 		{
 			resultDesc=ShowMsg.userNull;
@@ -200,6 +199,7 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/admin/update")
 	@ResponseBody
 	protected Object update(HttpServletRequest request,HttpServletResponse response,HttpSession session){
@@ -222,7 +222,7 @@ public class ManagerController extends MyController {
 		String lastName=getString(request, "lastName");
 		String email=getString(request, "email");
 		int type=getInt(request, "type");
-
+		
 		if(myid.equals("")||!myid.matches("^[0-9]*$"))
 		{
 			resultCode=2;
@@ -270,6 +270,7 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/admin/delete")
 	@ResponseBody
 	protected Object delete(HttpServletRequest request,HttpServletResponse response,HttpSession session){
@@ -316,6 +317,7 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/admin/list")
 	@ResponseBody
 	protected Object list(HttpServletRequest request,HttpServletResponse response,HttpSession session){
@@ -400,7 +402,6 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
-
 	
 	@RequestMapping("/admin/logout")
 	@ResponseBody
@@ -450,6 +451,7 @@ public class ManagerController extends MyController {
 		model.put("resultDesc", resultDesc);	
 		return model;
 	}
+	
 	@RequestMapping("/admin/apply")
 	@ResponseBody
 	protected Object apply(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -530,5 +532,6 @@ public class ManagerController extends MyController {
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
-	}	
+	}
+	
 }

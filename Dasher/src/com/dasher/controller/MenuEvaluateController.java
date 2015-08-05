@@ -280,6 +280,7 @@ public class MenuEvaluateController extends MyController {
 		model.put("resultDesc", resultDesc);
 		return model;
 	}
+	
 	@RequestMapping("/menu/eval/info")
 	@ResponseBody
 	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {

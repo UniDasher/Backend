@@ -170,11 +170,6 @@ public class MarketController extends MyController {
 			resultDesc=ShowMsg.AddressNull;
 			resultCode=2;
 		}
-//		else if(email=="")
-//		{
-//			resultDesc=ShowMsg.EmailNull;
-//			resultCode=2;
-//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -302,11 +297,6 @@ public class MarketController extends MyController {
 			resultDesc=ShowMsg.AddressNull;
 			resultCode=2;
 		}
-//		else if(email=="")
-//		{
-//			resultDesc=ShowMsg.EmailNull;
-//			resultCode=2;
-//		}
 		else if(phone=="")
 		{
 			resultDesc=ShowMsg.MobilePhoneNull;
@@ -429,7 +419,6 @@ public class MarketController extends MyController {
 		return model;
 	}	
 
-
 	@RequestMapping("/market/info")
 	@ResponseBody
 	protected Object info(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException {
@@ -475,8 +464,7 @@ public class MarketController extends MyController {
 		model.put("resultCode", resultCode);	
 		model.put("resultDesc", resultDesc);
 		return model;
-	}	
-	
+	}
 	
 	@RequestMapping("/market/list")
 	@ResponseBody

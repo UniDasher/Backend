@@ -97,5 +97,4 @@
      where sid=#{sid} and status>0
    </select>
    
-   
 </mapper>

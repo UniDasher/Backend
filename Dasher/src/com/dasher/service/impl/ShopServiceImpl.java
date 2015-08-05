@@ -131,7 +131,8 @@ public class ShopServiceImpl implements ShopService {
 			dw=dw-1;
 		}
 		
-		return shopMapper.getListByLati(minlon, maxlon, minlat, maxlat,dw);
+		//return shopMapper.getListByLati(minlon, maxlon, minlat, maxlat,dw);
+		return shopMapper.getListByLatiTest(dw);
 	}
 	public List<Shop> getListByMenu(double longitude, double latitude,float distance,String uid) {
 		double r = BaiDuMapUtil.DEF_R;
@@ -143,7 +144,10 @@ public class ShopServiceImpl implements ShopService {
 		double maxlat = latitude+dlat;
 		double minlon = longitude -dlng;
 		double maxlon = longitude + dlng;
-		return shopMapper.getListByMenu(minlon, maxlon, minlat, maxlat,uid);
+		
+		
+		//return shopMapper.getListByMenu(minlon, maxlon, minlat, maxlat,uid);
+		return shopMapper.getListByMenuTest(uid);
 	}
 
 	public List<Shop> list(String searchStr, int startRow, int pageSize) {

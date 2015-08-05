@@ -23,4 +23,6 @@ public interface ShopMapper {
 			@Param(value="minlat") double minlat,@Param(value="maxlat") double maxlat,@Param(value="uid") String uid);
 	public int updateEvaluate(Shop shop);
 	public List<String> getShopType();
+	public List<Shop> getListByLatiTest(@Param(value="dw") int dw);
+	public List<Shop> getListByMenuTest(@Param(value="uid") String uid);
 }
